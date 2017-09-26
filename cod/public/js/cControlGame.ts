@@ -2,15 +2,18 @@ class cControlGame {
 
     private controlHeroes:cControlHeroes;
     private controlMonsters:cControlMonster;
+    private controlInterface:cControlInterface;
 
     constructor(public game:Phaser.Game) {
 
         //lets add the stage
         game.add.sprite(0,0,'back');
 
+        //lets init the map
         this.initMap();
 
-
+        //lets init the game interface
+        this.controlInterface = new cControlInterface(game);
 
         //lets init the heroes
         this.controlHeroes = new cControlHeroes(game);
