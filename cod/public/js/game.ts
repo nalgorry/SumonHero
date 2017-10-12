@@ -1,7 +1,8 @@
 
-class SimpleGame {
+class InitGame {
 
     public game: Phaser.Game;
+    
 
     constructor() {
 
@@ -28,7 +29,7 @@ class SimpleGame {
 } //fin
 window.onload = () => {
 
-    var game = new SimpleGame();
+    var game = new InitGame();
 
 };
 

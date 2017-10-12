@@ -1,5 +1,5 @@
-var SimpleGame = (function () {
-    function SimpleGame() {
+var InitGame = (function () {
+    function InitGame() {
         var conf = {
             width: 960,
             height: 640,
@@ -13,8 +13,8 @@ var SimpleGame = (function () {
         this.game.state.add('mainMenu', mainMenu, false);
         this.game.state.start('boot');
     }
-    return SimpleGame;
+    return InitGame;
 }()); //fin
 window.onload = function () {
-    var game = new SimpleGame();
+    var game = new InitGame();
 };

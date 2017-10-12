@@ -1,33 +1,28 @@
 var cControlCards = (function () {
-    function cControlCards(game) {
+    function cControlCards(game, userInterfase) {
         this.game = game;
-        this.initiCard();
+        this.userInterfase = userInterfase;
+        this.arrayCards = [];
+        this.initCards();
     }
-    cControlCards.prototype.initiCard = function () {
-        this.sprite = this.game.add.sprite(20, 500);
-        this.sprite.inputEnabled = true;
-        //this.sprite.events.onInputUp.add(this.floorItemClick,this)
-        var cardColor = 0x0000FF;
-        var backCircle = this.game.add.graphics(0, 0);
-        backCircle.beginFill(cardColor);
-        backCircle.alpha = 0.5;
-        backCircle.drawRect(0, 0, 60, 90);
-        this.sprite.input.enableDrag();
-        this.sprite.events.onDragStart.add(this.onDragStart, this);
-        this.sprite.events.onDragStop.add(this.onDragStop, this);
-        this.sprite.events.onInputOver.add(this.onInputOver, this);
-        this.sprite.events.onInputOut.add(this.onInputOut, this);
-        this.sprite.addChild(backCircle);
-        //var itemSprite = this.game.add.sprite();
-        //this.sprite.addChild(itemSprite);
+    cControlCards.prototype.initCards = function () {
+        //lets add the cards that will let put monsters
+        this.arrayCards.push(this.createNewCard(20, 500));
+        this.arrayCards.push(this.createNewCard(100, 500));
     };
-    cControlCards.prototype.onDragStart = function () {
+    cControlCards.prototype.createNewCard = function (x, y) {
+        //create the card
+        var newCard = new cCards(this.game, x, y);
+        //lets check what if something happends with this card
+        newCard.eventDragStart.add(this.cardDragStart, this);
+        newCard.eventDragStop.add(this.cardRelease, this);
+        return newCard;
     };
-    cControlCards.prototype.onDragStop = function () {
+    cControlCards.prototype.cardDragStart = function (card) {
+        this.userInterfase.cardDragStart(card);
     };
-    cControlCards.prototype.onInputOver = function () {
-    };
-    cControlCards.prototype.onInputOut = function () {
+    cControlCards.prototype.cardRelease = function (card) {
+        this.userInterfase.checkCardRelease(card);
     };
     return cControlCards;
 }());

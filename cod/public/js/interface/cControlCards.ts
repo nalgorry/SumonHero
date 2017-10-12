@@ -1,54 +1,43 @@
 class cControlCards {
 
     private sprite:Phaser.Sprite;
+    private arrayCards:cCards[] = [];
 
 
-    constructor(public game:Phaser.Game) {
-        this.initiCard();
+    constructor(public game:Phaser.Game, public userInterfase:cControlInterface) {
+
+        this.initCards();
+
     }
 
-    public initiCard() {
+    private initCards(){
+        //lets add the cards that will let put monsters
+        this.arrayCards.push(this.createNewCard (20, 500));
+        this.arrayCards.push(this.createNewCard (100, 500));
 
-        this.sprite = this.game.add.sprite(20, 500);
+    }
+
+    private createNewCard(x:number, y:number):cCards {
         
-        this.sprite.inputEnabled = true;
-        //this.sprite.events.onInputUp.add(this.floorItemClick,this)
+        //create the card
+        var newCard = new cCards(this.game, x, y);
 
-        var cardColor = 0x0000FF; 
+        //lets check what if something happends with this card
+        newCard.eventDragStart.add(this.cardDragStart, this);
+        newCard.eventDragStop.add(this.cardRelease, this);
 
-        var backCircle = this.game.add.graphics(0,0);
-        backCircle.beginFill(cardColor);
-        backCircle.alpha = 0.5;
-        backCircle.drawRect(0, 0, 60,90);
 
-        this.sprite.input.enableDrag();
-
-        this.sprite.events.onDragStart.add(this.onDragStart, this);
-        this.sprite.events.onDragStop.add(this.onDragStop, this);
-        this.sprite.events.onInputOver.add(this.onInputOver,this);
-        this.sprite.events.onInputOut.add(this.onInputOut,this);
-
-        this.sprite.addChild(backCircle);
-
-        //var itemSprite = this.game.add.sprite();
-        //this.sprite.addChild(itemSprite);
-
+        return newCard;
     }
 
-    private onDragStart() {
-
+    private cardDragStart(card:cCards) {
+        this.userInterfase.cardDragStart(card);
     }
 
-    private onDragStop() {
-
+    private cardRelease(card:cCards)  {
+        this.userInterfase.checkCardRelease(card);
     }
 
-    private onInputOver() {
 
-    }
-
-    private onInputOut() {
-
-    }
 
 }
