@@ -9,10 +9,10 @@ class cControlHeroes {
     private otherHeroe:cOtherHeroe;
 
 
-    constructor(public game:Phaser.Game) {
+    constructor(public game:Phaser.Game, public gameInterface:cControlInterface) {
 
         this.heroe = new cThisHeroe(game, new Phaser.Point(940, 360), heroeOrientation.idle_left);
-        this.otherHeroe = new cOtherHeroe(game, new Phaser.Point(20, 360), heroeOrientation.idle_right);
+        this.otherHeroe = new cOtherHeroe(game, new Phaser.Point(20, 360), heroeOrientation.idle_right, gameInterface);
 
     }
 

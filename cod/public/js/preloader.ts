@@ -21,14 +21,14 @@ class preloader extends Phaser.State {
         this.game.load.image('blue_cristal', 'assets/blue_cristal.png');
 
         //  Load our actual games assets
-        this.game.load.image('bug_01', 'assets/bugs.png');
+        this.game.load.spritesheet('bugs', 'assets/bugs.png', 40, 40);
         //this.game.load.spritesheet('monster_2', 'assets/monster_2.png',170 ,119 );
         //this.game.load.image('monster_3', 'assets/monster_3.png' );
         //this.game.load.image('monster_4', 'assets/monster_4.png' );
         //this.game.load.image('monster_5', 'assets/cosmic_monster.png' );
         //this.game.load.image('monster_6', 'assets/monster_6.png' );
     
-        
+        this.game.load.json('monsterData', 'js/monsters/monsterData.json');
     }
 
     create() {

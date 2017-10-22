@@ -1,0 +1,40 @@
+{   "monsterData": [ 
+
+    {
+        "id": 1, 
+        "monsterName": "blue monster", 
+        "tilePoss": 1,
+        "color": "blue",
+        "strongVs": "red",
+        "atack": 5,
+        "defence": 5,
+        "life": 50,
+        "maxSpeed": 1.5,
+        "special": ""
+    },
+    {
+        "id": 2, 
+        "monsterName": "red monster", 
+        "tilePoss": 2,
+        "color": "red",
+        "strongVs": "green",
+        "atack": 5,
+        "defence": 5,
+        "life": 50,
+        "maxSpeed": 1.5,
+        "special": ""
+    },
+    {
+        "id": 3, 
+        "monsterName": "green monster", 
+        "tilePoss": 3,
+        "color": "green",
+        "strongVs": "blue",
+        "atack": 5,
+        "defence": 5,
+        "life": 50,
+        "maxSpeed": 1.5,
+        "special": ""
+    }
+]
+}

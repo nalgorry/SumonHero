@@ -1,23 +1,108 @@
 class cControlMonsters {
 
+    public gameInterface:cControlInterface
+    
     private showPath:boolean = false;
 
     private arrayMonsters:cMonster[] = [] //to store all the active monsters
+    private arrayEnemyMonsters:cMonster[] = [] //to store all the active monsters
     private pathCreatePoints = []; // store the points that generate each path
     private paths:number[][] = []; //ths actual points of the path
 
+    private monsterId:number = 0;
+
+    private monsterRadius = 20;
+
+
     constructor(public game:Phaser.Game) {
   
-        this.initPosiblePaths();       
+        this.initPosiblePaths();   
+
+        this.readMonsterData();    
+
+        this.createEnemyMonster(enumPathOptions.up);
+
+        var timer = game.time.create();
+        timer.loop(100, this.checkMonstersHit,this)
+        timer.start();
+    }
+
+    private readMonsterData() {
+
+        var phaserJSON = this.game.cache.getJSON('monsterData');
+
+        console.log(phaserJSON);
+
+
 
     }
 
-    public createNewMonster(pathOption:enumPathOptions) {
-
-        console.log(pathOption);
+    //this function will control when the monsters colide
+    private checkMonstersHit(){
         
-        var monster = new cMonster(this.game, new Phaser.Point(150,150), this.paths[pathOption]);
-        this.arrayMonsters.push (monster);
+        //lets check if monster colides each other 
+        this.arrayMonsters.forEach(monster => {
+            
+            var monsterPoss:Phaser.Point = monster.sprite.position;
+
+            this.arrayEnemyMonsters.forEach(enemy => {
+                
+                var enemyPoss:Phaser.Point = enemy.sprite.position;
+
+                var distance = enemyPoss.distance(monsterPoss);
+
+                if (distance <= this.monsterRadius) {
+                    monster.destroyMonster();
+                    enemy.destroyMonster();
+
+                    delete this.arrayMonsters[monster.id];
+                    delete this.arrayEnemyMonsters[enemy.id];
+                }
+
+
+            });
+
+
+        });
+
+    }
+
+     public createEnemyMonster(pathOption:enumPathOptions) {
+        
+        //lets copy the path and then reverse it
+        var path:any[] = <any>this.paths[pathOption].slice();
+        path.reverse();
+        var monster = new cMonster(this.game,this.monsterId, path ,true, 0);
+        this.arrayEnemyMonsters[this.monsterId] = monster;
+        this.monsterId ++;
+
+        monster.eMonsterHitHeroe.add(this.monsterHitHeroe, this);
+
+    }
+    
+    public createNewMonster(pathOption:enumPathOptions, startPosition:number) {
+        
+        var monster = new cMonster(this.game, this.monsterId, this.paths[pathOption], false, startPosition);
+        
+        this.arrayMonsters[this.monsterId] = monster;
+        this.monsterId ++;
+
+        monster.eMonsterHitHeroe.add(this.monsterHitHeroe, this);
+
+    }
+
+    private monsterHitHeroe(monster: cMonster) {
+        
+        //we should calculate the damage here? or direct in the monster? mmm
+        //may be if i want to use some kind of power that will increise the power it should be here.
+         var damage = this.game.rnd.integerInRange(20, 50);
+
+        this.gameInterface.monsterHitHeroe(monster, damage);
+
+        //we delete the monster of the two arrays
+        delete this.arrayMonsters[monster.id];
+        delete this.arrayEnemyMonsters[monster.id];
+
     }
 
     //lest create all the posible paths for the monster,

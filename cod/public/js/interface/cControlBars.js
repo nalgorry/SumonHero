@@ -35,12 +35,12 @@ var cControlBars = (function () {
     //devuelve true si el personaje llego a cero vida
     cControlBars.prototype.UpdateLife = function (addValue) {
         //controlo si se murio o no 
-        if (this.life > -addValue) {
-            this.life = this.UpdateBar(this.lifeBar, this.life, this.maxLife, addValue);
+        this.life = this.UpdateBar(this.lifeBar, this.life, this.maxLife, addValue);
+        //lets check if it die 
+        if (this.life != 0) {
             return false;
         }
         else {
-            this.life = 0;
             return true;
         }
     };
@@ -55,16 +55,20 @@ var cControlBars = (function () {
         }
     };
     cControlBars.prototype.UpdateBar = function (bar, value, maxValue, addValue) {
-        console.log("hola");
+        var result = value;
         //controlo si no se paso del maximo
         if (value + addValue <= maxValue) {
-            value += addValue;
+            result += addValue;
         }
         else {
-            value = maxValue;
+            result = maxValue;
         }
-        this.ResizeBar(bar, value, maxValue);
-        return value;
+        //check min value 
+        if (value + addValue <= 0) {
+            result = 0;
+        }
+        this.ResizeBar(bar, result, maxValue);
+        return result;
     };
     cControlBars.prototype.ResizeBar = function (bar, value, maxValue) {
         this.game.add.tween(bar.scale).to({ x: -value / maxValue }, 25, Phaser.Easing.Linear.None, true);

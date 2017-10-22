@@ -5,8 +5,11 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 var cOtherHeroe = (function (_super) {
     __extends(cOtherHeroe, _super);
-    function cOtherHeroe(game, initPos, orientation) {
+    function cOtherHeroe(game, initPos, orientation, gameInterface) {
         _super.call(this, game, initPos, orientation);
+        this.game = game;
+        this.gameInterface = gameInterface;
+        this.enemyIA = new cEnemyIA(game, gameInterface);
     }
     return cOtherHeroe;
 }(cBasicHeroe));

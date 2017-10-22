@@ -10,7 +10,6 @@ var cCards = (function () {
         var cardColor = 0x0000FF;
         var backCircle = this.game.add.graphics(0, 0);
         backCircle.beginFill(cardColor);
-        backCircle.alpha = 0.5;
         backCircle.drawRect(0, 0, 60, 90);
         this.sprite.input.enableDrag();
         this.sprite.events.onDragStart.add(this.onDragStart, this);

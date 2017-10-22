@@ -5,27 +5,40 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 var cMonster = (function (_super) {
     __extends(cMonster, _super);
-    function cMonster(game, initPos, path) {
+    function cMonster(game, id, path, isEnemy, startPoss) {
         _super.call(this, game, 0, 0);
         this.game = game;
+        this.id = id;
+        this.isEnemy = isEnemy;
         this.showPath = false;
         this.monsterPath = []; //here we have all the paths to move the monsters
         this.pathNumber = 0;
         this.loopSpeedNumber = 0;
         this.loopSpeed = 0;
-        this.speed = 1.5; //the distance of every point in the path
-        this.sprite = this.game.add.sprite(initPos.x, initPos.y);
+        this.speed = 1; //the distance of every point in the path
+        //left define the start position of the monster, base on the path selected
+        path = path.slice(-path.length + startPoss);
+        this.sprite = this.game.add.sprite(path[0].x, path[0].y);
         this.sprite.anchor.set(0.5);
         //lets create the bug
-        var bugSprite = this.game.add.sprite(0, 0, 'bug_01');
+        var bugSprite = this.game.add.sprite(0, 0, 'bugs', 0);
         bugSprite.anchor.set(0.5);
         bugSprite.y -= 20;
         this.sprite.addChild(bugSprite);
-        this.angularSpeed = this.speed / 20 * 180 / 3.14159;
+        //lets make it rotate!
+        if (this.isEnemy == false) {
+            this.angularSpeed = this.speed / 20 * 180 / 3.14159;
+        }
+        else {
+            this.angularSpeed = -this.speed / 20 * 180 / 3.14159;
+            bugSprite.scale.y *= -1;
+        }
         //lets define the path it will follow
         this.makePathConstantSpeed(path);
         this.sprite.x = this.monsterPath[0].x;
         this.sprite.y = this.monsterPath[0].y;
+        //to control the events of the monster
+        this.eMonsterHitHeroe = new Phaser.Signal();
         //to use the update loop
         this.game.add.existing(this);
     }
@@ -56,6 +69,11 @@ var cMonster = (function (_super) {
         });
     };
     cMonster.prototype.monsterHitHeroe = function () {
+        this.destroyMonster();
+        //lets inform that this happend
+        this.eMonsterHitHeroe.dispatch(this);
+    };
+    cMonster.prototype.destroyMonster = function () {
         this.destroy();
         this.sprite.destroy();
     };

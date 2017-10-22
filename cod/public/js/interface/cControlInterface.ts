@@ -2,15 +2,14 @@ class cControlInterface {
 
     private controlCards:cControlCards;
     private controlCristals:cControlCristals;
-    private controlMonsters:cControlMonsters;
+
     private playerBars:cControlBars;
     private enemyBars:cControlBars;
+
+    private speedBars = 50;
     
     
-
-    constructor (public game:Phaser.Game, controlMonsters) {
-
-        this.controlMonsters = controlMonsters;
+    constructor (public game:Phaser.Game,public controlMonsters:cControlMonsters) {
 
         this.initInterfaceBack(); //all that goes to the back will go here
 
@@ -21,6 +20,23 @@ class cControlInterface {
 
         this.initCristals(); //init all the cristals :)
 
+        //to control the update of the bars        
+        var timer = this.game.time.events.loop(this.speedBars, this.updateBars, this);
+
+    }
+
+    public monsterHitHeroe(monster:cMonster,damage: number) {
+
+        if (monster.isEnemy) {
+            this.playerBars.UpdateLife(-damage);
+        } else {
+            this.enemyBars.UpdateLife(-damage);
+        }
+        
+    }
+
+    private updateBars() {
+        this.playerBars.UpdateMana(1);
     }
 
     private initInterfaceBack() {
@@ -66,7 +82,7 @@ class cControlInterface {
             if (this.playerBars.UpdateMana(-card.manaCost) == true) {
 
                 //lets add the new monster to the map!
-                this.controlMonsters.createNewMonster(cristal.pathOption);
+                this.controlMonsters.createNewMonster(cristal.pathOption, cristal.monsterStartPoss);
 
             }
 
@@ -79,3 +95,4 @@ class cControlInterface {
     }
 
 }
+

@@ -3,14 +3,63 @@ var cControlMonsters = (function () {
         this.game = game;
         this.showPath = false;
         this.arrayMonsters = []; //to store all the active monsters
+        this.arrayEnemyMonsters = []; //to store all the active monsters
         this.pathCreatePoints = []; // store the points that generate each path
         this.paths = []; //ths actual points of the path
+        this.monsterId = 0;
+        this.monsterRadius = 20;
         this.initPosiblePaths();
+        this.readMonsterData();
+        this.createEnemyMonster(0 /* up */);
+        var timer = game.time.create();
+        timer.loop(100, this.checkMonstersHit, this);
+        timer.start();
     }
-    cControlMonsters.prototype.createNewMonster = function (pathOption) {
-        console.log(pathOption);
-        var monster = new cMonster(this.game, new Phaser.Point(150, 150), this.paths[pathOption]);
-        this.arrayMonsters.push(monster);
+    cControlMonsters.prototype.readMonsterData = function () {
+        var phaserJSON = this.game.cache.getJSON('monsterData');
+        console.log(phaserJSON);
+    };
+    //this function will control when the monsters colide
+    cControlMonsters.prototype.checkMonstersHit = function () {
+        var _this = this;
+        //lets check if monster colides each other 
+        this.arrayMonsters.forEach(function (monster) {
+            var monsterPoss = monster.sprite.position;
+            _this.arrayEnemyMonsters.forEach(function (enemy) {
+                var enemyPoss = enemy.sprite.position;
+                var distance = enemyPoss.distance(monsterPoss);
+                if (distance <= _this.monsterRadius) {
+                    monster.destroyMonster();
+                    enemy.destroyMonster();
+                    delete _this.arrayMonsters[monster.id];
+                    delete _this.arrayEnemyMonsters[enemy.id];
+                }
+            });
+        });
+    };
+    cControlMonsters.prototype.createEnemyMonster = function (pathOption) {
+        //lets copy the path and then reverse it
+        var path = this.paths[pathOption].slice();
+        path.reverse();
+        var monster = new cMonster(this.game, this.monsterId, path, true, 0);
+        this.arrayEnemyMonsters[this.monsterId] = monster;
+        this.monsterId++;
+        monster.eMonsterHitHeroe.add(this.monsterHitHeroe, this);
+    };
+    cControlMonsters.prototype.createNewMonster = function (pathOption, startPosition) {
+        var monster = new cMonster(this.game, this.monsterId, this.paths[pathOption], false, startPosition);
+        this.arrayMonsters[this.monsterId] = monster;
+        this.monsterId++;
+        monster.eMonsterHitHeroe.add(this.monsterHitHeroe, this);
+    };
+    cControlMonsters.prototype.monsterHitHeroe = function (monster) {
+        //we should calculate the damage here? or direct in the monster? mmm
+        //may be if i want to use some kind of power that will increise the power it should be here.
+        var damage = this.game.rnd.integerInRange(20, 50);
+        this.gameInterface.monsterHitHeroe(monster, damage);
+        //we delete the monster of the two arrays
+        delete this.arrayMonsters[monster.id];
+        delete this.arrayEnemyMonsters[monster.id];
     };
     //lest create all the posible paths for the monster,
     cControlMonsters.prototype.initPosiblePaths = function () {

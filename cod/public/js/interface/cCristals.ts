@@ -1,12 +1,14 @@
 class cCristals {
 
     sprite:Phaser.Sprite;
+    sprite_back_circle:Phaser.Sprite;
     maxDistance:number = 30;
 
     constructor(public game:Phaser.Game,
         public x:number, public y:number,
         public color:cristalColor, 
-        public pathOption:enumPathOptions) {
+        public pathOption:enumPathOptions,
+        public monsterStartPoss:number) {
 
         //lets create the cristal
         this.sprite = this.game.add.sprite(x, y);
@@ -37,21 +39,34 @@ class cCristals {
 
         if (this.color == cristalColor.blue_cristal) {
             var backCircle = this.game.add.graphics(0,0);
-            backCircle.beginFill(0x07b215);
-            backCircle.drawCircle(0, 0, this.maxDistance * 2);
-            
+            backCircle.beginFill(0x0d5118);
+            backCircle.drawEllipse(0, 15, this.maxDistance, this.maxDistance * 0.8);
+
             //lets put the circle in the back
-            var sprite = this.sprite;
-            sprite.addChild(backCircle);
-            sprite.swapChildren(sprite.children[0], sprite.children[1]);
+            this.sprite_back_circle = this.game.add.sprite(0, 0);
+            this.sprite_back_circle.anchor.set(0.5);
+            this.sprite_back_circle.alpha = 0.6;
+            this.sprite_back_circle.addChild(backCircle);
+            
+            this.sprite.addChild(this.sprite_back_circle);
+            this.sprite.swapChildren(this.sprite.children[0],this.sprite.children[1])
+            
+            //lets add some really cool animation
+            this.sprite_back_circle.scale.set(0.8);
+            var tweenA = this.game.add.tween(this.sprite_back_circle.scale).to( { x: 1, y: 1 }, 800, Phaser.Easing.Cubic.Out ,true);
+            var tweenB = this.game.add.tween(this.sprite_back_circle.scale).to( { x: 0.8, y: 0.8 }, 800, Phaser.Easing.Cubic.In ,false);
+
+            tweenA.chain(tweenB);
+            tweenB.chain(tweenA);
+
         }
 
     }
 
     public turnOffCristal() {
         
-        if (this.color == cristalColor.blue_cristal) {
-            this.sprite.removeChildAt(0);
+        if (this.sprite_back_circle != undefined) {
+            this.sprite_back_circle.destroy();
         }
 
     }

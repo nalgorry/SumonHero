@@ -52,13 +52,16 @@ class cControlBars {
     //devuelve true si el personaje llego a cero vida
     public UpdateLife(addValue:number):boolean {
         //controlo si se murio o no 
-        if (this.life > -addValue) {
-            this.life = this.UpdateBar(this.lifeBar,this.life,this.maxLife,addValue);
-            return false;
-        } else {
-            this.life = 0;
-            return true;
-        }
+        
+         this.life = this.UpdateBar(this.lifeBar,this.life,this.maxLife,addValue);
+
+         //lets check if it die 
+         if (this.life != 0 ) {
+            return false
+         } else {
+            return true
+         }
+        
 
         
     }
@@ -75,19 +78,24 @@ class cControlBars {
 
     }
 
-        private UpdateBar(bar:Phaser.Sprite,value:number,maxValue:number,addValue:number) {
+        private UpdateBar(bar:Phaser.Sprite, value:number, maxValue:number, addValue:number) {
+        var  result:number = value;
 
-        console.log("hola")
         //controlo si no se paso del maximo
         if (value + addValue <= maxValue) {
-            value += addValue;
+            result += addValue;
         } else {
-            value = maxValue;
+            result = maxValue;
         }
 
-        this.ResizeBar(bar,value,maxValue);
+        //check min value 
+        if (value + addValue <= 0) {
+            result = 0 
+        }
 
-        return value;
+        this.ResizeBar(bar,result,maxValue);
+
+        return result;
     }
     
     private ResizeBar(bar: Phaser.Sprite,value:number,maxValue:number) {

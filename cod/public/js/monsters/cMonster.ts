@@ -3,28 +3,43 @@ class cMonster extends Phaser.Sprite{
     private showPath:boolean = false;
 
     private monsterPath = []; //here we have all the paths to move the monsters
-    private sprite:Phaser.Sprite;
+    public sprite:Phaser.Sprite;
     private pathNumber:number = 0;
     private loopSpeedNumber:number = 0;
     private loopSpeed:number = 0;
-    private speed:number = 1.5; //the distance of every point in the path
+    private speed:number = 1; //the distance of every point in the path
     private angularSpeed:number;
 
-    constructor (public game:Phaser.Game, initPos:Phaser.Point, path:number[]) {
+    public eMonsterHitHeroe:Phaser.Signal;
+
+    constructor (public game:Phaser.Game, 
+        public id:number,
+        path:any[], 
+        public isEnemy:boolean,
+        startPoss:number) {
 
         super(game, 0, 0)
+        
+        //left define the start position of the monster, base on the path selected
+        path = <any>path.slice(-path.length + startPoss);
 
-        this.sprite = this.game.add.sprite(initPos.x, initPos.y);
+        this.sprite = this.game.add.sprite(path[0].x, path[0].y);
         this.sprite.anchor.set(0.5);
 
         //lets create the bug
-        var bugSprite = this.game.add.sprite(0, 0, 'bug_01');
+        var bugSprite = this.game.add.sprite(0, 0, 'bugs',0);
         bugSprite.anchor.set(0.5);
         bugSprite.y -= 20;
 
         this.sprite.addChild(bugSprite);
 
-        this.angularSpeed = this.speed / 20 * 180 / 3.14159;
+        //lets make it rotate!
+        if (this.isEnemy == false) {
+            this.angularSpeed = this.speed / 20 * 180 / 3.14159;
+        } else {
+            this.angularSpeed = -this.speed / 20 * 180 / 3.14159;
+            bugSprite.scale.y *= -1;
+        }
 
         //lets define the path it will follow
         this.makePathConstantSpeed(path);
@@ -32,8 +47,12 @@ class cMonster extends Phaser.Sprite{
         this.sprite.x = this.monsterPath[0].x;
         this.sprite.y = this.monsterPath[0].y;
 
+        //to control the events of the monster
+        this.eMonsterHitHeroe = new Phaser.Signal();
+
         //to use the update loop
         this.game.add.existing(this);
+
 
     }
 
@@ -74,11 +93,16 @@ class cMonster extends Phaser.Sprite{
     }
 
     private monsterHitHeroe() {
-        this.destroy();
-
-        this.sprite.destroy();
+        
+        this.destroyMonster();
+        //lets inform that this happend
+        this.eMonsterHitHeroe.dispatch(this);
     }
 
+    public destroyMonster() {
+        this.destroy();
+        this.sprite.destroy();
+    }
 
     public update() {
 
