@@ -51,7 +51,7 @@ var cControlInterface = (function () {
             //lets check if we have the mana to do it
             if (this.playerBars.UpdateMana(-card.manaCost) == true) {
                 //lets add the new monster to the map!
-                this.controlMonsters.createNewMonster(cristal.pathOption, cristal.monsterStartPoss);
+                this.controlMonsters.createNewMonster(cristal.pathOption, cristal.monsterStartPoss, card.monsterType);
             }
         }
     };

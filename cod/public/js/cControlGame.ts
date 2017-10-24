@@ -22,9 +22,6 @@ class cControlGame {
         //lets init the heroes
         this.controlHeroes = new cControlHeroes(game, this.controlInterface);
 
-
-    
-
     }
 
     private initMap() {

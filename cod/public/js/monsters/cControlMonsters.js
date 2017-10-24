@@ -2,6 +2,7 @@ var cControlMonsters = (function () {
     function cControlMonsters(game) {
         this.game = game;
         this.showPath = false;
+        this.monsterData = [];
         this.arrayMonsters = []; //to store all the active monsters
         this.arrayEnemyMonsters = []; //to store all the active monsters
         this.pathCreatePoints = []; // store the points that generate each path
@@ -10,56 +11,103 @@ var cControlMonsters = (function () {
         this.monsterRadius = 20;
         this.initPosiblePaths();
         this.readMonsterData();
-        this.createEnemyMonster(0 /* up */);
         var timer = game.time.create();
         timer.loop(100, this.checkMonstersHit, this);
         timer.start();
     }
     cControlMonsters.prototype.readMonsterData = function () {
+        var _this = this;
         var phaserJSON = this.game.cache.getJSON('monsterData');
-        console.log(phaserJSON);
+        phaserJSON.monsterData.forEach(function (element) {
+            _this.monsterData[element.id] = new cMonsterData(element);
+        });
     };
     //this function will control when the monsters colide
     cControlMonsters.prototype.checkMonstersHit = function () {
         var _this = this;
-        //lets check if monster colides each other 
-        this.arrayMonsters.forEach(function (monster) {
-            var monsterPoss = monster.sprite.position;
-            _this.arrayEnemyMonsters.forEach(function (enemy) {
-                var enemyPoss = enemy.sprite.position;
+        //lets reset the atack mode of the enemys
+        Object.keys(this.arrayEnemyMonsters).forEach(function (keyEnemyMonster) {
+            var enemy = _this.arrayEnemyMonsters[keyEnemyMonster];
+            enemy.isAtacking = false;
+        });
+        //lets check if our monsters can atack the monster of the enemy
+        Object.keys(this.arrayMonsters).forEach(function (keyMonster) {
+            var monster = _this.arrayMonsters[keyMonster];
+            var monsterPoss = monster.position;
+            monster.isAtacking = false;
+            Object.keys(_this.arrayEnemyMonsters).forEach(function (keyEnemyMonster) {
+                var enemy = _this.arrayEnemyMonsters[keyEnemyMonster];
+                var enemyPoss = enemy.position;
                 var distance = enemyPoss.distance(monsterPoss);
-                if (distance <= _this.monsterRadius) {
-                    monster.destroyMonster();
-                    enemy.destroyMonster();
-                    delete _this.arrayMonsters[monster.id];
-                    delete _this.arrayEnemyMonsters[enemy.id];
+                //lets check if the monster can atack an enemy
+                if (distance <= monster.data.hitRange) {
+                    monster.isAtacking = true;
+                    _this.resolveAtack(monster, enemy);
+                }
+                //lets check if the enemy can atack the monster 
+                if (distance <= enemy.data.hitRange) {
+                    enemy.isAtacking = true;
+                    _this.resolveAtack(enemy, monster);
                 }
             });
         });
     };
-    cControlMonsters.prototype.createEnemyMonster = function (pathOption) {
+    cControlMonsters.prototype.resolveAtack = function (atacker, defender) {
+        if (atacker.speedCounter >= atacker.data.atackSpeed) {
+            this.monsterHit(atacker, defender);
+            atacker.speedCounter = 0;
+        }
+        else {
+            atacker.speedCounter += 100;
+        }
+    };
+    cControlMonsters.prototype.monsterHit = function (atacker, defender) {
+        var damage = atacker.data.atack;
+        defender.monsterIsHit(damage);
+        switch (atacker.data.atackType) {
+            case 2 /* range */:
+                new cControlSpellAnim(this.game, atacker, defender, enumRayAnimations.arrow, 10);
+                break;
+            default:
+                break;
+        }
+    };
+    cControlMonsters.prototype.monsterDie = function (monster) {
+        console.log("entra aca");
+        //it can happend that the moster is kill twice
+        if (monster != undefined) {
+            //lets delete the monster for the array
+            delete this.arrayMonsters["m" + monster.id];
+            delete this.arrayEnemyMonsters["m" + monster.id];
+            //lets delete the monster
+            monster.destroyMonster();
+        }
+    };
+    cControlMonsters.prototype.createEnemyMonster = function (pathOption, monsterType) {
         //lets copy the path and then reverse it
         var path = this.paths[pathOption].slice();
         path.reverse();
-        var monster = new cMonster(this.game, this.monsterId, path, true, 0);
-        this.arrayEnemyMonsters[this.monsterId] = monster;
+        var monster = new cMonster(this.game, this.monsterId, path, true, 0, this.monsterData[monsterType]);
+        this.arrayEnemyMonsters["m" + this.monsterId] = monster;
         this.monsterId++;
         monster.eMonsterHitHeroe.add(this.monsterHitHeroe, this);
+        monster.eMonsterDie.add(this.monsterDie, this);
     };
-    cControlMonsters.prototype.createNewMonster = function (pathOption, startPosition) {
-        var monster = new cMonster(this.game, this.monsterId, this.paths[pathOption], false, startPosition);
-        this.arrayMonsters[this.monsterId] = monster;
+    cControlMonsters.prototype.createNewMonster = function (pathOption, startPosition, monsterType) {
+        var monster = new cMonster(this.game, this.monsterId, this.paths[pathOption], false, startPosition, this.monsterData[monsterType]);
+        this.arrayMonsters["m" + this.monsterId] = monster;
         this.monsterId++;
         monster.eMonsterHitHeroe.add(this.monsterHitHeroe, this);
+        monster.eMonsterDie.add(this.monsterDie, this);
     };
     cControlMonsters.prototype.monsterHitHeroe = function (monster) {
         //we should calculate the damage here? or direct in the monster? mmm
         //may be if i want to use some kind of power that will increise the power it should be here.
-        var damage = this.game.rnd.integerInRange(20, 50);
+        var damage = this.game.rnd.integerInRange(45, 50);
         this.gameInterface.monsterHitHeroe(monster, damage);
         //we delete the monster of the two arrays
-        delete this.arrayMonsters[monster.id];
-        delete this.arrayEnemyMonsters[monster.id];
+        delete this.arrayMonsters["m" + monster.id];
+        delete this.arrayEnemyMonsters["m" + monster.id];
     };
     //lest create all the posible paths for the monster,
     cControlMonsters.prototype.initPosiblePaths = function () {
@@ -86,9 +134,11 @@ var cControlMonsters = (function () {
         });
     };
     cControlMonsters.prototype.makePath = function (points) {
-        var bmd = this.game.add.bitmapData(this.game.width, this.game.height);
-        bmd.addToWorld();
-        bmd.clear();
+        if (this.showPath) {
+            var bmd = this.game.add.bitmapData(this.game.width, this.game.height);
+            bmd.addToWorld();
+            bmd.clear();
+        }
         var x = 1 / this.game.width / 5;
         var totalDistance = 0;
         var catmullPath = [];

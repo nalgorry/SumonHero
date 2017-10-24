@@ -1,5 +1,7 @@
 class cEnemyIA {
 
+    private monsterNumber:number = 0;
+
     constructor(public game:Phaser.Game,
     public gameInterface:cControlInterface) {
 
@@ -13,7 +15,13 @@ class cEnemyIA {
     }
 
     private update () {
-        this.gameInterface.controlMonsters.createEnemyMonster(this.game.rnd.integerInRange(0,3));
+        
+        var monsterType = this.game.rnd.integerInRange(1,3);
+        var pathNumber = this.game.rnd.integerInRange(0,3);
+
+        this.gameInterface.controlMonsters.createEnemyMonster(pathNumber,monsterType);
+
+        this.monsterNumber ++;
 
     }
 

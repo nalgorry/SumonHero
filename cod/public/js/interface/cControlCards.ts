@@ -12,15 +12,18 @@ class cControlCards {
 
     private initCards(){
         //lets add the cards that will let put monsters
-        this.arrayCards.push(this.createNewCard (20, 500));
-        this.arrayCards.push(this.createNewCard (100, 500));
+        this.arrayCards.push(this.createNewCard (20, 500, enumIdMonsters.blue));
+        this.arrayCards.push(this.createNewCard (100, 500, enumIdMonsters.red));
+        this.arrayCards.push(this.createNewCard (180, 500, enumIdMonsters.green));
 
     }
 
-    private createNewCard(x:number, y:number):cCards {
+    private createNewCard(x:number, y:number, monsterType:enumIdMonsters):cCards {
         
         //create the card
-        var newCard = new cCards(this.game, x, y);
+        var monsterData = this.userInterfase.controlMonsters.monsterData[monsterType];
+
+        var newCard = new cCards(this.game, x, y, monsterType, monsterData.tilePoss);
 
         //lets check what if something happends with this card
         newCard.eventDragStart.add(this.cardDragStart, this);
