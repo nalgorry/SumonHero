@@ -8,6 +8,10 @@ class cMonster extends Phaser.Sprite{
     private loopSpeed:number = 0;
     private speed:number; //the distance of every point in the path
     private life:number;
+
+    private completeBugSprite:Phaser.Sprite; //all the sprites of the bug 
+    private bugSprite:Phaser.Sprite;
+    private weaponSprite:Phaser.Sprite
     
     //to control monster atacks
     public speedCounter:number = 0;
@@ -32,18 +36,24 @@ class cMonster extends Phaser.Sprite{
         this.y = path[0].y;
         this.anchor.set(0.5);
 
-        //lets create the bug
-        var bugSprite = this.game.add.sprite(0, 0, 'bugs', data.tilePoss);
-        bugSprite.anchor.set(0.5);
-        bugSprite.y -= 20;
+        //all the sprites that generates the bug
+        this.completeBugSprite =  this.game.add.sprite(0, 0)
+        this.addChild(this.completeBugSprite);
+        this.completeBugSprite.inputEnabled = true;
+        this.completeBugSprite.events.onInputDown.add(this.monsterClick, this)
 
-        this.addChild(bugSprite);
+        //lets create the bug
+        this.bugSprite = this.game.add.sprite(0, 0, 'bugs', data.tilePoss);
+        this.bugSprite.anchor.set(0.5);
+        this.bugSprite.y -= 20;
+
+        this.completeBugSprite.addChild(this.bugSprite);
 
         //lets create the weapon MUAJAJA (evil laugh)
-        var weaponSprite = this.game.add.sprite(data.weaponX, data.weaponY, 'items', data.weaponTilePoss);
-        weaponSprite.anchor.set(0.5);
+        this.weaponSprite = this.game.add.sprite(data.weaponX, data.weaponY, 'items', data.weaponTilePoss);
+        this.weaponSprite.anchor.set(0, 1);
 
-        this.addChild(weaponSprite);
+        this.completeBugSprite.addChild(this.weaponSprite);
 
         //lets define for now the speed of the monster
         this.speed = this.data.maxSpeed;
@@ -53,7 +63,7 @@ class cMonster extends Phaser.Sprite{
         if (this.isEnemy == false) {
             
         } else {
-           // this.scale.x *= -1;
+           this.completeBugSprite.scale.x *= -1;
         }
 
         //lets define the path it will follow
@@ -69,6 +79,10 @@ class cMonster extends Phaser.Sprite{
         //to use the update loop
         this.game.add.existing(this);
 
+    }
+
+    private monsterClick() {
+        this.monsterAtack(this);
     }
 
     private makePathConstantSpeed(path) {
@@ -109,6 +123,75 @@ class cMonster extends Phaser.Sprite{
 
     }
 
+    public monsterAtack(defender:cMonster) {
+        
+        switch (this.data.atackType) {
+            case enumAtackType.range:
+                
+                this.animateArrow(defender);
+
+                break;
+                case enumAtackType.sword:
+
+                this.animateSwordAtack(defender);
+
+                break
+                case enumAtackType.explosion:
+                this.animateExplosion();
+
+            default:
+                break;
+        }
+
+    }
+
+    private animateArrow(defender:cMonster) {
+        //lets create the proyectile
+        new cControlSpellAnim(this.game, this, defender, enumRayAnimations.arrow,0);
+    }
+
+    private animateExplosion() {
+
+        //lets make this monster explote!!
+        var boomSprite = this.game.add.sprite(this.x, this.y, 'bombexploding')
+
+        var animation = boomSprite.animations.add('boom');
+
+        animation.play(15, false, true);
+
+    }
+
+    private animateSwordAtack(defender:cMonster) {
+        
+        var animSpeed = 200;
+
+        //to control the orientacion of animations
+        var ori:number = this.completeBugSprite.scale.x
+
+        //the animations for the character 
+        var animation1 = this.game.add.tween(this.completeBugSprite)
+        animation1.to( { x: 20 * ori}, animSpeed, Phaser.Easing.Linear.None, true);
+
+        var animation2 = this.game.add.tween(this.completeBugSprite)
+        animation2.to( { x: 0}, animSpeed, Phaser.Easing.Linear.None, false);
+
+        animation1.chain(animation2);
+
+        //the animations for the sword
+        var swordAnimation1 = this.game.add.tween(this.weaponSprite).to( 
+            { angle: -90 }, 100, Phaser.Easing.Linear.None, true);
+
+        var swordAnimation2 = this.game.add.tween(this.weaponSprite).to( 
+            { angle: 45 }, 100, Phaser.Easing.Linear.None, false);
+        
+        var swordAnimation3 = this.game.add.tween(this.weaponSprite).to( 
+            { angle: 0}, 100, Phaser.Easing.Linear.None, false);
+
+        swordAnimation1.chain(swordAnimation2);
+        swordAnimation2.chain(swordAnimation3);
+
+    }
+
     private monsterHitHeroe() {
         
         this.destroyMonster();
@@ -117,9 +200,16 @@ class cMonster extends Phaser.Sprite{
     }
 
     public destroyMonster() {
-        this.destroy(true);
+        var deadAnimation = this.game.add.tween(this).to( { alpha: 0}, 200, Phaser.Easing.Linear.None, true, 0, 0, false);
+        deadAnimation.onComplete.add(this.destroySprite,this);
+
+    }
+
+    destroySprite() {
         this.destroy(true);
     }
+
+
 
     public monsterIsHit(damage:number) {
 
@@ -150,6 +240,7 @@ class cMonster extends Phaser.Sprite{
                 //lets check if the movement have finish!
                 if (this.pathNumber >= this.monsterPath.length) {
                     this.monsterHitHeroe()
+                    this.isAtacking = true;
                 }
 
                 this.loopSpeedNumber = 0

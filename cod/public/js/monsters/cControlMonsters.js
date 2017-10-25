@@ -14,7 +14,16 @@ var cControlMonsters = (function () {
         var timer = game.time.create();
         timer.loop(100, this.checkMonstersHit, this);
         timer.start();
+        this.testMonster(0 /* up */, 500, 2 /* explosion */);
     }
+    cControlMonsters.prototype.testMonster = function (pathOption, startPosition, monsterType) {
+        var monster = new cMonster(this.game, this.monsterId, this.paths[pathOption], false, startPosition, this.monsterData[monsterType]);
+        monster.isAtacking = true;
+        var enemyMonster = new cMonster(this.game, this.monsterId, this.paths[pathOption], true, startPosition + 500, this.monsterData[monsterType]);
+        enemyMonster.isAtacking = true;
+        monster.eMonsterHitHeroe.add(this.monsterHitHeroe, this);
+        monster.eMonsterDie.add(this.monsterDie, this);
+    };
     cControlMonsters.prototype.readMonsterData = function () {
         var _this = this;
         var phaserJSON = this.game.cache.getJSON('monsterData');
@@ -54,23 +63,18 @@ var cControlMonsters = (function () {
     };
     cControlMonsters.prototype.resolveAtack = function (atacker, defender) {
         if (atacker.speedCounter >= atacker.data.atackSpeed) {
-            this.monsterHit(atacker, defender);
+            this.monsterAtack(atacker, defender);
             atacker.speedCounter = 0;
         }
         else {
             atacker.speedCounter += 100;
         }
     };
-    cControlMonsters.prototype.monsterHit = function (atacker, defender) {
+    cControlMonsters.prototype.monsterAtack = function (atacker, defender) {
+        //lets calculate the damage we will do here, but the actual damage will happend when the animation finish.
         var damage = atacker.data.atack;
         defender.monsterIsHit(damage);
-        switch (atacker.data.atackType) {
-            case 2 /* range */:
-                new cControlSpellAnim(this.game, atacker, defender, enumRayAnimations.arrow, 10);
-                break;
-            default:
-                break;
-        }
+        atacker.monsterAtack(defender);
     };
     cControlMonsters.prototype.monsterDie = function (monster) {
         console.log("entra aca");

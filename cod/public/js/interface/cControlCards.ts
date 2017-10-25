@@ -12,13 +12,13 @@ class cControlCards {
 
     private initCards(){
         //lets add the cards that will let put monsters
-        this.arrayCards.push(this.createNewCard (20, 500, enumIdMonsters.blue));
-        this.arrayCards.push(this.createNewCard (100, 500, enumIdMonsters.red));
-        this.arrayCards.push(this.createNewCard (180, 500, enumIdMonsters.green));
+        this.arrayCards.push(this.createNewCard (20, 500, enumMonstersType.sword));
+        this.arrayCards.push(this.createNewCard (100, 500, enumMonstersType.explosion));
+        this.arrayCards.push(this.createNewCard (180, 500, enumMonstersType.bow));
 
     }
 
-    private createNewCard(x:number, y:number, monsterType:enumIdMonsters):cCards {
+    private createNewCard(x:number, y:number, monsterType:enumMonstersType):cCards {
         
         //create the card
         var monsterData = this.userInterfase.controlMonsters.monsterData[monsterType];

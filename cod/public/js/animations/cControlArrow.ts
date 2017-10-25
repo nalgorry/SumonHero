@@ -24,8 +24,10 @@ class cControlArrow {
 
         arrow.angle = angle;
 
+        var distance:number = spriteFrom.position.distance(spriteTo.position);
+
         var animation = this.game.add.tween(arrow).to( { 
-            x: xOffset, y: yOffset}, 300, Phaser.Easing.Linear.None, true);
+            x: xOffset, y: yOffset}, distance * 2, Phaser.Easing.Linear.None, true);
         
         animation.onComplete.add(this.arrowComplete,this,null, arrow);
     }

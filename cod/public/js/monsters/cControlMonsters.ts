@@ -24,6 +24,24 @@ class cControlMonsters {
         var timer = game.time.create();
         timer.loop(100, this.checkMonstersHit,this)
         timer.start();
+
+        this.testMonster(enumPathOptions.up, 500, enumMonstersType.explosion);
+
+    }
+
+    private testMonster(pathOption:enumPathOptions, startPosition:number, monsterType:enumMonstersType) {
+        
+        var monster = new cMonster(this.game, this.monsterId, this.paths[pathOption], false, startPosition, this.monsterData[monsterType]);
+
+        monster.isAtacking = true;
+
+        var enemyMonster = new cMonster(this.game, this.monsterId, this.paths[pathOption], true, startPosition + 500, this.monsterData[monsterType]);
+
+        enemyMonster.isAtacking = true;
+        
+        monster.eMonsterHitHeroe.add(this.monsterHitHeroe, this);
+        monster.eMonsterDie.add(this.monsterDie, this);
+
     }
 
     private readMonsterData() {
@@ -90,7 +108,7 @@ class cControlMonsters {
         
         if (atacker.speedCounter >= atacker.data.atackSpeed) {
 
-            this.monsterHit(atacker, defender);
+            this.monsterAtack(atacker, defender);
             
             atacker.speedCounter = 0;
         } else {
@@ -100,22 +118,15 @@ class cControlMonsters {
 
     }
 
-    private monsterHit(atacker:cMonster, defender:cMonster) {
+    private monsterAtack(atacker:cMonster, defender:cMonster) {
         
+        //lets calculate the damage we will do here, but the actual damage will happend when the animation finish.
         var damage = atacker.data.atack;
 
         defender.monsterIsHit(damage);
 
-        switch (atacker.data.atackType) {
-            case enumAtackType.range:
-                
-                new cControlSpellAnim(this.game, atacker, defender, enumRayAnimations.arrow,10);
+        atacker.monsterAtack(defender);
 
-                break;
-        
-            default:
-                break;
-        }
 
     }
 

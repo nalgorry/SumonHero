@@ -13,8 +13,9 @@ var cControlArrow = (function () {
         arrow.anchor.set(0.5);
         var angle = (360 / (2 * Math.PI)) * Phaser.Math.angleBetween(spriteFrom.x, spriteFrom.y, spriteTo.x, spriteTo.y) + 90;
         arrow.angle = angle;
+        var distance = spriteFrom.position.distance(spriteTo.position);
         var animation = this.game.add.tween(arrow).to({
-            x: xOffset, y: yOffset }, 300, Phaser.Easing.Linear.None, true);
+            x: xOffset, y: yOffset }, distance * 2, Phaser.Easing.Linear.None, true);
         animation.onComplete.add(this.arrowComplete, this, null, arrow);
     };
     cControlArrow.prototype.arrowComplete = function (arrow) {

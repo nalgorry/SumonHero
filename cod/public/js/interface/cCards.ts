@@ -9,7 +9,7 @@ class cCards {
     constructor(public game:Phaser.Game, 
         public x:number,
         public y:number, 
-        public monsterType:enumIdMonsters, 
+        public monsterType:enumMonstersType, 
         public monsterTilePoss:number) {
         
         this.sprite = this.game.add.sprite(x, y);

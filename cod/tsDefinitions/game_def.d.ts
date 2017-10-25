@@ -5,14 +5,14 @@
     downS = 3,
 }
 
-    declare const enum enumIdMonsters {
-        blue = 1,
-        red = 2,
-        green = 3,
+    declare const enum enumMonstersType {
+        sword = 1,
+        explosion = 2,
+        bow = 3,
     }
 
     declare const enum enumAtackType {
-        hand = 1,
+        sword = 1,
         range = 2,
         explosion = 3,
     }
