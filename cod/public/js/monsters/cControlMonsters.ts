@@ -25,7 +25,7 @@ class cControlMonsters {
         timer.loop(100, this.checkMonstersHit,this)
         timer.start();
 
-        this.testMonster(enumPathOptions.up, 500, enumMonstersType.explosion);
+       // this.testMonster(enumPathOptions.up, 500, enumMonstersType.explosion);
 
     }
 
@@ -120,54 +120,83 @@ class cControlMonsters {
 
     private monsterAtack(atacker:cMonster, defender:cMonster) {
         
-        //lets calculate the damage we will do here, but the actual damage will happend when the animation finish.
-        var damage = atacker.data.atack;
-
-        defender.monsterIsHit(damage);
-
         atacker.monsterAtack(defender);
-
 
     }
 
     private monsterDie(monster:cMonster) {
-        
-        console.log("entra aca");
-        //it can happend that the moster is kill twice
-        if(monster != undefined) {
-
-            //lets delete the monster for the array
-            delete this.arrayMonsters["m" + monster.id];
-            delete this.arrayEnemyMonsters["m" + monster.id];
-
-            //lets delete the monster
-            monster.destroyMonster();
-        }
+        //lets delete the monster for the array
+        delete this.arrayMonsters["m" + monster.id];
+        delete this.arrayEnemyMonsters["m" + monster.id];
     }
 
-     public createEnemyMonster(pathOption:enumPathOptions, monsterType:number) {
+     public createEnemyMonster(pathOption:enumPathOptions, startPosition:number, monsterType:number) {
         
         //lets copy the path and then reverse it
         var path:any[] = <any>this.paths[pathOption].slice();
         path.reverse();
-        var monster = new cMonster(this.game, this.monsterId, path ,true, 0, this.monsterData[monsterType]);
+        
+        var monster = this.createMonster(path, startPosition, monsterType, true )
+        
         this.arrayEnemyMonsters["m" + this.monsterId] = monster;
         this.monsterId ++;
-
-        monster.eMonsterHitHeroe.add(this.monsterHitHeroe, this);
-        monster.eMonsterDie.add(this.monsterDie, this);
 
     }
     
     public createNewMonster(pathOption:enumPathOptions, startPosition:number, monsterType:number) {
         
-        var monster = new cMonster(this.game, this.monsterId, this.paths[pathOption], false, startPosition, this.monsterData[monsterType]);
-        
+        var monster = this.createMonster(this.paths[pathOption], startPosition, monsterType, false )
+
         this.arrayMonsters["m" + this.monsterId] = monster;
         this.monsterId ++;
 
+    }
+
+    private createMonster(arrayPath,startPosition:number, monsterType:number, enemyMonster:boolean):cMonster {
+
+        var monster = new cMonster(this.game, this.monsterId, arrayPath, enemyMonster, startPosition, this.monsterData[monsterType]);
+
         monster.eMonsterHitHeroe.add(this.monsterHitHeroe, this);
         monster.eMonsterDie.add(this.monsterDie, this);
+        monster.eMonsterAreaAtack.add(this.monsterAreaAtack, this);
+
+        return monster;
+    }
+
+    //it happens when the moster do a area atack
+    private monsterAreaAtack(monster: cMonster) {
+        
+        switch (monster.data.atackType) {
+            case enumAtackType.explosion:
+                
+                //lets check wich array we have to uses 
+                var array:cMonster[];
+                if (monster.isEnemy == true) {
+                    array = this.arrayMonsters;
+                } else {
+                    array = this.arrayEnemyMonsters;
+                }
+
+                //lets get all the monster afected.
+                Object.keys(array).forEach(keyEnemyMonster => {
+                    
+                    var enemy:cMonster = array[keyEnemyMonster];
+
+                    var distance = monster.position.distance(enemy.position);
+
+                    if (distance <= monster.data.areaHitRange) {
+                        enemy.monsterIsHit(monster.data.atack);
+                    }
+
+                })
+
+
+                break;
+        
+            default:
+                break;
+        }
+
 
     }
 

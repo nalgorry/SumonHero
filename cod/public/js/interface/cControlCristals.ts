@@ -15,7 +15,7 @@ class cControlCristals {
         var centerPoss:number = oneQuarterCenterPoss * 2;
 
         //lets init the blue cristal of the player
-        this.arrayCristals.push( new cCristals(this.game, 56, 340, cristalColor.blue_cristal , enumPathOptions.up, 0 ));
+        this.arrayCristals.push( new cCristals(this.game, 56, 340, cristalColor.blue_cristal , enumPathOptions.allOptions, 0 ));
         this.arrayCristals.push( new cCristals(this.game, 244, 216, cristalColor.blue_cristal, enumPathOptions.up , oneQuarterPoss));
         this.arrayCristals.push( new cCristals(this.game, 244, 278, cristalColor.blue_cristal, enumPathOptions.upS, oneQuarterCenterPoss));
         this.arrayCristals.push( new cCristals(this.game, 244, 386, cristalColor.blue_cristal, enumPathOptions.downS, oneQuarterCenterPoss));

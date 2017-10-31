@@ -79,15 +79,25 @@ class cControlInterface {
         
         if (cristal != undefined) {
             //lets check if we have the mana to do it
-            if (this.playerBars.UpdateMana(-card.manaCost) == true) {
+            if (this.playerBars.UpdateMana(-card.monsterData.manaCost) == true) {
 
-                //lets add the new monster to the map!
-                this.controlMonsters.createNewMonster(cristal.pathOption, cristal.monsterStartPoss, card.monsterType);
-
+                if (cristal.pathOption == enumPathOptions.allOptions) {
+                    this.selMonsterDirection(cristal)
+                } else {
+                    //lets add the new monster to the map!
+                    this.controlMonsters.createNewMonster(cristal.pathOption, cristal.monsterStartPoss, card.monsterData.id);
+                }
             }
 
         }
 
+    }
+
+    private selMonsterDirection(cristal:cCristals) {
+
+        //lets create the arrow to select the directorio
+        this.game.add.sprite(cristal.x, cristal.y, 'pathArrow');
+        
     }
 
     public cardDragStart(card:cCards) {
@@ -95,4 +105,5 @@ class cControlInterface {
     }
 
 }
+
 

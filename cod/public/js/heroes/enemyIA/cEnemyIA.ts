@@ -19,7 +19,7 @@ class cEnemyIA {
         var monsterType = this.game.rnd.integerInRange(1,3);
         var pathNumber = this.game.rnd.integerInRange(0,3);
 
-        this.gameInterface.controlMonsters.createEnemyMonster(pathNumber,monsterType);
+        this.gameInterface.controlMonsters.createEnemyMonster(pathNumber, 0 ,monsterType);
 
         this.monsterNumber ++;
 

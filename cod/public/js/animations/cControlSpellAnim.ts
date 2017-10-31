@@ -7,12 +7,17 @@ enum enumRayAnimations {
 
 class cControlSpellAnim {
 
+    evenAnimationFinish:Phaser.Signal;
+
     constructor(public game: Phaser.Game, 
             spriteFrom:Phaser.Sprite, 
             public spriteTo:Phaser.Sprite, 
             rayAnimationType:enumRayAnimations,
             public spellDamage: number = 0,
             color:number = 0x000000) {
+
+                //lets iniciate the events
+                this.evenAnimationFinish = new Phaser.Signal;
 
                 //lets check if we have to do a ray 
                 if (spriteFrom != null && rayAnimationType != undefined) {
@@ -50,6 +55,7 @@ class cControlSpellAnim {
     }
 
     public rayFinish() {
+        this.evenAnimationFinish.dispatch();
         this.showDamageText();
 
      }

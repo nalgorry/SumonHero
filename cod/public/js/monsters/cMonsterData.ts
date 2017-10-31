@@ -15,6 +15,9 @@ class cMonsterData {
     public weaponTilePoss:number;
     public weaponX:number;
     public weaponY:number;
+    public areaHitRange:number;
+    public manaCost:number;
+    public respawnTime:number;
 
 
     constructor(JSONData:any) {
@@ -34,6 +37,9 @@ class cMonsterData {
         this.weaponTilePoss = JSONData.weaponTilePoss;
         this.weaponX = JSONData.weaponX;
         this.weaponY = JSONData.weaponY;
+        this.areaHitRange = JSONData.areaHitRange;
+        this.manaCost = JSONData.manaCost;
+        this.respawnTime = JSONData.respawnTime;
 
     }
 

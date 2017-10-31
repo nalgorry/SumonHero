@@ -27,6 +27,11 @@ var preloader = (function (_super) {
         this.game.load.spritesheet('bugs', 'assets/bugs.png', 40, 40);
         this.game.load.spritesheet('items', 'assets/items.png', 40, 40);
         this.game.load.spritesheet('bombexploding', 'assets/bombexploding.png', 32, 64);
+        this.game.load.image('pathArrow', 'assets/patharrow.png');
+        //load the fonts
+        this.game.load.bitmapFont('gotic_white', 'assets/fonts/showg_white.png', 'assets/fonts/showg_white.fnt');
+        this.game.load.bitmapFont('gotic_black', 'assets/fonts/showg_black.png', 'assets/fonts/showg_black.fnt');
+        this.game.load.bitmapFont('arial', 'assets/fonts/arial20.png', 'assets/fonts/arial20.fnt');
         //this.game.load.spritesheet('monster_2', 'assets/monster_2.png',170 ,119 );
         //this.game.load.image('monster_3', 'assets/monster_3.png' );
         //this.game.load.image('monster_4', 'assets/monster_4.png' );

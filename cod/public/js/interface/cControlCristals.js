@@ -9,7 +9,7 @@ var cControlCristals = (function () {
         var oneQuarterCenterPoss = 780;
         var centerPoss = oneQuarterCenterPoss * 2;
         //lets init the blue cristal of the player
-        this.arrayCristals.push(new cCristals(this.game, 56, 340, cristalColor.blue_cristal, 0 /* up */, 0));
+        this.arrayCristals.push(new cCristals(this.game, 56, 340, cristalColor.blue_cristal, 4 /* allOptions */, 0));
         this.arrayCristals.push(new cCristals(this.game, 244, 216, cristalColor.blue_cristal, 0 /* up */, oneQuarterPoss));
         this.arrayCristals.push(new cCristals(this.game, 244, 278, cristalColor.blue_cristal, 2 /* upS */, oneQuarterCenterPoss));
         this.arrayCristals.push(new cCristals(this.game, 244, 386, cristalColor.blue_cristal, 3 /* downS */, oneQuarterCenterPoss));

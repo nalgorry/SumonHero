@@ -15,6 +15,9 @@ var cMonsterData = (function () {
         this.weaponTilePoss = JSONData.weaponTilePoss;
         this.weaponX = JSONData.weaponX;
         this.weaponY = JSONData.weaponY;
+        this.areaHitRange = JSONData.areaHitRange;
+        this.manaCost = JSONData.manaCost;
+        this.respawnTime = JSONData.respawnTime;
     }
     return cMonsterData;
 }());

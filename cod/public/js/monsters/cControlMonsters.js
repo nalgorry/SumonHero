@@ -14,7 +14,7 @@ var cControlMonsters = (function () {
         var timer = game.time.create();
         timer.loop(100, this.checkMonstersHit, this);
         timer.start();
-        this.testMonster(0 /* up */, 500, 2 /* explosion */);
+        // this.testMonster(enumPathOptions.up, 500, enumMonstersType.explosion);
     }
     cControlMonsters.prototype.testMonster = function (pathOption, startPosition, monsterType) {
         var monster = new cMonster(this.game, this.monsterId, this.paths[pathOption], false, startPosition, this.monsterData[monsterType]);
@@ -71,38 +71,57 @@ var cControlMonsters = (function () {
         }
     };
     cControlMonsters.prototype.monsterAtack = function (atacker, defender) {
-        //lets calculate the damage we will do here, but the actual damage will happend when the animation finish.
-        var damage = atacker.data.atack;
-        defender.monsterIsHit(damage);
         atacker.monsterAtack(defender);
     };
     cControlMonsters.prototype.monsterDie = function (monster) {
-        console.log("entra aca");
-        //it can happend that the moster is kill twice
-        if (monster != undefined) {
-            //lets delete the monster for the array
-            delete this.arrayMonsters["m" + monster.id];
-            delete this.arrayEnemyMonsters["m" + monster.id];
-            //lets delete the monster
-            monster.destroyMonster();
-        }
+        //lets delete the monster for the array
+        delete this.arrayMonsters["m" + monster.id];
+        delete this.arrayEnemyMonsters["m" + monster.id];
     };
-    cControlMonsters.prototype.createEnemyMonster = function (pathOption, monsterType) {
+    cControlMonsters.prototype.createEnemyMonster = function (pathOption, startPosition, monsterType) {
         //lets copy the path and then reverse it
         var path = this.paths[pathOption].slice();
         path.reverse();
-        var monster = new cMonster(this.game, this.monsterId, path, true, 0, this.monsterData[monsterType]);
+        var monster = this.createMonster(path, startPosition, monsterType, true);
         this.arrayEnemyMonsters["m" + this.monsterId] = monster;
         this.monsterId++;
-        monster.eMonsterHitHeroe.add(this.monsterHitHeroe, this);
-        monster.eMonsterDie.add(this.monsterDie, this);
     };
     cControlMonsters.prototype.createNewMonster = function (pathOption, startPosition, monsterType) {
-        var monster = new cMonster(this.game, this.monsterId, this.paths[pathOption], false, startPosition, this.monsterData[monsterType]);
+        var monster = this.createMonster(this.paths[pathOption], startPosition, monsterType, false);
         this.arrayMonsters["m" + this.monsterId] = monster;
         this.monsterId++;
+    };
+    cControlMonsters.prototype.createMonster = function (arrayPath, startPosition, monsterType, enemyMonster) {
+        var monster = new cMonster(this.game, this.monsterId, arrayPath, enemyMonster, startPosition, this.monsterData[monsterType]);
         monster.eMonsterHitHeroe.add(this.monsterHitHeroe, this);
         monster.eMonsterDie.add(this.monsterDie, this);
+        monster.eMonsterAreaAtack.add(this.monsterAreaAtack, this);
+        return monster;
+    };
+    //it happens when the moster do a area atack
+    cControlMonsters.prototype.monsterAreaAtack = function (monster) {
+        switch (monster.data.atackType) {
+            case 3 /* explosion */:
+                //lets check wich array we have to uses 
+                var array;
+                if (monster.isEnemy == true) {
+                    array = this.arrayMonsters;
+                }
+                else {
+                    array = this.arrayEnemyMonsters;
+                }
+                //lets get all the monster afected.
+                Object.keys(array).forEach(function (keyEnemyMonster) {
+                    var enemy = array[keyEnemyMonster];
+                    var distance = monster.position.distance(enemy.position);
+                    if (distance <= monster.data.areaHitRange) {
+                        enemy.monsterIsHit(monster.data.atack);
+                    }
+                });
+                break;
+            default:
+                break;
+        }
     };
     cControlMonsters.prototype.monsterHitHeroe = function (monster) {
         //we should calculate the damage here? or direct in the monster? mmm

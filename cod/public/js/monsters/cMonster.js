@@ -16,6 +16,7 @@ var cMonster = (function (_super) {
         this.pathNumber = 0;
         this.loopSpeedNumber = 0;
         this.loopSpeed = 0;
+        this.isDead = false; //to control if a spell hit after the monster die.
         //to control monster atacks
         this.speedCounter = 0;
         this.isAtacking = false;
@@ -54,6 +55,7 @@ var cMonster = (function (_super) {
         //to control the events of the monster
         this.eMonsterHitHeroe = new Phaser.Signal();
         this.eMonsterDie = new Phaser.Signal();
+        this.eMonsterAreaAtack = new Phaser.Signal();
         //to use the update loop
         this.game.add.existing(this);
     }
@@ -104,13 +106,25 @@ var cMonster = (function (_super) {
     };
     cMonster.prototype.animateArrow = function (defender) {
         //lets create the proyectile
-        new cControlSpellAnim(this.game, this, defender, enumRayAnimations.arrow, 0);
+        var arrow = new cControlSpellAnim(this.game, this, defender, enumRayAnimations.arrow, 0);
+        arrow.evenAnimationFinish.add(this.monsterHit, this, null, defender, null, defender);
     };
     cMonster.prototype.animateExplosion = function () {
-        //lets make this monster explote!!
-        var boomSprite = this.game.add.sprite(this.x, this.y, 'bombexploding');
-        var animation = boomSprite.animations.add('boom');
-        animation.play(15, false, true);
+        //lets make this monster explote only once
+        if (this.isDead == false) {
+            var ori = this.completeBugSprite.scale.x;
+            var boomSprite = this.game.add.sprite(this.x + 30 * ori, this.y - 30, 'bombexploding');
+            boomSprite.anchor.set(0.5);
+            var animation = boomSprite.animations.add('boom');
+            animation.play(15, false, true);
+            animation.onComplete.add(this.boomExplote, this);
+            this.isDead = true;
+        }
+    };
+    cMonster.prototype.boomExplote = function () {
+        //lets kill the character that drop the boom
+        this.destroyMonster();
+        this.eMonsterAreaAtack.dispatch(this);
     };
     cMonster.prototype.animateSwordAtack = function (defender) {
         var animSpeed = 200;
@@ -128,6 +142,12 @@ var cMonster = (function (_super) {
         var swordAnimation3 = this.game.add.tween(this.weaponSprite).to({ angle: 0 }, 100, Phaser.Easing.Linear.None, false);
         swordAnimation1.chain(swordAnimation2);
         swordAnimation2.chain(swordAnimation3);
+        swordAnimation3.onComplete.add(this.monsterHit, this, null, defender);
+    };
+    cMonster.prototype.monsterHit = function (sprite, tween, defender) {
+        //lets calculate the damage we will do here, but the actual damage will happend when the animation finish.
+        var damage = this.data.atack;
+        defender.monsterIsHit(damage);
     };
     cMonster.prototype.monsterHitHeroe = function () {
         this.destroyMonster();
@@ -135,18 +155,19 @@ var cMonster = (function (_super) {
         this.eMonsterHitHeroe.dispatch(this);
     };
     cMonster.prototype.destroyMonster = function () {
+        this.eMonsterDie.dispatch(this);
         var deadAnimation = this.game.add.tween(this).to({ alpha: 0 }, 200, Phaser.Easing.Linear.None, true, 0, 0, false);
         deadAnimation.onComplete.add(this.destroySprite, this);
+        this.isDead = true;
     };
     cMonster.prototype.destroySprite = function () {
         this.destroy(true);
     };
     cMonster.prototype.monsterIsHit = function (damage) {
         this.life -= damage;
-        console.log(damage);
         //lets check if the monster is dead!
-        if (this.life <= 0) {
-            this.eMonsterDie.dispatch(this);
+        if (this.life <= 0 && this.isDead == false) {
+            this.destroyMonster();
         }
     };
     cMonster.prototype.update = function () {

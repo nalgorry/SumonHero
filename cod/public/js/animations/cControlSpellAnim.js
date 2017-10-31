@@ -12,6 +12,8 @@ var cControlSpellAnim = (function () {
         this.game = game;
         this.spriteTo = spriteTo;
         this.spellDamage = spellDamage;
+        //lets iniciate the events
+        this.evenAnimationFinish = new Phaser.Signal;
         //lets check if we have to do a ray 
         if (spriteFrom != null && rayAnimationType != undefined) {
             //lets see wich ray we have to do 
@@ -41,6 +43,7 @@ var cControlSpellAnim = (function () {
         }
     }
     cControlSpellAnim.prototype.rayFinish = function () {
+        this.evenAnimationFinish.dispatch();
         this.showDamageText();
     };
     cControlSpellAnim.prototype.showDamageText = function () {

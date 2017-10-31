@@ -11,7 +11,10 @@ class cMonster extends Phaser.Sprite{
 
     private completeBugSprite:Phaser.Sprite; //all the sprites of the bug 
     private bugSprite:Phaser.Sprite;
-    private weaponSprite:Phaser.Sprite
+    private weaponSprite:Phaser.Sprite;
+    
+
+    public isDead:boolean = false; //to control if a spell hit after the monster die.
     
     //to control monster atacks
     public speedCounter:number = 0;
@@ -19,6 +22,7 @@ class cMonster extends Phaser.Sprite{
 
     public eMonsterHitHeroe:Phaser.Signal;
     public eMonsterDie:Phaser.Signal;
+    public eMonsterAreaAtack:Phaser.Signal;
 
     constructor (public game:Phaser.Game, 
         public id:number,
@@ -75,6 +79,7 @@ class cMonster extends Phaser.Sprite{
         //to control the events of the monster
         this.eMonsterHitHeroe = new Phaser.Signal();
         this.eMonsterDie = new Phaser.Signal();
+        this.eMonsterAreaAtack = new Phaser.Signal();
         
         //to use the update loop
         this.game.add.existing(this);
@@ -147,17 +152,36 @@ class cMonster extends Phaser.Sprite{
 
     private animateArrow(defender:cMonster) {
         //lets create the proyectile
-        new cControlSpellAnim(this.game, this, defender, enumRayAnimations.arrow,0);
+        var arrow = new cControlSpellAnim(this.game, this, defender, enumRayAnimations.arrow,0);
+
+        arrow.evenAnimationFinish.add(this.monsterHit,this, null, defender, null, defender);
     }
 
     private animateExplosion() {
 
-        //lets make this monster explote!!
-        var boomSprite = this.game.add.sprite(this.x, this.y, 'bombexploding')
+        //lets make this monster explote only once
+        if (this.isDead == false) {
 
-        var animation = boomSprite.animations.add('boom');
+            var ori = this.completeBugSprite.scale.x;
+            var boomSprite = this.game.add.sprite(this.x + 30 * ori, this.y - 30, 'bombexploding')
+            boomSprite.anchor.set(0.5);
 
-        animation.play(15, false, true);
+            var animation = boomSprite.animations.add('boom');
+
+            animation.play(15, false, true);
+
+            animation.onComplete.add(this.boomExplote,this)
+
+            this.isDead = true;
+        }
+
+    }
+
+    private boomExplote() {
+        
+        //lets kill the character that drop the boom
+        this.destroyMonster();
+        this.eMonsterAreaAtack.dispatch(this)
 
     }
 
@@ -190,6 +214,16 @@ class cMonster extends Phaser.Sprite{
         swordAnimation1.chain(swordAnimation2);
         swordAnimation2.chain(swordAnimation3);
 
+        swordAnimation3.onComplete.add(this.monsterHit, this, null, defender);
+
+    }
+
+    private monsterHit(sprite, tween, defender:cMonster) {
+        //lets calculate the damage we will do here, but the actual damage will happend when the animation finish.
+        var damage = this.data.atack;
+
+        defender.monsterIsHit(damage);
+        
     }
 
     private monsterHitHeroe() {
@@ -200,8 +234,11 @@ class cMonster extends Phaser.Sprite{
     }
 
     public destroyMonster() {
+
+        this.eMonsterDie.dispatch(this);
         var deadAnimation = this.game.add.tween(this).to( { alpha: 0}, 200, Phaser.Easing.Linear.None, true, 0, 0, false);
         deadAnimation.onComplete.add(this.destroySprite,this);
+        this.isDead = true;
 
     }
 
@@ -213,14 +250,11 @@ class cMonster extends Phaser.Sprite{
 
     public monsterIsHit(damage:number) {
 
-
         this.life -= damage;
 
-        console.log(damage);
-
-        //lets check if the monster is dead!
-        if (this.life <= 0) {
-            this.eMonsterDie.dispatch(this);
+       //lets check if the monster is dead!
+        if (this.life <= 0 && this.isDead == false) {
+            this.destroyMonster();         
         }
 
     }
