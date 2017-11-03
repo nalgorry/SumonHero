@@ -18,3 +18,10 @@
         range = 2,
         explosion = 3,
     }
+
+    declare const enum enumCristalType {
+        heroeCristal = 1,
+        fixedCristal = 2,
+        centerCristal = 3,
+        enemyCristal = 4
+    }

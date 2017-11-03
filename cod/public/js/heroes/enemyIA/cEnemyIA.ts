@@ -9,7 +9,7 @@ class cEnemyIA {
 
                 //lets create the timer to do all we need
         var timer = game.time.create(false);
-        timer.loop(2000, this.update, this);
+        timer.loop(4000, this.update, this);
         timer.start();
 
     }

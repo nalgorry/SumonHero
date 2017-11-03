@@ -11,6 +11,9 @@ var cControlInterface = (function () {
         //to control the update of the bars        
         var timer = this.game.time.events.loop(this.speedBars, this.updateBars, this);
     }
+    cControlInterface.prototype.getSharedCristals = function () {
+        return this.controlCristals.arrayShareCristals;
+    };
     cControlInterface.prototype.monsterHitHeroe = function (monster, damage) {
         if (monster.isEnemy) {
             this.playerBars.UpdateLife(-damage);
@@ -50,19 +53,53 @@ var cControlInterface = (function () {
         if (cristal != undefined) {
             //lets check if we have the mana to do it
             if (this.playerBars.UpdateMana(-card.monsterData.manaCost) == true) {
+                var direction = cristal.pathOption;
                 if (cristal.pathOption == 4 /* allOptions */) {
-                    this.selMonsterDirection(cristal);
+                    //lets choose a random path 
+                    direction = this.game.rnd.integerInRange(0, 3);
                 }
-                else {
-                    //lets add the new monster to the map!
-                    this.controlMonsters.createNewMonster(cristal.pathOption, cristal.monsterStartPoss, card.monsterData.id);
-                }
+                //lets add the new monster to the map!
+                this.controlMonsters.createNewMonster(direction, cristal.monsterStartPoss, card.monsterData.id);
             }
         }
     };
-    cControlInterface.prototype.selMonsterDirection = function (cristal) {
+    cControlInterface.prototype.selMonsterDirection = function (cristal, cards) {
+        /* to make the arrow */
         //lets create the arrow to select the directorio
-        this.game.add.sprite(cristal.x, cristal.y, 'pathArrow');
+        var arrow = this.game.add.sprite(cristal.x, cristal.y, 'pathArrow');
+        //arrow.anchor.set(0, 0.5);
+        //lets create a timer to control the arrow
+        var timer = this.game.time.create(false);
+        timer.loop(30, this.updateArrow, this, arrow, timer, cristal, cards);
+        timer.start();
+    };
+    cControlInterface.prototype.updateArrow = function (arrow, timer, cristal, card) {
+        var mousePoss = this.game.input.activePointer.position;
+        var angle = (360 / (2 * Math.PI)) * Phaser.Math.angleBetween(arrow.x, arrow.y, mousePoss.x, mousePoss.y);
+        arrow.angle = angle;
+        if (this.game.input.activePointer.isDown) {
+            //lets check where to put the monster now!
+            var pathOption = 0;
+            if (arrow.angle <= -28) {
+                pathOption = 0 /* up */;
+            }
+            else if (arrow.angle < 0) {
+                pathOption = 2 /* upS */;
+            }
+            else if (arrow.angle < 36) {
+                pathOption = 3 /* downS */;
+            }
+            else {
+                pathOption = 1 /* down */;
+            }
+            this.controlMonsters.createNewMonster(pathOption, cristal.monsterStartPoss, card.monsterData.id);
+            timer.destroy();
+            var deadAnimation = this.game.add.tween(arrow).to({ alpha: 0 }, 200, Phaser.Easing.Linear.None, true, 0, 0, false);
+            deadAnimation.onComplete.add(this.destroySprite, this, null, arrow);
+        }
+    };
+    cControlInterface.prototype.destroySprite = function (arrow) {
+        arrow.destroy(true);
     };
     cControlInterface.prototype.cardDragStart = function (card) {
         this.controlCristals.activateBlueCristals();

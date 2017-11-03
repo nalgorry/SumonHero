@@ -12,7 +12,7 @@ var cControlMonsters = (function () {
         this.initPosiblePaths();
         this.readMonsterData();
         var timer = game.time.create();
-        timer.loop(100, this.checkMonstersHit, this);
+        timer.loop(100, this.checkMonsterPostion, this);
         timer.start();
         // this.testMonster(enumPathOptions.up, 500, enumMonstersType.explosion);
     }
@@ -29,6 +29,54 @@ var cControlMonsters = (function () {
         var phaserJSON = this.game.cache.getJSON('monsterData');
         phaserJSON.monsterData.forEach(function (element) {
             _this.monsterData[element.id] = new cMonsterData(element);
+        });
+    };
+    cControlMonsters.prototype.checkMonsterPostion = function () {
+        //check if the monster will enter atack mode 
+        this.checkMonstersHit();
+        //check if the monster can capture a cristal 
+        this.checkCristalCapture();
+    };
+    cControlMonsters.prototype.checkCristalCapture = function () {
+        var _this = this;
+        var sharedCristals = this.gameInterface.getSharedCristals();
+        //lets check if the monster is in the cristal 
+        sharedCristals.forEach(function (cristal) {
+            //lets check player monsters
+            for (var keyMonster in _this.arrayMonsters) {
+                var monster = _this.arrayMonsters[keyMonster];
+                var distance = monster.position.distance(cristal.sprite.position);
+                if (distance <= 30) {
+                    cristal.playerControl = true;
+                    break;
+                }
+                else {
+                    cristal.playerControl = false;
+                }
+            }
+            ;
+            //lets check enemy monsters
+            for (var keyMonster in _this.arrayEnemyMonsters) {
+                var monster = _this.arrayEnemyMonsters[keyMonster];
+                var distance = monster.position.distance(cristal.sprite.position);
+                if (distance <= 30) {
+                    cristal.enemyControl = true;
+                    break;
+                }
+                else {
+                    cristal.enemyControl = false;
+                }
+            }
+            ;
+        });
+        //let change the color of the cristal 
+        sharedCristals.forEach(function (cristal) {
+            if (cristal.playerControl == true && cristal.enemyControl == false) {
+                console.log("cristal en control amigo");
+            }
+            else if (cristal.playerControl == false && cristal.enemyControl == true) {
+                console.log("cristal en control enemigo");
+            }
         });
     };
     //this function will control when the monsters colide
@@ -87,6 +135,7 @@ var cControlMonsters = (function () {
         this.monsterId++;
     };
     cControlMonsters.prototype.createNewMonster = function (pathOption, startPosition, monsterType) {
+        console.log(this.paths[pathOption]);
         var monster = this.createMonster(this.paths[pathOption], startPosition, monsterType, false);
         this.arrayMonsters["m" + this.monsterId] = monster;
         this.monsterId++;
