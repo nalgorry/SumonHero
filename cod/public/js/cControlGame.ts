@@ -21,6 +21,7 @@ class cControlGame {
 
         //lets init the heroes
         this.controlHeroes = new cControlHeroes(game, this.controlInterface);
+        this.controlInterface.controlHeroes = this.controlHeroes;
 
     }
 

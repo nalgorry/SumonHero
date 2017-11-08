@@ -3,7 +3,7 @@ class cControlRay extends Phaser.Sprite {
     private randomFactor = 3;
     private randomCorrectionFactor = 2;
     private maxLenght:number = 5;
-    private numberOfUpdates = 6;
+    private numberOfUpdates = 8;
     private numberOfVisibleParts = 25;
 
     private graphics:Phaser.Graphics[] = [];
@@ -40,7 +40,7 @@ class cControlRay extends Phaser.Sprite {
     
 
     private makeRay(spriteFrom:Phaser.Sprite, spriteTo:Phaser.Sprite, color) {
-        var from:Phaser.Point;
+            var from:Phaser.Point;
             var to:Phaser.Point;
 
             from = new Phaser.Point(spriteFrom.x, spriteFrom.y - 40);
@@ -126,7 +126,7 @@ class cControlRay extends Phaser.Sprite {
 
             //lets destroy the last part of the ray
             if (this.rayPartNumber >= this.numberOfVisibleParts) {
-                this.graphics[this.rayPartNumber - this.numberOfVisibleParts].destroy();
+                //this.graphics[this.rayPartNumber - this.numberOfVisibleParts].destroy();
             }
 
             //lets prepare the next part of the ray

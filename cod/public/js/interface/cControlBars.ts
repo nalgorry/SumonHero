@@ -5,7 +5,7 @@ class cControlBars {
     private manaBar:Phaser.Sprite;
     private life:number;
     private mana:number;
-    private maxLife = 100;
+    private maxLife = 1000;
     private maxMana = 100;
 
 

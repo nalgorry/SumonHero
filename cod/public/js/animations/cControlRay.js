@@ -12,7 +12,7 @@ var cControlRay = (function (_super) {
         this.randomFactor = 3;
         this.randomCorrectionFactor = 2;
         this.maxLenght = 5;
-        this.numberOfUpdates = 6;
+        this.numberOfUpdates = 8;
         this.numberOfVisibleParts = 25;
         this.graphics = [];
         this.rayNumber = 0;
@@ -90,7 +90,6 @@ var cControlRay = (function (_super) {
             }
             //lets destroy the last part of the ray
             if (this.rayPartNumber >= this.numberOfVisibleParts) {
-                this.graphics[this.rayPartNumber - this.numberOfVisibleParts].destroy();
             }
             //lets prepare the next part of the ray
             if (this.rayPartNumber + 1 != this.numberOfLines) {

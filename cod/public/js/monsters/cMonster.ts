@@ -1,4 +1,4 @@
-class cMonster extends Phaser.Sprite{
+class cMonster extends cBasicActor{
 
     private showPath:boolean = false;
 
@@ -7,14 +7,12 @@ class cMonster extends Phaser.Sprite{
     private loopSpeedNumber:number = 0;
     private loopSpeed:number = 0;
     private speed:number; //the distance of every point in the path
-    private life:number;
 
-    private completeBugSprite:Phaser.Sprite; //all the sprites of the bug 
     private bugSprite:Phaser.Sprite;
     private weaponSprite:Phaser.Sprite;
     
-
     public isDead:boolean = false; //to control if a spell hit after the monster die.
+    public monsterAtacked:cBasicActor;
     
     //to control monster atacks
     public speedCounter:number = 0;
@@ -41,23 +39,23 @@ class cMonster extends Phaser.Sprite{
         this.anchor.set(0.5);
 
         //all the sprites that generates the bug
-        this.completeBugSprite =  this.game.add.sprite(0, 0)
-        this.addChild(this.completeBugSprite);
-        this.completeBugSprite.inputEnabled = true;
-        this.completeBugSprite.events.onInputDown.add(this.monsterClick, this)
+        this.sprite =  this.game.add.sprite(0, 0)
+        this.addChild(this.sprite);
+        this.sprite.inputEnabled = true;
+        this.sprite.events.onInputDown.add(this.monsterClick, this)
 
         //lets create the bug
         this.bugSprite = this.game.add.sprite(0, 0, 'bugs', data.tilePoss);
         this.bugSprite.anchor.set(0.5);
         this.bugSprite.y -= 20;
 
-        this.completeBugSprite.addChild(this.bugSprite);
+        this.sprite.addChild(this.bugSprite);
 
         //lets create the weapon MUAJAJA (evil laugh)
         this.weaponSprite = this.game.add.sprite(data.weaponX, data.weaponY, 'items', data.weaponTilePoss);
         this.weaponSprite.anchor.set(0, 1);
 
-        this.completeBugSprite.addChild(this.weaponSprite);
+        this.sprite.addChild(this.weaponSprite);
 
         //lets define for now the speed of the monster
         this.speed = this.data.maxSpeed;
@@ -67,7 +65,7 @@ class cMonster extends Phaser.Sprite{
         if (this.isEnemy == false) {
             
         } else {
-           this.completeBugSprite.scale.x *= -1;
+           this.sprite.scale.x *= -1;
         }
 
         //lets define the path it will follow
@@ -128,7 +126,7 @@ class cMonster extends Phaser.Sprite{
 
     }
 
-    public monsterAtack(defender:cMonster) {
+    public monsterAtack(defender:cBasicActor) {
         
         switch (this.data.atackType) {
             case enumAtackType.range:
@@ -150,7 +148,7 @@ class cMonster extends Phaser.Sprite{
 
     }
 
-    private animateArrow(defender:cMonster) {
+    private animateArrow(defender:cBasicActor) {
         //lets create the proyectile
         var arrow = new cControlSpellAnim(this.game, this, defender, enumRayAnimations.arrow,0);
 
@@ -162,7 +160,7 @@ class cMonster extends Phaser.Sprite{
         //lets make this monster explote only once
         if (this.isDead == false) {
 
-            var ori = this.completeBugSprite.scale.x;
+            var ori = this.sprite.scale.x;
             var boomSprite = this.game.add.sprite(this.x + 30 * ori, this.y - 30, 'bombexploding')
             boomSprite.anchor.set(0.5);
 
@@ -185,18 +183,18 @@ class cMonster extends Phaser.Sprite{
 
     }
 
-    private animateSwordAtack(defender:cMonster) {
+    private animateSwordAtack(defender:cBasicActor) {
         
         var animSpeed = 200;
 
         //to control the orientacion of animations
-        var ori:number = this.completeBugSprite.scale.x
+        var ori:number = this.sprite.scale.x
 
         //the animations for the character 
-        var animation1 = this.game.add.tween(this.completeBugSprite)
+        var animation1 = this.game.add.tween(this.sprite)
         animation1.to( { x: 20 * ori}, animSpeed, Phaser.Easing.Linear.None, true);
 
-        var animation2 = this.game.add.tween(this.completeBugSprite)
+        var animation2 = this.game.add.tween(this.sprite)
         animation2.to( { x: 0}, animSpeed, Phaser.Easing.Linear.None, false);
 
         animation1.chain(animation2);
@@ -218,11 +216,11 @@ class cMonster extends Phaser.Sprite{
 
     }
 
-    private monsterHit(sprite, tween, defender:cMonster) {
+    private monsterHit(sprite, tween, defender:cBasicActor) {
         //lets calculate the damage we will do here, but the actual damage will happend when the animation finish.
         var damage = this.data.atack;
 
-        defender.monsterIsHit(damage);
+        defender.IsHit(damage);
         
     }
 
@@ -247,8 +245,7 @@ class cMonster extends Phaser.Sprite{
     }
 
 
-
-    public monsterIsHit(damage:number) {
+    public IsHit(damage:number) {
 
         this.life -= damage;
 

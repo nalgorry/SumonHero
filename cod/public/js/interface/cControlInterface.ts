@@ -2,6 +2,7 @@ class cControlInterface {
 
     private controlCards:cControlCards;
     private controlCristals:cControlCristals;
+    public controlHeroes:cControlHeroes;
 
     private playerBars:cControlBars;
     private enemyBars:cControlBars;
@@ -25,13 +26,14 @@ class cControlInterface {
 
     }
 
+
     public getSharedCristals() {
         return this.controlCristals.arrayShareCristals;
     }
 
-    public monsterHitHeroe(monster:cMonster,damage: number) {
+    public monsterHitHeroe(isEnemy:boolean, damage: number) {
 
-        if (monster.isEnemy) {
+        if (isEnemy) {
             this.playerBars.UpdateLife(-damage);
         } else {
             this.enemyBars.UpdateLife(-damage);

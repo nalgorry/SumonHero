@@ -2,7 +2,7 @@ var cControlMonsters = (function () {
     function cControlMonsters(game) {
         this.game = game;
         this.showPath = false;
-        this.monsterData = [];
+        this.monsterData = []; //to store the data (life, atack, etc)
         this.arrayMonsters = []; //to store all the active monsters
         this.arrayEnemyMonsters = []; //to store all the active monsters
         this.pathCreatePoints = []; // store the points that generate each path
@@ -16,12 +16,17 @@ var cControlMonsters = (function () {
         timer.start();
         // this.testMonster(enumPathOptions.up, 500, enumMonstersType.explosion);
     }
+    cControlMonsters.prototype.getEnemyMonsters = function () {
+        return this.arrayEnemyMonsters;
+    };
+    cControlMonsters.prototype.getPlayerMonsters = function () {
+        return this.arrayMonsters;
+    };
     cControlMonsters.prototype.testMonster = function (pathOption, startPosition, monsterType) {
         var monster = new cMonster(this.game, this.monsterId, this.paths[pathOption], false, startPosition, this.monsterData[monsterType]);
         monster.isAtacking = true;
         var enemyMonster = new cMonster(this.game, this.monsterId, this.paths[pathOption], true, startPosition + 500, this.monsterData[monsterType]);
         enemyMonster.isAtacking = true;
-        monster.eMonsterHitHeroe.add(this.monsterHitHeroe, this);
         monster.eMonsterDie.add(this.monsterDie, this);
     };
     cControlMonsters.prototype.readMonsterData = function () {
@@ -72,42 +77,71 @@ var cControlMonsters = (function () {
         //let change the color of the cristal 
         sharedCristals.forEach(function (cristal) {
             if (cristal.playerControl == true && cristal.enemyControl == false) {
-                console.log("cristal en control amigo");
+                cristal.changeCristalColor(cristalColor.blue_cristal);
             }
             else if (cristal.playerControl == false && cristal.enemyControl == true) {
-                console.log("cristal en control enemigo");
+                cristal.changeCristalColor(cristalColor.red_cristal);
             }
         });
     };
     //this function will control when the monsters colide
     cControlMonsters.prototype.checkMonstersHit = function () {
-        var _this = this;
-        //lets reset the atack mode of the enemys
-        Object.keys(this.arrayEnemyMonsters).forEach(function (keyEnemyMonster) {
-            var enemy = _this.arrayEnemyMonsters[keyEnemyMonster];
+        var arrayMonsterAtacking = [];
+        //lets check the enemies and the enemy heroe first
+        for (var keyEnemyMonster in this.arrayEnemyMonsters) {
+            var enemy = this.arrayEnemyMonsters[keyEnemyMonster];
             enemy.isAtacking = false;
-        });
-        //lets check if our monsters can atack the monster of the enemy
-        Object.keys(this.arrayMonsters).forEach(function (keyMonster) {
-            var monster = _this.arrayMonsters[keyMonster];
-            var monsterPoss = monster.position;
+            //lets check if the monster can atack the player heroe first
+            var playerHeroe = this.gameInterface.controlHeroes.heroe;
+            var heroeDistance = enemy.position.distance(playerHeroe.position);
+            if (heroeDistance <= enemy.data.hitRange) {
+                this.activateAtack(arrayMonsterAtacking, enemy, playerHeroe);
+            }
+        }
+        ;
+        //lets check if the monster can atack each other
+        for (var keyMonster in this.arrayMonsters) {
+            var monster = this.arrayMonsters[keyMonster];
             monster.isAtacking = false;
-            Object.keys(_this.arrayEnemyMonsters).forEach(function (keyEnemyMonster) {
-                var enemy = _this.arrayEnemyMonsters[keyEnemyMonster];
-                var enemyPoss = enemy.position;
-                var distance = enemyPoss.distance(monsterPoss);
+            //lets check if the monster can atack the enemy heroe first
+            var enemyHeroe = this.gameInterface.controlHeroes.enemyHeroe;
+            var heroeDistance = monster.position.distance(enemyHeroe.position);
+            if (heroeDistance <= monster.data.hitRange) {
+                this.activateAtack(arrayMonsterAtacking, monster, enemyHeroe);
+            }
+            //to hit always the closer monster
+            var monsterHitDistance = monster.data.hitRange;
+            for (var keyEnemyMonster in this.arrayEnemyMonsters) {
+                var enemy = this.arrayEnemyMonsters[keyEnemyMonster];
+                var enemyHitDistance = enemy.data.hitRange;
+                var distance = enemy.position.distance(monster.position);
                 //lets check if the monster can atack an enemy
-                if (distance <= monster.data.hitRange) {
-                    monster.isAtacking = true;
-                    _this.resolveAtack(monster, enemy);
+                if (distance <= monsterHitDistance) {
+                    this.activateAtack(arrayMonsterAtacking, monster, enemy);
+                    monsterHitDistance = distance;
                 }
                 //lets check if the enemy can atack the monster 
-                if (distance <= enemy.data.hitRange) {
-                    enemy.isAtacking = true;
-                    _this.resolveAtack(enemy, monster);
+                if (distance <= enemyHitDistance) {
+                    this.activateAtack(arrayMonsterAtacking, enemy, monster);
+                    enemyHitDistance = distance;
                 }
-            });
-        });
+            }
+            ;
+        }
+        ;
+        //now we resolve the atacks
+        for (var _i = 0, arrayMonsterAtacking_1 = arrayMonsterAtacking; _i < arrayMonsterAtacking_1.length; _i++) {
+            var monster_1 = arrayMonsterAtacking_1[_i];
+            this.resolveAtack(monster_1, monster_1.monsterAtacked);
+        }
+    };
+    //activate the atack mode of the monster 
+    cControlMonsters.prototype.activateAtack = function (arrayMonsterAtacking, monster, enemyHit) {
+        if (monster.isAtacking == false) {
+            arrayMonsterAtacking.push(monster);
+        }
+        monster.monsterAtacked = enemyHit;
+        monster.isAtacking = true;
     };
     cControlMonsters.prototype.resolveAtack = function (atacker, defender) {
         if (atacker.speedCounter >= atacker.data.atackSpeed) {
@@ -119,6 +153,7 @@ var cControlMonsters = (function () {
         }
     };
     cControlMonsters.prototype.monsterAtack = function (atacker, defender) {
+        //lets check if it is atacking a monster or the enemyHeroe
         atacker.monsterAtack(defender);
     };
     cControlMonsters.prototype.monsterDie = function (monster) {
@@ -135,14 +170,12 @@ var cControlMonsters = (function () {
         this.monsterId++;
     };
     cControlMonsters.prototype.createNewMonster = function (pathOption, startPosition, monsterType) {
-        console.log(this.paths[pathOption]);
         var monster = this.createMonster(this.paths[pathOption], startPosition, monsterType, false);
         this.arrayMonsters["m" + this.monsterId] = monster;
         this.monsterId++;
     };
     cControlMonsters.prototype.createMonster = function (arrayPath, startPosition, monsterType, enemyMonster) {
         var monster = new cMonster(this.game, this.monsterId, arrayPath, enemyMonster, startPosition, this.monsterData[monsterType]);
-        monster.eMonsterHitHeroe.add(this.monsterHitHeroe, this);
         monster.eMonsterDie.add(this.monsterDie, this);
         monster.eMonsterAreaAtack.add(this.monsterAreaAtack, this);
         return monster;
@@ -164,22 +197,13 @@ var cControlMonsters = (function () {
                     var enemy = array[keyEnemyMonster];
                     var distance = monster.position.distance(enemy.position);
                     if (distance <= monster.data.areaHitRange) {
-                        enemy.monsterIsHit(monster.data.atack);
+                        enemy.IsHit(monster.data.atack);
                     }
                 });
                 break;
             default:
                 break;
         }
-    };
-    cControlMonsters.prototype.monsterHitHeroe = function (monster) {
-        //we should calculate the damage here? or direct in the monster? mmm
-        //may be if i want to use some kind of power that will increise the power it should be here.
-        var damage = this.game.rnd.integerInRange(45, 50);
-        this.gameInterface.monsterHitHeroe(monster, damage);
-        //we delete the monster of the two arrays
-        delete this.arrayMonsters["m" + monster.id];
-        delete this.arrayEnemyMonsters["m" + monster.id];
     };
     //lest create all the posible paths for the monster,
     cControlMonsters.prototype.initPosiblePaths = function () {

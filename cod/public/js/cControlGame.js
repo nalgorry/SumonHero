@@ -12,6 +12,7 @@ var cControlGame = (function () {
         this.controlMonsters.gameInterface = this.controlInterface;
         //lets init the heroes
         this.controlHeroes = new cControlHeroes(game, this.controlInterface);
+        this.controlInterface.controlHeroes = this.controlHeroes;
     }
     cControlGame.prototype.initMap = function () {
     };

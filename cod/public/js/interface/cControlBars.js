@@ -1,7 +1,7 @@
 var cControlBars = (function () {
     function cControlBars(game, x, y) {
         this.game = game;
-        this.maxLife = 100;
+        this.maxLife = 1000;
         this.maxMana = 100;
         this.initBars(x, y);
     }

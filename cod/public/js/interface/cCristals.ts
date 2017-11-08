@@ -3,6 +3,8 @@ class cCristals {
     sprite:Phaser.Sprite;
     sprite_back_circle:Phaser.Sprite;
     maxDistance:number = 30;
+    private cristalSprite:Phaser.Sprite;
+
 
     public playerControl:boolean;
     public enemyControl:boolean;
@@ -18,9 +20,9 @@ class cCristals {
         this.sprite = this.game.add.sprite(x, y);
         this.sprite.anchor.set(0.5);
 
-        var cristalSprite = this.game.add.sprite(0, 0, cristalColor[color]);
-        cristalSprite.anchor.set(0.5);
-        this.sprite.addChild(cristalSprite);
+        this.cristalSprite = this.game.add.sprite(0, 0, cristalColor[color]);
+        this.cristalSprite.anchor.set(0.5);
+        this.sprite.addChild(this.cristalSprite);
 
         //lets add the events to detect when we are over a cristal
         this.sprite.inputEnabled = true;
@@ -31,7 +33,7 @@ class cCristals {
     }
 
     private mouseOut() {
-        
+            
     }
 
     private mouseOver() {
@@ -46,6 +48,12 @@ class cCristals {
                 this.makeCircle();
 
         }
+
+    }
+
+    public changeCristalColor(newColor: cristalColor) {
+
+        this.cristalSprite.loadTexture(cristalColor[newColor]); 
 
     }
 

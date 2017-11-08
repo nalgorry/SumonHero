@@ -11,9 +11,9 @@ var cCristals = (function () {
         //lets create the cristal
         this.sprite = this.game.add.sprite(x, y);
         this.sprite.anchor.set(0.5);
-        var cristalSprite = this.game.add.sprite(0, 0, cristalColor[color]);
-        cristalSprite.anchor.set(0.5);
-        this.sprite.addChild(cristalSprite);
+        this.cristalSprite = this.game.add.sprite(0, 0, cristalColor[color]);
+        this.cristalSprite.anchor.set(0.5);
+        this.sprite.addChild(this.cristalSprite);
         //lets add the events to detect when we are over a cristal
         this.sprite.inputEnabled = true;
         this.sprite.events.onInputOver.add(this.mouseOver, this);
@@ -27,6 +27,9 @@ var cCristals = (function () {
         if (this.color == cristalColor.blue_cristal) {
             this.makeCircle();
         }
+    };
+    cCristals.prototype.changeCristalColor = function (newColor) {
+        this.cristalSprite.loadTexture(cristalColor[newColor]);
     };
     cCristals.prototype.makeCircle = function () {
         var backCircle = this.game.add.graphics(0, 0);

@@ -26,19 +26,19 @@ var cMonster = (function (_super) {
         this.y = path[0].y;
         this.anchor.set(0.5);
         //all the sprites that generates the bug
-        this.completeBugSprite = this.game.add.sprite(0, 0);
-        this.addChild(this.completeBugSprite);
-        this.completeBugSprite.inputEnabled = true;
-        this.completeBugSprite.events.onInputDown.add(this.monsterClick, this);
+        this.sprite = this.game.add.sprite(0, 0);
+        this.addChild(this.sprite);
+        this.sprite.inputEnabled = true;
+        this.sprite.events.onInputDown.add(this.monsterClick, this);
         //lets create the bug
         this.bugSprite = this.game.add.sprite(0, 0, 'bugs', data.tilePoss);
         this.bugSprite.anchor.set(0.5);
         this.bugSprite.y -= 20;
-        this.completeBugSprite.addChild(this.bugSprite);
+        this.sprite.addChild(this.bugSprite);
         //lets create the weapon MUAJAJA (evil laugh)
         this.weaponSprite = this.game.add.sprite(data.weaponX, data.weaponY, 'items', data.weaponTilePoss);
         this.weaponSprite.anchor.set(0, 1);
-        this.completeBugSprite.addChild(this.weaponSprite);
+        this.sprite.addChild(this.weaponSprite);
         //lets define for now the speed of the monster
         this.speed = this.data.maxSpeed;
         this.life = this.data.maxLife;
@@ -46,7 +46,7 @@ var cMonster = (function (_super) {
         if (this.isEnemy == false) {
         }
         else {
-            this.completeBugSprite.scale.x *= -1;
+            this.sprite.scale.x *= -1;
         }
         //lets define the path it will follow
         this.makePathConstantSpeed(path);
@@ -112,7 +112,7 @@ var cMonster = (function (_super) {
     cMonster.prototype.animateExplosion = function () {
         //lets make this monster explote only once
         if (this.isDead == false) {
-            var ori = this.completeBugSprite.scale.x;
+            var ori = this.sprite.scale.x;
             var boomSprite = this.game.add.sprite(this.x + 30 * ori, this.y - 30, 'bombexploding');
             boomSprite.anchor.set(0.5);
             var animation = boomSprite.animations.add('boom');
@@ -129,11 +129,11 @@ var cMonster = (function (_super) {
     cMonster.prototype.animateSwordAtack = function (defender) {
         var animSpeed = 200;
         //to control the orientacion of animations
-        var ori = this.completeBugSprite.scale.x;
+        var ori = this.sprite.scale.x;
         //the animations for the character 
-        var animation1 = this.game.add.tween(this.completeBugSprite);
+        var animation1 = this.game.add.tween(this.sprite);
         animation1.to({ x: 20 * ori }, animSpeed, Phaser.Easing.Linear.None, true);
-        var animation2 = this.game.add.tween(this.completeBugSprite);
+        var animation2 = this.game.add.tween(this.sprite);
         animation2.to({ x: 0 }, animSpeed, Phaser.Easing.Linear.None, false);
         animation1.chain(animation2);
         //the animations for the sword
@@ -147,7 +147,7 @@ var cMonster = (function (_super) {
     cMonster.prototype.monsterHit = function (sprite, tween, defender) {
         //lets calculate the damage we will do here, but the actual damage will happend when the animation finish.
         var damage = this.data.atack;
-        defender.monsterIsHit(damage);
+        defender.IsHit(damage);
     };
     cMonster.prototype.monsterHitHeroe = function () {
         this.destroyMonster();
@@ -163,7 +163,7 @@ var cMonster = (function (_super) {
     cMonster.prototype.destroySprite = function () {
         this.destroy(true);
     };
-    cMonster.prototype.monsterIsHit = function (damage) {
+    cMonster.prototype.IsHit = function (damage) {
         this.life -= damage;
         //lets check if the monster is dead!
         if (this.life <= 0 && this.isDead == false) {
@@ -191,4 +191,4 @@ var cMonster = (function (_super) {
         }
     };
     return cMonster;
-}(Phaser.Sprite));
+}(cBasicActor));

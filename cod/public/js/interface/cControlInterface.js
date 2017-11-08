@@ -14,8 +14,8 @@ var cControlInterface = (function () {
     cControlInterface.prototype.getSharedCristals = function () {
         return this.controlCristals.arrayShareCristals;
     };
-    cControlInterface.prototype.monsterHitHeroe = function (monster, damage) {
-        if (monster.isEnemy) {
+    cControlInterface.prototype.monsterHitHeroe = function (isEnemy, damage) {
+        if (isEnemy) {
             this.playerBars.UpdateLife(-damage);
         }
         else {
