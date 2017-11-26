@@ -9,9 +9,6 @@ class cControlGame {
         //lets add the stage
         game.add.sprite(0,0,'back');
 
-        //lets init the map
-        this.initMap();
-
         //lets init the controler for the monsters
         this.controlMonsters  = new cControlMonsters(game);
 
@@ -24,14 +21,6 @@ class cControlGame {
         this.controlInterface.controlHeroes = this.controlHeroes;
 
     }
-
-    private initMap() {
-
-
-
-
-    }
-
 
 
 

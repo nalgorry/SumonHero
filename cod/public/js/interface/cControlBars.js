@@ -1,14 +1,15 @@
 var cControlBars = (function () {
     function cControlBars(game, x, y) {
         this.game = game;
-        this.maxLife = 1000;
+        this.maxLife = 10;
         this.maxMana = 100;
+        this.initMana = 30;
         this.initBars(x, y);
     }
     cControlBars.prototype.initBars = function (x, y) {
         //lets set the life and mana to maxvalues
         this.life = this.maxLife;
-        this.mana = this.maxMana;
+        this.mana = this.initMana;
         //the size of the bars
         var barHeight = 20;
         var barWidth = 158;
@@ -31,11 +32,17 @@ var cControlBars = (function () {
         //lets put the bars in it max values 
         this.ResizeBar(this.lifeBar, this.life, this.maxLife);
         this.ResizeBar(this.manaBar, this.mana, this.maxMana);
+        //para los textos de las barras
+        this.textLife = this.game.add.bitmapText(this.lifeBar.x + 100, this.lifeBar.y - 4, 'gotic_white', this.life.toString(), 16);
+        this.textLife.anchor.setTo(1);
+        this.textMana = this.game.add.bitmapText(this.manaBar.x + 100, this.manaBar.y - 4, 'gotic_white', this.mana.toString(), 16);
+        this.textMana.anchor.setTo(1);
     };
     //devuelve true si el personaje llego a cero vida
     cControlBars.prototype.UpdateLife = function (addValue) {
         //controlo si se murio o no 
         this.life = this.UpdateBar(this.lifeBar, this.life, this.maxLife, addValue);
+        this.textLife.text = this.life.toString();
         //lets check if it die 
         if (this.life != 0) {
             return false;
@@ -48,6 +55,7 @@ var cControlBars = (function () {
     cControlBars.prototype.UpdateMana = function (addValue) {
         if (this.mana >= -addValue) {
             this.mana = this.UpdateBar(this.manaBar, this.mana, this.maxMana, addValue);
+            this.textMana.text = Math.round(this.mana).toString();
             return true;
         }
         else {

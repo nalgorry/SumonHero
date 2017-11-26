@@ -2,8 +2,9 @@ class cControlCristals {
 
     private arrayCristals:cCristals[] = []; //to store all the cristals to do the checks
     public arrayShareCristals:cCristals[] = [];
+    public numBlueCristals:number = 4;
 
-    constructor (public game:Phaser.Game) {
+    constructor (public game:Phaser.Game, public controlInterfase:cControlInterface) {
         
         this.initCristals();
 
@@ -13,7 +14,7 @@ class cControlCristals {
 
         var oneQuarterPoss:number = 1150;
         var oneQuarterCenterPoss:number = 780;
-        var centerPoss:number = oneQuarterCenterPoss * 2;
+        var centerPoss:number = 2400;
 
         //lets init the blue cristal of the player
         this.arrayCristals.push( new cCristals(this.game, 56, 340, cristalColor.blue_cristal , enumPathOptions.allOptions, 0, enumCristalType.heroeCristal ));
@@ -74,6 +75,20 @@ class cControlCristals {
         });
 
         return selCristal;
+    }
+
+    public changeCristalColor(cristal:cCristals, color: cristalColor) {
+        cristal.changeCristalColor(color);
+
+        //lets update the number of cristal we have 
+        if (color = cristalColor.blue_cristal) {
+            this.numBlueCristals ++;
+        } else {
+            this.numBlueCristals --;
+        }
+
+        this.controlInterfase.updateManaSpeed(this.numBlueCristals);
+
     }
 
 }

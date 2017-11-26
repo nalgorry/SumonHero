@@ -20,6 +20,8 @@ var cMonster = (function (_super) {
         //to control monster atacks
         this.speedCounter = 0;
         this.isAtacking = false;
+        //to control the walk animations
+        this.isMoving = false;
         //left define the start position of the monster, base on the path selected
         path = path.slice(-path.length + startPoss);
         this.x = path[0].x;
@@ -60,7 +62,8 @@ var cMonster = (function (_super) {
         this.game.add.existing(this);
     }
     cMonster.prototype.monsterClick = function () {
-        this.monsterAtack(this);
+        //this.monsterAtack(this);
+        console.log(this.life);
     };
     cMonster.prototype.makePathConstantSpeed = function (path) {
         var _this = this;
@@ -184,11 +187,80 @@ var cMonster = (function (_super) {
                     this.isAtacking = true;
                 }
                 this.loopSpeedNumber = 0;
+                //lets animate the character 
+                this.startMoveAnimation();
             }
             else {
                 this.loopSpeedNumber++;
             }
         }
+        else {
+            this.stopMoveAnimation();
+        }
+    };
+    cMonster.prototype.startMoveAnimation = function () {
+        if (this.isMoving == false) {
+            //animamos
+            switch (this.data.atackType) {
+                case 2 /* range */:
+                    this.animateArrowMovement();
+                    break;
+                case 1 /* sword */:
+                    this.animateSwordMovement();
+                    break;
+                case 3 /* explosion */:
+                    this.animateExplosionMovement();
+                default:
+                    break;
+            }
+            this.isMoving = true;
+        }
+    };
+    cMonster.prototype.stopMoveAnimation = function () {
+        if (this.isMoving == true) {
+            //detenemos todas las animaciones
+            this.isMoving = false;
+            if (this.weaponAnimation1 != undefined) {
+                this.weaponAnimation1.stop();
+            }
+            if (this.weaponAnimation2 != undefined) {
+                this.weaponAnimation2.stop();
+            }
+        }
+    };
+    cMonster.prototype.animateSwordMovement = function () {
+        var animSpeed = 200;
+        //to control the orientacion of animations
+        var ori = this.sprite.scale.x;
+        //the animations for the character 
+        /*
+        var animation1 = this.game.add.tween(this.sprite)
+        animation1.to( { x: 20 * ori}, animSpeed, Phaser.Easing.Linear.None, true);
+
+        var animation2 = this.game.add.tween(this.sprite)
+        animation2.to( { x: 0}, animSpeed, Phaser.Easing.Linear.None, false);
+        animation1.chain(animation2);
+
+        */
+        //animate the weapon
+        this.weaponAnimation1 = this.game.add.tween(this.weaponSprite).to({ angle: -10, y: 2 }, 800, Phaser.Easing.Linear.None, true);
+        this.weaponAnimation2 = this.game.add.tween(this.weaponSprite).to({ angle: 0, y: -4 }, 800, Phaser.Easing.Linear.None, false);
+        this.weaponAnimation1.chain(this.weaponAnimation2);
+        this.weaponAnimation2.chain(this.weaponAnimation1);
+    };
+    cMonster.prototype.animateArrowMovement = function () {
+        //animate the weapon
+        this.weaponAnimation1 = this.game.add.tween(this.weaponSprite).to({ angle: -2, y: this.data.weaponY + 2 }, 800, Phaser.Easing.Linear.None, true);
+        this.weaponAnimation2 = this.game.add.tween(this.weaponSprite).to({ angle: 0, y: this.data.weaponY - 2 }, 800, Phaser.Easing.Linear.None, false);
+        this.weaponAnimation1.chain(this.weaponAnimation2);
+        this.weaponAnimation2.chain(this.weaponAnimation1);
+    };
+    cMonster.prototype.animateExplosionMovement = function () {
+        //animate the weapon
+        this.weaponAnimation1 = this.game.add.tween(this.weaponSprite).to({ angle: -2, y: this.data.weaponY + 2 }, 800, Phaser.Easing.Linear.None, true);
+        this.weaponAnimation2 = this.game.add.tween(this.weaponSprite).to({ angle: 0, y: this.data.weaponY - 2 }, 800, Phaser.Easing.Linear.None, false);
+        this.weaponAnimation1.chain(this.weaponAnimation2);
+        this.weaponAnimation2.chain(this.weaponAnimation1);
     };
     return cMonster;
 }(cBasicActor));

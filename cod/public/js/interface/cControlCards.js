@@ -28,5 +28,10 @@ var cControlCards = (function () {
     cControlCards.prototype.cardRelease = function (card) {
         this.userInterfase.checkCardRelease(card);
     };
+    cControlCards.prototype.checkManaCards = function (mana) {
+        this.arrayCards.forEach(function (card) {
+            card.checkMana(mana);
+        });
+    };
     return cControlCards;
 }());

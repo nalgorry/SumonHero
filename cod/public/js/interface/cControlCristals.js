@@ -1,14 +1,16 @@
 var cControlCristals = (function () {
-    function cControlCristals(game) {
+    function cControlCristals(game, controlInterfase) {
         this.game = game;
+        this.controlInterfase = controlInterfase;
         this.arrayCristals = []; //to store all the cristals to do the checks
         this.arrayShareCristals = [];
+        this.numBlueCristals = 4;
         this.initCristals();
     }
     cControlCristals.prototype.initCristals = function () {
         var oneQuarterPoss = 1150;
         var oneQuarterCenterPoss = 780;
-        var centerPoss = oneQuarterCenterPoss * 2;
+        var centerPoss = 2400;
         //lets init the blue cristal of the player
         this.arrayCristals.push(new cCristals(this.game, 56, 340, cristalColor.blue_cristal, 4 /* allOptions */, 0, 1 /* heroeCristal */));
         this.arrayCristals.push(new cCristals(this.game, 244, 216, cristalColor.blue_cristal, 0 /* up */, oneQuarterPoss, 2 /* fixedCristal */));
@@ -54,6 +56,17 @@ var cControlCristals = (function () {
             }
         });
         return selCristal;
+    };
+    cControlCristals.prototype.changeCristalColor = function (cristal, color) {
+        cristal.changeCristalColor(color);
+        //lets update the number of cristal we have 
+        if (color = cristalColor.blue_cristal) {
+            this.numBlueCristals++;
+        }
+        else {
+            this.numBlueCristals--;
+        }
+        this.controlInterfase.updateManaSpeed(this.numBlueCristals);
     };
     return cControlCristals;
 }());

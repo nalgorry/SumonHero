@@ -1,16 +1,22 @@
 class cControlInterface {
 
     private controlCards:cControlCards;
-    private controlCristals:cControlCristals;
+    public controlCristals:cControlCristals;
     public controlHeroes:cControlHeroes;
 
     private playerBars:cControlBars;
     private enemyBars:cControlBars;
 
+    private speedMana = 0.5;
+
     private speedBars = 50;
+
+    private gameStop:boolean = false; 
+
+    //to show a message when game finish
+    private spriteEndGame: Phaser.Sprite;
     
-    
-    constructor (public game:Phaser.Game,public controlMonsters:cControlMonsters) {
+    constructor (public game:Phaser.Game, public controlMonsters:cControlMonsters) {
 
         this.initInterfaceBack(); //all that goes to the back will go here
 
@@ -26,6 +32,28 @@ class cControlInterface {
 
     }
 
+    public updateManaSpeed(numCristals:number)   {
+
+        switch (numCristals) {
+            case 4:
+                this.speedMana = 0.5;
+                break;
+            case 5:
+                this.speedMana = 0.7;
+                break;
+            case 6:
+                this.speedMana = 0.9;
+                break;
+            case 7:
+                this.speedMana = 1.2;
+                break;
+        
+            default:
+                break;
+        }
+
+    }
+
 
     public getSharedCristals() {
         return this.controlCristals.arrayShareCristals;
@@ -33,16 +61,113 @@ class cControlInterface {
 
     public monsterHitHeroe(isEnemy:boolean, damage: number) {
 
+        //lets update the bars and control if one of the heroes is dead
         if (isEnemy) {
-            this.playerBars.UpdateLife(-damage);
+            var dead = this.playerBars.UpdateLife(-damage);
+
+            if (dead == true) {
+                this.heroeDead(false)
+            }
+
         } else {
-            this.enemyBars.UpdateLife(-damage);
+            var dead = this.enemyBars.UpdateLife(-damage);
+            
+            if (dead == true) {
+                this.heroeDead(true)
+            }
         }
         
     }
 
+    private heroeDead(youWin:boolean) {
+
+        if (this.gameStop) {return}
+
+        //lets put the background
+        var height = 200;
+        var width = 500;
+        var x = 480;
+        var y = 350;
+
+        this.spriteEndGame = this.game.add.sprite(x, y);
+        this.spriteEndGame.anchor.setTo(0.5);
+
+        var bitmapEndGame = this.game.add.graphics(-width/2 , -height/2);
+        bitmapEndGame.beginFill(0x363636);
+        bitmapEndGame.lineStyle(2, 0x000000, 1);
+        bitmapEndGame.drawRect(0, 0, width, height);
+        bitmapEndGame.endFill();
+        bitmapEndGame.alpha = 0.9;
+        this.spriteEndGame.addChild(bitmapEndGame);
+
+        //lets add the text
+        var textEndGame = this.game.add.bitmapText(0, -70, "gotic_white", "Game Finish!", 32);
+        textEndGame.anchor.setTo(0.5);
+        this.spriteEndGame.addChild(textEndGame);
+
+        var result:string 
+        if (youWin) {
+            result = "YOU WIN :)";
+        } else {
+            result = "YOU LOSE :(";
+        }
+
+        //lets add the text
+        var textEndGame = this.game.add.bitmapText(0, 0, "gotic_white", result, 32);
+        textEndGame.anchor.setTo(0.5);
+        this.spriteEndGame.addChild(textEndGame);
+
+        //lets add some buttons
+        var buttonTryAgain = new cControlButton(this.game, -140, 70, "Try Again!");
+        buttonTryAgain.anchor.setTo(0.5);
+        buttonTryAgain.buttonClick.add(this.tryAgain, this);
+        this.spriteEndGame.addChild(buttonTryAgain);
+
+        var buttonNextLvl = new cControlButton(this.game, 140, 70, "Next Lvl ->");
+        buttonNextLvl.anchor.setTo(0.5);
+        buttonNextLvl.buttonClick.add(this.nextLvl, this);
+        this.spriteEndGame.addChild(buttonNextLvl);        
+
+        //lets stop the game
+        this.stopGame();
+
+    }
+
+    private stopGame() {
+        //lets stop the enemy AI
+        this.controlHeroes.enemyHeroe.enemyIA.stopEnemyAI();
+        this.gameStop = true;
+
+    }
+
+    private startGame() {
+        // start enemyAI
+        this.controlHeroes.enemyHeroe.enemyIA.startEnemyAI();
+
+        this.gameStop = false;
+    }
+    
+    private tryAgain() {
+        this.spriteEndGame.destroy();
+
+        this.startGame();
+
+    }
+
+    private nextLvl() {
+        this.spriteEndGame.destroy();
+        this.controlHeroes.enemyHeroe.enemyIA.startEnemyAI();
+
+        this.startGame();
+    }
+
     private updateBars() {
-        this.playerBars.UpdateMana(1);
+
+        //update the mana of the player
+        this.playerBars.UpdateMana(this.speedMana);
+        
+        //enable the cards acording to the mana needed
+        this.controlCards.checkManaCards(this.playerBars.mana);
     }
 
     private initInterfaceBack() {
@@ -59,7 +184,6 @@ class cControlInterface {
 
         var backGroundDesc = this.game.add.sprite(0, 0, bitmapDescItem);
         backGroundDesc.anchor.setTo(0);
-        backGroundDesc.fixedToCamera = true;
         backGroundDesc.alpha = 0.9;
     }
 
@@ -71,7 +195,7 @@ class cControlInterface {
     }
 
     private initCristals() {
-        this.controlCristals = new cControlCristals(this.game);
+        this.controlCristals = new cControlCristals(this.game, this);
 
     }
 

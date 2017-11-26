@@ -12,7 +12,7 @@ var cControlRay = (function (_super) {
         this.randomFactor = 3;
         this.randomCorrectionFactor = 2;
         this.maxLenght = 5;
-        this.numberOfUpdates = 8;
+        this.numberOfUpdates = 6;
         this.numberOfVisibleParts = 25;
         this.graphics = [];
         this.rayNumber = 0;
@@ -50,7 +50,13 @@ var cControlRay = (function (_super) {
         if (this.rayActive == false) {
             return;
         }
+        this.graphics[this.rayPartNumber].moveTo(this.lastX, this.lastY);
         for (var i = 1; i <= this.loopsInUpdate; i++) {
+            //lets prepare the next part of the ray
+            if (this.rayPartNumber + 1 != this.numberOfLines) {
+                this.graphics[this.rayPartNumber + 1].moveTo(this.lastX, this.lastY);
+                this.rayPartNumber++;
+            }
             if (this.rayNumber != this.numberOfLines) {
                 var randomFactorXMin = this.randomFactor;
                 var randomFactorXMax = this.randomFactor;
@@ -80,7 +86,7 @@ var cControlRay = (function (_super) {
             }
             else {
                 //lets make the ray disapear slowly
-                var buletAnimation = this.game.add.tween(this.groupGraphics).to({ alpha: 0 }, 200, Phaser.Easing.Linear.None, true, 0, 0, false);
+                var buletAnimation = this.game.add.tween(this.groupGraphics).to({ alpha: 0 }, 300, Phaser.Easing.Linear.None, true, 0, 0, false);
                 buletAnimation.onComplete.add(this.destroyBulet, this, null, this.graphics);
                 //lets kill the loops
                 this.rayActive = false;
@@ -90,11 +96,6 @@ var cControlRay = (function (_super) {
             }
             //lets destroy the last part of the ray
             if (this.rayPartNumber >= this.numberOfVisibleParts) {
-            }
-            //lets prepare the next part of the ray
-            if (this.rayPartNumber + 1 != this.numberOfLines) {
-                this.graphics[this.rayPartNumber + 1].moveTo(this.lastX, this.lastY);
-                this.rayPartNumber++;
             }
         }
     };

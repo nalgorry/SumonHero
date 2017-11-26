@@ -3,11 +3,16 @@ class cControlBars {
     //to control the player bars
     private lifeBar:Phaser.Sprite;
     private manaBar:Phaser.Sprite;
-    private life:number;
-    private mana:number;
-    private maxLife = 1000;
-    private maxMana = 100;
 
+    //to show the numbers of actual life and mana
+    private textLife: Phaser.BitmapText;
+    private textMana: Phaser.BitmapText;
+
+    public life:number;
+    public mana:number;
+    private maxLife = 10;
+    private maxMana = 100;
+    private initMana = 30;
 
     constructor(public game:Phaser.Game, x:number, y:number){
         
@@ -19,7 +24,7 @@ class cControlBars {
 
         //lets set the life and mana to maxvalues
         this.life = this.maxLife;
-        this.mana = this.maxMana;
+        this.mana = this.initMana;
 
         //the size of the bars
         var barHeight:number = 20;
@@ -46,7 +51,13 @@ class cControlBars {
         //lets put the bars in it max values 
         this.ResizeBar(this.lifeBar,this.life,this.maxLife);
         this.ResizeBar(this.manaBar,this.mana,this.maxMana);
-        
+
+        //para los textos de las barras
+        this.textLife = this.game.add.bitmapText(this.lifeBar.x + 100, this.lifeBar.y - 4, 'gotic_white', this.life.toString() , 16);
+        this.textLife.anchor.setTo(1);
+        this.textMana = this.game.add.bitmapText(this.manaBar.x + 100, this.manaBar.y - 4, 'gotic_white', this.mana.toString() , 16);
+        this.textMana.anchor.setTo(1);
+
     }
 
     //devuelve true si el personaje llego a cero vida
@@ -55,14 +66,14 @@ class cControlBars {
         
          this.life = this.UpdateBar(this.lifeBar,this.life,this.maxLife,addValue);
 
+         this.textLife.text = this.life.toString();
+
          //lets check if it die 
          if (this.life != 0 ) {
             return false
          } else {
             return true
          }
-        
-
         
     }
 
@@ -71,6 +82,7 @@ class cControlBars {
 
         if (this.mana >= -addValue) {
             this.mana = this.UpdateBar(this.manaBar,this.mana,this.maxMana,addValue);
+            this.textMana.text = Math.round(this.mana).toString();
             return true
         } else {
             return false

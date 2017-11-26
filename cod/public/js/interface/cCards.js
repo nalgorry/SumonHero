@@ -58,5 +58,13 @@ var cCards = (function () {
     };
     cCards.prototype.onInputOut = function () {
     };
+    cCards.prototype.checkMana = function (mana) {
+        if (mana >= this.monsterData.manaCost) {
+            this.sprite.alpha = 1;
+        }
+        else {
+            this.sprite.alpha = 0.5;
+        }
+    };
     return cCards;
 }());

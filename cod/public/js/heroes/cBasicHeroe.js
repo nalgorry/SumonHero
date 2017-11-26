@@ -9,7 +9,7 @@ var cBasicHeroe = (function (_super) {
         _super.call(this, game, 0, 0);
         this.game = game;
         this.atackDistance = 220;
-        this.heroeAtack = 10;
+        this.heroeAtack = 5;
         this.orientation = orientation;
         this.playerHit = new Phaser.Signal;
         this.life = 100;
@@ -37,9 +37,9 @@ var cBasicHeroe = (function (_super) {
     //atack the closest monster in range
     cBasicHeroe.prototype.atack = function (arrayEnemyMonsters) {
         var monsterToAtack;
+        var closestDistance = this.atackDistance;
         for (var idMonster in arrayEnemyMonsters) {
             var monster = arrayEnemyMonsters[idMonster];
-            var closestDistance = this.atackDistance;
             var distance = this.position.distance(monster.position);
             if (distance <= closestDistance) {
                 closestDistance = distance;

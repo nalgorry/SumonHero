@@ -4,7 +4,7 @@ class cBasicHeroe extends cBasicActor{
     private weaponSprite:Phaser.Sprite;
     private orientation:heroeOrientation;
     private atackDistance = 220;
-    private heroeAtack = 10;
+    private heroeAtack = 5;
     public playerHit:Phaser.Signal;
 
     constructor (public game:Phaser.Game, initPos:Phaser.Point, orientation:heroeOrientation) {
@@ -51,11 +51,12 @@ class cBasicHeroe extends cBasicActor{
         
         var monsterToAtack:cMonster;
 
+        var closestDistance:number = this.atackDistance;
+        
         for  (let idMonster in arrayEnemyMonsters) {
 
             var monster = arrayEnemyMonsters[idMonster];
             
-            var closestDistance:number = this.atackDistance;
             var distance = this.position.distance(monster.position);
 
             if (distance <= closestDistance) {
@@ -65,7 +66,6 @@ class cBasicHeroe extends cBasicActor{
 
             }
             
-
         }
 
         if (monsterToAtack != undefined) {

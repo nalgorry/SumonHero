@@ -77,10 +77,10 @@ var cControlMonsters = (function () {
         //let change the color of the cristal 
         sharedCristals.forEach(function (cristal) {
             if (cristal.playerControl == true && cristal.enemyControl == false) {
-                cristal.changeCristalColor(cristalColor.blue_cristal);
+                _this.gameInterface.controlCristals.changeCristalColor(cristal, cristalColor.blue_cristal);
             }
             else if (cristal.playerControl == false && cristal.enemyControl == true) {
-                cristal.changeCristalColor(cristalColor.red_cristal);
+                _this.gameInterface.controlCristals.changeCristalColor(cristal, cristalColor.red_cristal);
             }
         });
     };

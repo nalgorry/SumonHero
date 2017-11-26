@@ -54,6 +54,7 @@ class cCristals {
     public changeCristalColor(newColor: cristalColor) {
 
         this.cristalSprite.loadTexture(cristalColor[newColor]); 
+        this.color = newColor;
 
     }
 

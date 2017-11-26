@@ -32,7 +32,6 @@ class cControlCards {
         newCard.eventDragStart.add(this.cardDragStart, this);
         newCard.eventDragStop.add(this.cardRelease, this);
 
-
         return newCard;
     }
 
@@ -42,6 +41,14 @@ class cControlCards {
 
     private cardRelease(card:cCards)  {
         this.userInterfase.checkCardRelease(card);
+    }
+
+    public checkManaCards(mana:Number) {
+        
+        this.arrayCards.forEach(card => {
+            card.checkMana(mana);
+        });
+
     }
 
 

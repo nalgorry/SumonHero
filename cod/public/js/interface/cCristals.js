@@ -30,6 +30,7 @@ var cCristals = (function () {
     };
     cCristals.prototype.changeCristalColor = function (newColor) {
         this.cristalSprite.loadTexture(cristalColor[newColor]);
+        this.color = newColor;
     };
     cCristals.prototype.makeCircle = function () {
         var backCircle = this.game.add.graphics(0, 0);

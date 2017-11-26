@@ -18,9 +18,18 @@ class cMonster extends cBasicActor{
     public speedCounter:number = 0;
     public isAtacking:boolean = false;
 
+    //to control the walk animations
+    public isMoving:boolean = false;
+
+    public weaponAnimation1:Phaser.Tween;
+    public weaponAnimation2:Phaser.Tween;
+
+
     public eMonsterHitHeroe:Phaser.Signal;
     public eMonsterDie:Phaser.Signal;
     public eMonsterAreaAtack:Phaser.Signal;
+
+    
 
     constructor (public game:Phaser.Game, 
         public id:number,
@@ -85,7 +94,8 @@ class cMonster extends cBasicActor{
     }
 
     private monsterClick() {
-        this.monsterAtack(this);
+        //this.monsterAtack(this);
+        console.log(this.life);
     }
 
     private makePathConstantSpeed(path) {
@@ -276,14 +286,122 @@ class cMonster extends cBasicActor{
 
                 this.loopSpeedNumber = 0
 
+                //lets animate the character 
+                this.startMoveAnimation()
+
             } else {
 
                 this.loopSpeedNumber++;
 
             }
+        } else {
+            this.stopMoveAnimation();
         }
+
+    }
+
+    private startMoveAnimation() {
+
+        if (this.isMoving == false) {
+
+            //animamos
+        switch (this.data.atackType) {
+            case enumAtackType.range:
+                    this.animateArrowMovement();
+                break;
+                case enumAtackType.sword:
+                    this.animateSwordMovement();
+                break
+                case enumAtackType.explosion:
+                    this.animateExplosionMovement();
+            default:
+                break;
+        }
+
+            this.isMoving = true;
+
+        }
+
+    }
+
+    private stopMoveAnimation() {
+
+        if (this.isMoving == true) {
+
+            //detenemos todas las animaciones
+
+            this.isMoving = false;
+
+            if (this.weaponAnimation1 != undefined) {
+                this.weaponAnimation1.stop();
+            }
+            
+            if (this.weaponAnimation2 != undefined) {
+                this.weaponAnimation2.stop();
+            }
+
+        }
+
+    }
+
+    private animateSwordMovement() {
+               var animSpeed = 200;
+
+        //to control the orientacion of animations
+        var ori:number = this.sprite.scale.x
+
+        //the animations for the character 
+        /*
+        var animation1 = this.game.add.tween(this.sprite)
+        animation1.to( { x: 20 * ori}, animSpeed, Phaser.Easing.Linear.None, true);
+
+        var animation2 = this.game.add.tween(this.sprite)
+        animation2.to( { x: 0}, animSpeed, Phaser.Easing.Linear.None, false);
+        animation1.chain(animation2);
+
+        */
+        
+
+        //animate the weapon
+        this.weaponAnimation1 = this.game.add.tween(this.weaponSprite).to( 
+            { angle: -10, y: 2 }, 800, Phaser.Easing.Linear.None, true);
+
+        this.weaponAnimation2 = this.game.add.tween(this.weaponSprite).to( 
+            { angle: 0, y: -4 }, 800, Phaser.Easing.Linear.None, false);
+        
+        this.weaponAnimation1.chain(this.weaponAnimation2);
+        this.weaponAnimation2.chain(this.weaponAnimation1);
+
+    }
+
+    private animateArrowMovement() {
+        //animate the weapon
+        this.weaponAnimation1 = this.game.add.tween(this.weaponSprite).to( 
+            { angle: -2, y: this.data.weaponY + 2 }, 800, Phaser.Easing.Linear.None, true);
+
+        this.weaponAnimation2 = this.game.add.tween(this.weaponSprite).to( 
+            { angle: 0, y: this.data.weaponY - 2 }, 800, Phaser.Easing.Linear.None, false);
+        
+        this.weaponAnimation1.chain(this.weaponAnimation2);
+        this.weaponAnimation2.chain(this.weaponAnimation1);
+
+
+    }
+
+        private animateExplosionMovement() {
+        //animate the weapon
+        this.weaponAnimation1 = this.game.add.tween(this.weaponSprite).to( 
+            { angle: -2, y: this.data.weaponY + 2 }, 800, Phaser.Easing.Linear.None, true);
+
+        this.weaponAnimation2 = this.game.add.tween(this.weaponSprite).to( 
+            { angle: 0, y: this.data.weaponY - 2 }, 800, Phaser.Easing.Linear.None, false);
+        
+        this.weaponAnimation1.chain(this.weaponAnimation2);
+        this.weaponAnimation2.chain(this.weaponAnimation1);
+
 
     }
 
 
 }
+

@@ -114,9 +114,9 @@ class cControlMonsters {
         sharedCristals.forEach(cristal => { 
 
             if (cristal.playerControl == true && cristal.enemyControl == false) {
-                cristal.changeCristalColor(cristalColor.blue_cristal);
+                this.gameInterface.controlCristals.changeCristalColor(cristal, cristalColor.blue_cristal);
             } else if(cristal.playerControl == false && cristal.enemyControl == true) {
-                cristal.changeCristalColor(cristalColor.red_cristal);
+                this.gameInterface.controlCristals.changeCristalColor(cristal, cristalColor.red_cristal);
             }
 
         });
@@ -153,8 +153,7 @@ class cControlMonsters {
             //lets check if the monster can atack the enemy heroe first
             var enemyHeroe = this.gameInterface.controlHeroes.enemyHeroe;
             var heroeDistance = monster.position.distance(enemyHeroe.position);
-            
-
+        
             if (heroeDistance <= monster.data.hitRange) {                  
                 this.activateAtack(arrayMonsterAtacking, monster, enemyHeroe);
             }

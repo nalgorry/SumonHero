@@ -65,8 +65,6 @@ class cCards {
 
         this.sprite.addChild(textMana);
         
-
-
     }
 
     private onDragStart() {
@@ -87,6 +85,16 @@ class cCards {
     }
 
     private onInputOut() {
+
+    }
+
+    public checkMana(mana:Number) {
+        
+        if (mana >= this.monsterData.manaCost) {
+            this.sprite.alpha = 1;
+        } else {
+            this.sprite.alpha = 0.5;
+        }
 
     }
 
