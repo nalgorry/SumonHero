@@ -1,5 +1,5 @@
 {
-  "name": "Summon Bugs",
+  "name": "Summon-Bugs",
   "version": "1.0.0",
   "description": "Lets kill some bugs!!",
   "main": "cod/server/server.js",
