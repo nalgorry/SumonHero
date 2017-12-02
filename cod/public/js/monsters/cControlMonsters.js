@@ -16,6 +16,22 @@ var cControlMonsters = (function () {
         timer.start();
         // this.testMonster(enumPathOptions.up, 500, enumMonstersType.explosion);
     }
+    cControlMonsters.prototype.restart = function () {
+        //lets destroy all the monsters in the game
+        for (var keyMonster in this.arrayMonsters) {
+            var monster = this.arrayMonsters[keyMonster];
+            monster.destroyMonster();
+        }
+        ;
+        //lets check enemy monsters
+        for (var keyMonster in this.arrayEnemyMonsters) {
+            var monster = this.arrayEnemyMonsters[keyMonster];
+            monster.destroyMonster();
+        }
+        ;
+        this.arrayEnemyMonsters = [];
+        this.arrayMonsters = [];
+    };
     cControlMonsters.prototype.getEnemyMonsters = function () {
         return this.arrayEnemyMonsters;
     };

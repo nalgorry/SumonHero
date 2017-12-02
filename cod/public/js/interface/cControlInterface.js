@@ -16,16 +16,16 @@ var cControlInterface = (function () {
     cControlInterface.prototype.updateManaSpeed = function (numCristals) {
         switch (numCristals) {
             case 4:
-                this.speedMana = 0.5;
+                this.speedMana = 0.6;
                 break;
             case 5:
-                this.speedMana = 0.7;
-                break;
-            case 6:
                 this.speedMana = 0.9;
                 break;
+            case 6:
+                this.speedMana = 1.3;
+                break;
             case 7:
-                this.speedMana = 1.2;
+                this.speedMana = 1.5;
                 break;
             default:
                 break;
@@ -100,17 +100,21 @@ var cControlInterface = (function () {
         this.gameStop = true;
     };
     cControlInterface.prototype.startGame = function () {
+        this.spriteEndGame.destroy();
         // start enemyAI
-        this.controlHeroes.enemyHeroe.enemyIA.startEnemyAI();
         this.gameStop = false;
+        //lets kill all the monster from the previus games!
+        this.controlMonsters.restart();
+        this.playerBars.restartBars();
+        this.enemyBars.restartBars();
+        this.controlCristals.restartCristals();
     };
     cControlInterface.prototype.tryAgain = function () {
-        this.spriteEndGame.destroy();
+        this.controlHeroes.enemyHeroe.enemyIA.startEnemyAI(0);
         this.startGame();
     };
     cControlInterface.prototype.nextLvl = function () {
-        this.spriteEndGame.destroy();
-        this.controlHeroes.enemyHeroe.enemyIA.startEnemyAI();
+        this.controlHeroes.enemyHeroe.enemyIA.startEnemyAI(-300);
         this.startGame();
     };
     cControlInterface.prototype.updateBars = function () {
@@ -151,48 +155,13 @@ var cControlInterface = (function () {
                     //lets choose a random path 
                     direction = this.game.rnd.integerInRange(0, 3);
                 }
+                else if (cristal.pathOption == 5 /* centerOfMap */) {
+                    direction = this.game.rnd.integerInRange(2, 3);
+                }
                 //lets add the new monster to the map!
                 this.controlMonsters.createNewMonster(direction, cristal.monsterStartPoss, card.monsterData.id);
             }
         }
-    };
-    cControlInterface.prototype.selMonsterDirection = function (cristal, cards) {
-        /* to make the arrow */
-        //lets create the arrow to select the directorio
-        var arrow = this.game.add.sprite(cristal.x, cristal.y, 'pathArrow');
-        //arrow.anchor.set(0, 0.5);
-        //lets create a timer to control the arrow
-        var timer = this.game.time.create(false);
-        timer.loop(30, this.updateArrow, this, arrow, timer, cristal, cards);
-        timer.start();
-    };
-    cControlInterface.prototype.updateArrow = function (arrow, timer, cristal, card) {
-        var mousePoss = this.game.input.activePointer.position;
-        var angle = (360 / (2 * Math.PI)) * Phaser.Math.angleBetween(arrow.x, arrow.y, mousePoss.x, mousePoss.y);
-        arrow.angle = angle;
-        if (this.game.input.activePointer.isDown) {
-            //lets check where to put the monster now!
-            var pathOption = 0;
-            if (arrow.angle <= -28) {
-                pathOption = 0 /* up */;
-            }
-            else if (arrow.angle < 0) {
-                pathOption = 2 /* upS */;
-            }
-            else if (arrow.angle < 36) {
-                pathOption = 3 /* downS */;
-            }
-            else {
-                pathOption = 1 /* down */;
-            }
-            this.controlMonsters.createNewMonster(pathOption, cristal.monsterStartPoss, card.monsterData.id);
-            timer.destroy();
-            var deadAnimation = this.game.add.tween(arrow).to({ alpha: 0 }, 200, Phaser.Easing.Linear.None, true, 0, 0, false);
-            deadAnimation.onComplete.add(this.destroySprite, this, null, arrow);
-        }
-    };
-    cControlInterface.prototype.destroySprite = function (arrow) {
-        arrow.destroy(true);
     };
     cControlInterface.prototype.cardDragStart = function (card) {
         this.controlCristals.activateBlueCristals();

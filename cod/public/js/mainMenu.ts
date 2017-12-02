@@ -3,6 +3,9 @@ class mainMenu extends Phaser.State {
     showElements = true;
  
     create() {
+
+        //lets add the stage
+        this.game.add.sprite(0,0,'back');
         
         //inicio todos los parametros dele juego
         var controlGame = new cControlGame(this.game);

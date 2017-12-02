@@ -1,11 +1,17 @@
 var cControlBars = (function () {
     function cControlBars(game, x, y) {
         this.game = game;
-        this.maxLife = 10;
+        this.maxLife = 500;
         this.maxMana = 100;
         this.initMana = 30;
         this.initBars(x, y);
     }
+    cControlBars.prototype.restartBars = function () {
+        this.life = this.maxLife;
+        this.mana = this.initMana;
+        this.UpdateLife(0);
+        this.UpdateMana(0);
+    };
     cControlBars.prototype.initBars = function (x, y) {
         //lets set the life and mana to maxvalues
         this.life = this.maxLife;

@@ -10,6 +10,8 @@ var mainMenu = (function (_super) {
         this.showElements = true;
     }
     mainMenu.prototype.create = function () {
+        //lets add the stage
+        this.game.add.sprite(0, 0, 'back');
         //inicio todos los parametros dele juego
         var controlGame = new cControlGame(this.game);
         //para medir los tiempos

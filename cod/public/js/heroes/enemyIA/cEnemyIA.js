@@ -3,10 +3,10 @@ var cEnemyIA = (function () {
         this.game = game;
         this.gameInterface = gameInterface;
         this.monsterNumber = 0;
-        console.log("empieza la enemy IA");
+        this.timerStep = 5000;
         //lets create the timer to do all we need
         this.timer = game.time.create(false);
-        this.timer.loop(5000, this.loop, this);
+        this.timer.loop(this.timerStep, this.loop, this);
         this.timer.start();
     }
     cEnemyIA.prototype.loop = function () {
@@ -18,10 +18,11 @@ var cEnemyIA = (function () {
     cEnemyIA.prototype.stopEnemyAI = function () {
         this.timer.stop();
     };
-    cEnemyIA.prototype.startEnemyAI = function () {
-        this.timer.loop(5000, this.loop, this);
+    cEnemyIA.prototype.startEnemyAI = function (timerStep) {
+        this.timerStep += timerStep;
+        console.log(this.timerStep);
+        this.timer.loop(this.timerStep, this.loop, this);
         this.timer.start();
-        console.log("entra");
     };
     return cEnemyIA;
 }());

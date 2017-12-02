@@ -4,6 +4,7 @@
     upS = 2,
     downS = 3,
     allOptions = 4,
+    centerOfMap =5,
 }
 
     declare const enum enumMonstersType {

@@ -33,7 +33,7 @@ class cControlCristals {
         //finaly the white ones
 
         var cristal_1 =  new cCristals(this.game, 480, 176, cristalColor.white_cristal, enumPathOptions.up, centerPoss, enumCristalType.centerCristal);
-        var cristal_2 = new cCristals(this.game, 480, 334, cristalColor.white_cristal, enumPathOptions.upS, centerPoss, enumCristalType.centerCristal);
+        var cristal_2 = new cCristals(this.game, 480, 334, cristalColor.white_cristal, enumPathOptions.centerOfMap, centerPoss, enumCristalType.centerCristal);
         var cristal_3 = new cCristals(this.game, 480, 502, cristalColor.white_cristal, enumPathOptions.down, centerPoss, enumCristalType.centerCristal);
 
         this.arrayCristals.push(cristal_1);
@@ -89,6 +89,15 @@ class cControlCristals {
 
         this.controlInterfase.updateManaSpeed(this.numBlueCristals);
 
+    }
+
+    public restartCristals() {
+        //lets restart the white cristals
+        this.arrayShareCristals.forEach(cristal => {
+            this.changeCristalColor(cristal, cristalColor.white_cristal);
+        });
+
+        this.controlInterfase.updateManaSpeed(this.numBlueCristals);
     }
 
 }

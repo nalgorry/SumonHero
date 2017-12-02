@@ -10,7 +10,8 @@ class cControlBars {
 
     public life:number;
     public mana:number;
-    private maxLife = 10;
+
+    private maxLife = 500;
     private maxMana = 100;
     private initMana = 30;
 
@@ -18,6 +19,14 @@ class cControlBars {
         
         this.initBars(x, y);
 
+    }
+
+    public restartBars() {
+        this.life = this.maxLife;
+        this.mana = this.initMana;
+
+        this.UpdateLife(0);
+        this.UpdateMana(0);
     }
 
       private initBars(x:number, y:number) {

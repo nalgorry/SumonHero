@@ -25,7 +25,7 @@ var cControlCristals = (function () {
         this.arrayCristals.push(new cCristals(this.game, 720, 458, cristalColor.red_cristal, 1 /* down */, oneQuarterPoss, 4 /* enemyCristal */));
         //finaly the white ones
         var cristal_1 = new cCristals(this.game, 480, 176, cristalColor.white_cristal, 0 /* up */, centerPoss, 3 /* centerCristal */);
-        var cristal_2 = new cCristals(this.game, 480, 334, cristalColor.white_cristal, 2 /* upS */, centerPoss, 3 /* centerCristal */);
+        var cristal_2 = new cCristals(this.game, 480, 334, cristalColor.white_cristal, 5 /* centerOfMap */, centerPoss, 3 /* centerCristal */);
         var cristal_3 = new cCristals(this.game, 480, 502, cristalColor.white_cristal, 1 /* down */, centerPoss, 3 /* centerCristal */);
         this.arrayCristals.push(cristal_1);
         this.arrayCristals.push(cristal_2);
@@ -66,6 +66,14 @@ var cControlCristals = (function () {
         else {
             this.numBlueCristals--;
         }
+        this.controlInterfase.updateManaSpeed(this.numBlueCristals);
+    };
+    cControlCristals.prototype.restartCristals = function () {
+        var _this = this;
+        //lets restart the white cristals
+        this.arrayShareCristals.forEach(function (cristal) {
+            _this.changeCristalColor(cristal, cristalColor.white_cristal);
+        });
         this.controlInterfase.updateManaSpeed(this.numBlueCristals);
     };
     return cControlCristals;

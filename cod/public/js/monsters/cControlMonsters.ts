@@ -10,6 +10,7 @@ class cControlMonsters {
     private pathCreatePoints = []; // store the points that generate each path
     private paths:number[][] = []; //ths actual points of the path
 
+
     private monsterId:number = 0;
 
     private monsterRadius = 20;
@@ -26,6 +27,30 @@ class cControlMonsters {
         timer.start();
 
        // this.testMonster(enumPathOptions.up, 500, enumMonstersType.explosion);
+
+    }
+
+    public restart() {
+
+        //lets destroy all the monsters in the game
+         for (let keyMonster in this.arrayMonsters) {
+                var monster:cMonster = this.arrayMonsters[keyMonster];
+
+                monster.destroyMonster();
+
+            };
+
+            //lets check enemy monsters
+            for (let keyMonster in this.arrayEnemyMonsters) {
+                var monster:cMonster = this.arrayEnemyMonsters[keyMonster];
+
+                monster.destroyMonster();
+
+
+            };
+
+            this.arrayEnemyMonsters = [];
+            this.arrayMonsters = [];
 
     }
 

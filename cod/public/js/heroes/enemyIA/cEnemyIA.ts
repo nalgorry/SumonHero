@@ -2,15 +2,14 @@ class cEnemyIA {
 
     private monsterNumber:number = 0;
     private timer:Phaser.Timer;
+    public timerStep = 5000;
 
     constructor(public game:Phaser.Game,
     public gameInterface:cControlInterface) {
 
-        console.log("empieza la enemy IA");
-
-                //lets create the timer to do all we need
+        //lets create the timer to do all we need
         this.timer = game.time.create(false);
-        this.timer.loop(5000, this.loop, this);
+        this.timer.loop(this.timerStep, this.loop, this);
         this.timer.start();
 
     }
@@ -30,10 +29,13 @@ class cEnemyIA {
         this.timer.stop();
     }
 
-    public startEnemyAI() {
-        this.timer.loop(5000, this.loop, this);
+    public startEnemyAI(timerStep:number) {
+
+        this.timerStep += timerStep;
+        console.log(this.timerStep);
+
+        this.timer.loop(this.timerStep, this.loop, this);
         this.timer.start();
-        console.log("entra");
     }
 
 }
