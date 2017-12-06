@@ -12,7 +12,7 @@ class cControlBars {
     public mana:number;
 
     private maxLife = 500;
-    private maxMana = 100;
+    private maxMana = 150;
     private initMana = 30;
 
     constructor(public game:Phaser.Game, x:number, y:number){

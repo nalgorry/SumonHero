@@ -4,14 +4,18 @@ var cCards = (function () {
         this.x = x;
         this.y = y;
         this.monsterData = monsterData;
-        this.sprite = this.game.add.sprite(x, y);
-        this.sprite.inputEnabled = true;
-        //this.sprite.events.onInputUp.add(this.floorItemClick,this)
+        this.cardWidth = 60;
+        this.cardHeight = 90;
+        //properties of the cards
         var cardColor = 0x9eb3c1;
         var lineColor = 0x215072;
         var manaBackColor = 0xADDDED;
         var cardWidth = 60;
         var cardHeight = 90;
+        this.sprite = this.game.add.sprite(x, y);
+        this.sprite.anchor.set(0.5);
+        this.sprite.inputEnabled = true;
+        //this.sprite.events.onInputUp.add(this.floorItemClick,this)
         var backCircle = this.game.add.graphics(0, 0);
         backCircle.beginFill(cardColor);
         backCircle.lineStyle(1, lineColor);
@@ -65,6 +69,10 @@ var cCards = (function () {
         else {
             this.sprite.alpha = 0.5;
         }
+    };
+    cCards.prototype.getCenter = function () {
+        var poss = new Phaser.Point(this.sprite.x + this.cardWidth / 2, this.sprite.y + this.cardHeight / 2);
+        return poss;
     };
     return cCards;
 }());

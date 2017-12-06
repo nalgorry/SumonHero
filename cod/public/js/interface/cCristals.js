@@ -7,7 +7,8 @@ var cCristals = (function () {
         this.pathOption = pathOption;
         this.monsterStartPoss = monsterStartPoss;
         this.cristalType = cristalType;
-        this.maxDistance = 30;
+        this.maxDistance = 45;
+        this.showCircleDistnace = 35;
         //lets create the cristal
         this.sprite = this.game.add.sprite(x, y);
         this.sprite.anchor.set(0.5);
@@ -35,7 +36,7 @@ var cCristals = (function () {
     cCristals.prototype.makeCircle = function () {
         var backCircle = this.game.add.graphics(0, 0);
         backCircle.beginFill(0x0d5118);
-        backCircle.drawEllipse(0, 15, this.maxDistance, this.maxDistance * 0.8);
+        backCircle.drawEllipse(0, 15, this.showCircleDistnace, this.showCircleDistnace * 0.75);
         //lets put the circle in the back
         this.sprite_back_circle = this.game.add.sprite(0, 0);
         this.sprite_back_circle.anchor.set(0.5);
@@ -56,13 +57,14 @@ var cCristals = (function () {
         }
     };
     //check if a card was drop over a cristal
-    cCristals.prototype.checkDistance = function () {
+    cCristals.prototype.checkDistance = function (card) {
         //first we check if the cristal is blue, if not we just leave
         if (this.color != cristalColor.blue_cristal) {
             return false;
         }
         //the poin1 is the mouse poss
-        var point1 = this.game.input.activePointer.position;
+        //var point1 = this.game.input.activePointer.position;
+        var point1 = card.getCenter();
         var point2 = new Phaser.Point(this.sprite.x, this.sprite.y);
         var distance = point1.distance(point2);
         if (distance <= this.maxDistance) {

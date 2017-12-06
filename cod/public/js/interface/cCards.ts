@@ -4,22 +4,27 @@ class cCards {
     public eventDragStart:Phaser.Signal;
     public eventDragStop:Phaser.Signal;
 
+    private cardWidth:number = 60;
+    private cardHeight:number = 90 
+
     constructor(public game:Phaser.Game, 
         public x:number,
         public y:number, 
         public monsterData:cMonsterData) {
-        
-        this.sprite = this.game.add.sprite(x, y);
-        
-        this.sprite.inputEnabled = true;
-        //this.sprite.events.onInputUp.add(this.floorItemClick,this)
 
+        //properties of the cards
         var cardColor = 0x9eb3c1; 
         var lineColor = 0x215072;
         var manaBackColor = 0xADDDED;
 
         var cardWidth:number = 60;
         var cardHeight:number = 90 
+        
+        this.sprite = this.game.add.sprite(x, y);
+        this.sprite.anchor.set(0.5);
+        
+        this.sprite.inputEnabled = true;
+        //this.sprite.events.onInputUp.add(this.floorItemClick,this)
 
         var backCircle = this.game.add.graphics(0,0);
         backCircle.beginFill(cardColor);
@@ -96,6 +101,12 @@ class cCards {
             this.sprite.alpha = 0.5;
         }
 
+    }
+
+    public getCenter():Phaser.Point {
+        var poss = new Phaser.Point(this.sprite.x + this.cardWidth/2, this.sprite.y + this.cardHeight/2);
+
+        return poss;
     }
 
 

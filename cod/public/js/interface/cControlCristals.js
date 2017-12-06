@@ -47,11 +47,11 @@ var cControlCristals = (function () {
         });
     };
     //when we check if the card was release over the cristal
-    cControlCristals.prototype.checkRelease = function () {
+    cControlCristals.prototype.checkRelease = function (card) {
         var selCristal = undefined;
         //lets check every cristal if it is close enough
         this.arrayCristals.forEach(function (cristal) {
-            if (cristal.checkDistance() == true) {
+            if (cristal.checkDistance(card) == true) {
                 selCristal = cristal;
             }
         });

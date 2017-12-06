@@ -63,12 +63,12 @@ class cControlCristals {
     }
 
     //when we check if the card was release over the cristal
-    public checkRelease():cCristals {
+    public checkRelease(card:cCards):cCristals {
         
         var selCristal:cCristals = undefined;
         //lets check every cristal if it is close enough
         this.arrayCristals.forEach(cristal => {
-            if (cristal.checkDistance() == true) {
+            if (cristal.checkDistance(card) == true) {
                 selCristal = cristal;
             }
             

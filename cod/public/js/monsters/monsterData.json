@@ -59,7 +59,7 @@
         "id": 3, 
         "monsterName": "arrow monster", 
         "tilePoss": 2,
-        "atack": 12,
+        "atack": 8,
         "defence": 1,
         "life": 50,
         "maxSpeed": 0.5,

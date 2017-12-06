@@ -264,6 +264,12 @@ class cMonster extends cBasicActor{
             this.destroyMonster();         
         }
 
+        if (isNaN(this.life)) {
+            console.log("esto no deberia pasar, nan en la vida del monstruo!");
+            console.log("el daño fue" + damage);
+            this.destroyMonster();
+        }
+
     }
 
     public update() {

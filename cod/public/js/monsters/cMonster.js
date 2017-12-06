@@ -172,6 +172,11 @@ var cMonster = (function (_super) {
         if (this.life <= 0 && this.isDead == false) {
             this.destroyMonster();
         }
+        if (isNaN(this.life)) {
+            console.log("esto no deberia pasar, nan en la vida del monstruo!");
+            console.log("el daño fue" + damage);
+            this.destroyMonster();
+        }
     };
     cMonster.prototype.update = function () {
         //lets control if we have to update the movement

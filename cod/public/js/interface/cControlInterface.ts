@@ -211,7 +211,7 @@ class cControlInterface {
         this.controlCristals.turnOffBlueCristals();
 
         //then we see if we have to generate a monster or not
-        var cristal = this.controlCristals.checkRelease();
+        var cristal = this.controlCristals.checkRelease(card);
         
         if (cristal != undefined) {
             //lets check if we have the mana to do it
