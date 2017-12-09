@@ -58,9 +58,13 @@ var cControlCristals = (function () {
         return selCristal;
     };
     cControlCristals.prototype.changeCristalColor = function (cristal, color) {
+        //lets check if we really need to change the color of the cristal
+        if (cristal.color == color) {
+            return;
+        }
         cristal.changeCristalColor(color);
         //lets update the number of cristal we have 
-        if (color = cristalColor.blue_cristal) {
+        if (color == cristalColor.blue_cristal) {
             this.numBlueCristals++;
         }
         else {

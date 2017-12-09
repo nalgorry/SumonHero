@@ -13,7 +13,7 @@ class preloader extends Phaser.State {
 
         this.game.load.spritesheet('heroe', 'assets/char_test40.png', 40,70 );
         this.game.load.spritesheet('weapon1', 'assets/weapon1.png', 120,120 );
-        this.game.load.spritesheet('spells', 'assets/spells.png', 50, 50 );
+        this.game.load.spritesheet('spells', 'assets/spells.png', 64, 64 );
         this.game.load.image('back', 'assets/back.png');
         
         this.game.load.image('white_cristal', 'assets/white_cristal.png');
@@ -43,6 +43,7 @@ class preloader extends Phaser.State {
         //this.game.load.image('monster_6', 'assets/monster_6.png' );
     
         this.game.load.json('monsterData', 'js/monsters/monsterData.json');
+        this.game.load.json('spellData', 'js/spells/spellData.json');
     }
 
     create() {

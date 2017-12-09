@@ -11,6 +11,8 @@ class cControlInterface {
 
     private speedBars = 50;
 
+    public gameLvl:number = 1;
+
     private gameStop:boolean = false; 
 
     //to show a message when game finish
@@ -18,10 +20,8 @@ class cControlInterface {
     
     constructor (public game:Phaser.Game, public controlMonsters:cControlMonsters) {
 
-        this.initInterfaceBack(); //all that goes to the back will go here
-
-        this.playerBars = new cControlBars(game, 30, 20); //create the player bars to control mana and life
-        this.enemyBars = new cControlBars(game, 760, 20); //create the enemy bars
+        this.playerBars = new cControlBars(game, 22, 475, 120, true); //create the player bars to control mana and life
+        this.enemyBars = new cControlBars(game, 916, 368, 40, false); //create the enemy bars
         
         this.initCards(); //init the cards of the game 
 
@@ -36,21 +36,24 @@ class cControlInterface {
 
         switch (numCristals) {
             case 4:
-                this.speedMana = 0.6;
+                this.speedMana = 0.5;
                 break;
             case 5:
-                this.speedMana = 0.9;
+                this.speedMana = 0.6;
                 break;
             case 6:
-                this.speedMana = 1.3;
+                this.speedMana = 0.65;
                 break;
             case 7:
-                this.speedMana = 1.5;
+                this.speedMana = 0.7;
                 break;
         
             default:
                 break;
         }
+
+        console.log(numCristals);
+        console.log("speed cristales" + this.speedMana)
 
     }
 
@@ -101,7 +104,7 @@ class cControlInterface {
         this.spriteEndGame.addChild(bitmapEndGame);
 
         //lets add the text
-        var textEndGame = this.game.add.bitmapText(0, -70, "gotic_white", "Game Finish!", 32);
+        var textEndGame = this.game.add.bitmapText(0, -70, "gotic_white", "Lvl "+ this.gameLvl.toString() +" Finish!", 32);
         textEndGame.anchor.setTo(0.5);
         this.spriteEndGame.addChild(textEndGame);
 
@@ -123,14 +126,28 @@ class cControlInterface {
         buttonTryAgain.buttonClick.add(this.tryAgain, this);
         this.spriteEndGame.addChild(buttonTryAgain);
 
-        var buttonNextLvl = new cControlButton(this.game, 140, 70, "Next Lvl ->");
-        buttonNextLvl.anchor.setTo(0.5);
-        buttonNextLvl.buttonClick.add(this.nextLvl, this);
-        this.spriteEndGame.addChild(buttonNextLvl);        
+        //only if you win you can continue
+        if (youWin) {
+            var buttonNextLvl = new cControlButton(this.game, 140, 70, "Next Lvl ->");
+            buttonNextLvl.anchor.setTo(0.5);
+            buttonNextLvl.buttonClick.add(this.nextLvl, this);
+            this.spriteEndGame.addChild(buttonNextLvl);        
+        }
 
         //lets stop the game
         this.stopGame();
 
+    }
+
+    private tryAgain() {
+        this.controlHeroes.enemyHeroe.enemyIA.startEnemyAI(0);
+        this.startGame();
+    }
+
+    private nextLvl() {
+        this.gameLvl ++;
+        this.controlHeroes.enemyHeroe.enemyIA.startEnemyAI(-300);
+        this.startGame();
     }
 
     private stopGame() {
@@ -156,16 +173,6 @@ class cControlInterface {
 
 
     }
-    
-    private tryAgain() {
-        this.controlHeroes.enemyHeroe.enemyIA.startEnemyAI(0);
-        this.startGame();
-    }
-
-    private nextLvl() {
-        this.controlHeroes.enemyHeroe.enemyIA.startEnemyAI(-300);
-        this.startGame();
-    }
 
     private updateBars() {
 
@@ -174,23 +181,6 @@ class cControlInterface {
         
         //enable the cards acording to the mana needed
         this.controlCards.checkManaCards(this.playerBars.mana);
-    }
-
-    private initInterfaceBack() {
-        
-        //lets put the background
-        var height = 80;
-        var width = 960;
-        
-        var bitmapDescItem = this.game.add.bitmapData(width, height);
-        bitmapDescItem.ctx.beginPath();
-        bitmapDescItem.ctx.rect(0, 0, width, height);
-        bitmapDescItem.ctx.fillStyle = '#363636';
-        bitmapDescItem.ctx.fill();
-
-        var backGroundDesc = this.game.add.sprite(0, 0, bitmapDescItem);
-        backGroundDesc.anchor.setTo(0);
-        backGroundDesc.alpha = 0.9;
     }
 
     

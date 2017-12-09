@@ -92,5 +92,13 @@ class cBasicHeroe extends cBasicActor{
         this.playerHit.dispatch(damage);
 
     }
+
+    public animateSpell() {
+
+        var tween1 = this.game.add.tween(this.weaponSprite).to({y: this.weaponSprite.y -  15, angle: -15}, 1000, Phaser.Easing.Cubic.Out, true);
+        var tween2 = this.game.add.tween(this.weaponSprite).to({y: this.weaponSprite.y, angle: 0 }, 500, Phaser.Easing.Linear.None, false);
+
+        tween1.chain(tween2);
+    }
     
 }

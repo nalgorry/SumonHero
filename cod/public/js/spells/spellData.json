@@ -1,0 +1,23 @@
+{   "spellData": [ 
+
+    {
+        "id": 1,
+        "possInSheet": 1,
+        "coolDownTimeSec": 30,
+        "heroeText": "Kill Directis!"
+
+    },
+    {
+        "id": 2,
+        "possInSheet": 4,
+        "coolDownTimeSec": 20,
+        "heroeText": "Heal Heal!"
+    },
+    {
+        "id": 3,
+        "possInSheet": 3,
+        "coolDownTimeSec": 10,
+        "heroeText": "KillDirectis!"
+    }
+]
+}

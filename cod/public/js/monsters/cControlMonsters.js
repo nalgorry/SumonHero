@@ -279,5 +279,37 @@ var cControlMonsters = (function () {
         //lets store the path to use it later
         this.paths.push(catmullPath);
     };
+    //this spell kill two random monsters 
+    cControlMonsters.prototype.spellDirectKill = function () {
+        //lets get the active monsters 
+        var monsters = Object.keys(this.arrayEnemyMonsters);
+        //if there is no monster in play we just exit this
+        if (monsters.length == 0) {
+            return;
+        }
+        //lets check if there are enougth monsters to kill
+        var monsterToKill = 2;
+        if (monsters.length < monsterToKill) {
+            monsterToKill = monsters.length;
+        }
+        //lets kill them! MUAJAJA
+        console.log(monsterToKill);
+        for (var i = 1; i <= monsterToKill; i++) {
+            var rnd = this.game.rnd.integerInRange(0, monsters.length - 1);
+            var idMonster = monsters[rnd];
+            var monster = this.arrayEnemyMonsters[idMonster];
+            monster.destroyMonster();
+            //we remove the monster kill to avoid kill it twice
+            monsters.splice(rnd, 1);
+        }
+    };
+    cControlMonsters.prototype.spellHealMonsters = function () {
+        //lets check player monsters
+        for (var keyMonster in this.arrayMonsters) {
+            var monster = this.arrayMonsters[keyMonster];
+            monster.life = monster.data.maxLife;
+        }
+        ;
+    };
     return cControlMonsters;
 }());

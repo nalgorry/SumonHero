@@ -4,10 +4,10 @@ var cControlInterface = (function () {
         this.controlMonsters = controlMonsters;
         this.speedMana = 0.5;
         this.speedBars = 50;
+        this.gameLvl = 1;
         this.gameStop = false;
-        this.initInterfaceBack(); //all that goes to the back will go here
-        this.playerBars = new cControlBars(game, 30, 20); //create the player bars to control mana and life
-        this.enemyBars = new cControlBars(game, 760, 20); //create the enemy bars
+        this.playerBars = new cControlBars(game, 22, 475, 120, true); //create the player bars to control mana and life
+        this.enemyBars = new cControlBars(game, 916, 368, 40, false); //create the enemy bars
         this.initCards(); //init the cards of the game 
         this.initCristals(); //init all the cristals :)
         //to control the update of the bars        
@@ -16,20 +16,22 @@ var cControlInterface = (function () {
     cControlInterface.prototype.updateManaSpeed = function (numCristals) {
         switch (numCristals) {
             case 4:
-                this.speedMana = 0.6;
+                this.speedMana = 0.5;
                 break;
             case 5:
-                this.speedMana = 0.9;
+                this.speedMana = 0.6;
                 break;
             case 6:
-                this.speedMana = 1.3;
+                this.speedMana = 0.65;
                 break;
             case 7:
-                this.speedMana = 1.5;
+                this.speedMana = 0.7;
                 break;
             default:
                 break;
         }
+        console.log(numCristals);
+        console.log("speed cristales" + this.speedMana);
     };
     cControlInterface.prototype.getSharedCristals = function () {
         return this.controlCristals.arrayShareCristals;
@@ -68,7 +70,7 @@ var cControlInterface = (function () {
         bitmapEndGame.alpha = 0.9;
         this.spriteEndGame.addChild(bitmapEndGame);
         //lets add the text
-        var textEndGame = this.game.add.bitmapText(0, -70, "gotic_white", "Game Finish!", 32);
+        var textEndGame = this.game.add.bitmapText(0, -70, "gotic_white", "Lvl " + this.gameLvl.toString() + " Finish!", 32);
         textEndGame.anchor.setTo(0.5);
         this.spriteEndGame.addChild(textEndGame);
         var result;
@@ -87,12 +89,24 @@ var cControlInterface = (function () {
         buttonTryAgain.anchor.setTo(0.5);
         buttonTryAgain.buttonClick.add(this.tryAgain, this);
         this.spriteEndGame.addChild(buttonTryAgain);
-        var buttonNextLvl = new cControlButton(this.game, 140, 70, "Next Lvl ->");
-        buttonNextLvl.anchor.setTo(0.5);
-        buttonNextLvl.buttonClick.add(this.nextLvl, this);
-        this.spriteEndGame.addChild(buttonNextLvl);
+        //only if you win you can continue
+        if (youWin) {
+            var buttonNextLvl = new cControlButton(this.game, 140, 70, "Next Lvl ->");
+            buttonNextLvl.anchor.setTo(0.5);
+            buttonNextLvl.buttonClick.add(this.nextLvl, this);
+            this.spriteEndGame.addChild(buttonNextLvl);
+        }
         //lets stop the game
         this.stopGame();
+    };
+    cControlInterface.prototype.tryAgain = function () {
+        this.controlHeroes.enemyHeroe.enemyIA.startEnemyAI(0);
+        this.startGame();
+    };
+    cControlInterface.prototype.nextLvl = function () {
+        this.gameLvl++;
+        this.controlHeroes.enemyHeroe.enemyIA.startEnemyAI(-300);
+        this.startGame();
     };
     cControlInterface.prototype.stopGame = function () {
         //lets stop the enemy AI
@@ -109,32 +123,11 @@ var cControlInterface = (function () {
         this.enemyBars.restartBars();
         this.controlCristals.restartCristals();
     };
-    cControlInterface.prototype.tryAgain = function () {
-        this.controlHeroes.enemyHeroe.enemyIA.startEnemyAI(0);
-        this.startGame();
-    };
-    cControlInterface.prototype.nextLvl = function () {
-        this.controlHeroes.enemyHeroe.enemyIA.startEnemyAI(-300);
-        this.startGame();
-    };
     cControlInterface.prototype.updateBars = function () {
         //update the mana of the player
         this.playerBars.UpdateMana(this.speedMana);
         //enable the cards acording to the mana needed
         this.controlCards.checkManaCards(this.playerBars.mana);
-    };
-    cControlInterface.prototype.initInterfaceBack = function () {
-        //lets put the background
-        var height = 80;
-        var width = 960;
-        var bitmapDescItem = this.game.add.bitmapData(width, height);
-        bitmapDescItem.ctx.beginPath();
-        bitmapDescItem.ctx.rect(0, 0, width, height);
-        bitmapDescItem.ctx.fillStyle = '#363636';
-        bitmapDescItem.ctx.fill();
-        var backGroundDesc = this.game.add.sprite(0, 0, bitmapDescItem);
-        backGroundDesc.anchor.setTo(0);
-        backGroundDesc.alpha = 0.9;
     };
     cControlInterface.prototype.initCards = function () {
         this.controlCards = new cControlCards(this.game, this);

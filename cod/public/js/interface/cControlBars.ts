@@ -15,9 +15,9 @@ class cControlBars {
     private maxMana = 150;
     private initMana = 30;
 
-    constructor(public game:Phaser.Game, x:number, y:number){
+    constructor(public game:Phaser.Game, x:number, y:number, barWidth:number, showMana:boolean){
         
-        this.initBars(x, y);
+        this.initBars(x, y, barWidth, showMana);
 
     }
 
@@ -29,7 +29,7 @@ class cControlBars {
         this.UpdateMana(0);
     }
 
-      private initBars(x:number, y:number) {
+      private initBars(x:number, y:number, barWidth:number, showMana:boolean) {
 
         //lets set the life and mana to maxvalues
         this.life = this.maxLife;
@@ -37,9 +37,16 @@ class cControlBars {
 
         //the size of the bars
         var barHeight:number = 20;
-        var barWidth:number = 158;
 
         //vida
+        //back
+        var bitmapBack = this.game.add.graphics(barWidth , barHeight);
+        bitmapBack.beginFill(0x363636);
+        bitmapBack.drawRect(x - barWidth, y - barHeight, barWidth , barHeight);
+        bitmapBack.endFill();
+        bitmapBack.alpha = 0.9;
+
+        //actual bar
         var bitmapVida = this.game.add.bitmapData(barWidth, barHeight);
         bitmapVida.ctx.beginPath();
         bitmapVida.ctx.rect(0, 0, barWidth, barHeight);
@@ -47,25 +54,42 @@ class cControlBars {
         bitmapVida.ctx.fill();
         this.lifeBar = this.game.add.sprite(x, y + bitmapVida.height,bitmapVida);
         this.lifeBar.anchor.setTo(1);
-        
-        //mana
-        var bitmapMana = this.game.add.bitmapData(barWidth, barHeight);
-        bitmapMana.ctx.beginPath();
-        bitmapMana.ctx.rect(0, 0, barWidth, barHeight);
-        bitmapMana.ctx.fillStyle = '#0099ff';
-        bitmapMana.ctx.fill();
-        this.manaBar = this.game.add.sprite(x , y + 25 + bitmapMana.height,bitmapMana);
-        this.manaBar.anchor.setTo(1);
+
+        //text
+        this.textLife = this.game.add.bitmapText(this.lifeBar.x + barWidth / 2 + 14, this.lifeBar.y - 4, 'gotic_white', this.life.toString() , 16);
+        this.textLife.anchor.setTo(1);
 
         //lets put the bars in it max values 
-        this.ResizeBar(this.lifeBar,this.life,this.maxLife);
-        this.ResizeBar(this.manaBar,this.mana,this.maxMana);
+        this.ResizeBar(this.lifeBar, this.life, this.maxLife);
+        
 
-        //para los textos de las barras
-        this.textLife = this.game.add.bitmapText(this.lifeBar.x + 100, this.lifeBar.y - 4, 'gotic_white', this.life.toString() , 16);
-        this.textLife.anchor.setTo(1);
-        this.textMana = this.game.add.bitmapText(this.manaBar.x + 100, this.manaBar.y - 4, 'gotic_white', this.mana.toString() , 16);
-        this.textMana.anchor.setTo(1);
+        if (showMana){
+            //mana
+            //back
+            var bitmapBack = this.game.add.graphics(barWidth , barHeight);
+            bitmapBack.beginFill(0x363636);
+            bitmapBack.drawRect(x - barWidth, y + 25 - barHeight, barWidth , barHeight);
+            bitmapBack.endFill();
+            bitmapBack.alpha = 0.9;
+
+            //bar
+            var bitmapMana = this.game.add.bitmapData(barWidth, barHeight);
+            bitmapMana.ctx.beginPath();
+            bitmapMana.ctx.rect(0, 0, barWidth, barHeight);
+            bitmapMana.ctx.fillStyle = '#0099ff';
+            bitmapMana.ctx.fill();
+            this.manaBar = this.game.add.sprite(x , y + 25 + bitmapMana.height,bitmapMana);
+            this.manaBar.anchor.setTo(1);
+
+            //text
+            this.textMana = this.game.add.bitmapText(this.manaBar.x + barWidth / 2 + 14, this.manaBar.y - 4, 'gotic_white', this.mana.toString() , 16);
+            this.textMana.anchor.setTo(1);
+
+            this.ResizeBar(this.manaBar, this.mana, this.maxMana);
+        }
+
+
+
 
     }
 

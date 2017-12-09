@@ -78,10 +78,14 @@ class cControlCristals {
     }
 
     public changeCristalColor(cristal:cCristals, color: cristalColor) {
+
+        //lets check if we really need to change the color of the cristal
+        if (cristal.color == color) {return}
+
         cristal.changeCristalColor(color);
 
         //lets update the number of cristal we have 
-        if (color = cristalColor.blue_cristal) {
+        if (color == cristalColor.blue_cristal) {
             this.numBlueCristals ++;
         } else {
             this.numBlueCristals --;

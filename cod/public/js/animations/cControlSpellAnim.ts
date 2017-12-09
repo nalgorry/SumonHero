@@ -94,8 +94,7 @@ class cControlSpellAnim {
 
         var tweenText = this.game.add.tween(completeText).to({y: '-40'}, 1000, Phaser.Easing.Cubic.Out, true);
         tweenText.onComplete.add(this.removeTweenText,completeText);
-        
-
+    
     }
 
     removeTweenText(sprite:Phaser.Sprite) {        

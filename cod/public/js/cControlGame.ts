@@ -3,6 +3,7 @@ class cControlGame {
     private controlHeroes:cControlHeroes;
     private controlMonsters:cControlMonsters;
     private controlInterface:cControlInterface;
+    private controlSpells:cControlSpells;
 
     private spriteMainMenu:Phaser.Sprite;
 
@@ -29,6 +30,9 @@ class cControlGame {
         //lets init the heroes
         this.controlHeroes = new cControlHeroes(this.game, this.controlInterface);
         this.controlInterface.controlHeroes = this.controlHeroes;
+
+        //lets init the spells
+        this.controlSpells = new cControlSpells(this.game,this.controlMonsters, this.controlHeroes);
 
     }
 
