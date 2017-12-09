@@ -15,7 +15,7 @@ class cControlBars {
     private maxMana = 150;
     private initMana = 30;
 
-    constructor(public game:Phaser.Game, x:number, y:number, barWidth:number, showMana:boolean){
+    constructor(public game:Phaser.Game, x:number, y:number, barWidth:number, public showMana:boolean){
         
         this.initBars(x, y, barWidth, showMana);
 
@@ -23,10 +23,12 @@ class cControlBars {
 
     public restartBars() {
         this.life = this.maxLife;
-        this.mana = this.initMana;
-
         this.UpdateLife(0);
-        this.UpdateMana(0);
+
+        if (this.showMana) {
+            this.mana = this.initMana;
+            this.UpdateMana(0);
+        }
     }
 
       private initBars(x:number, y:number, barWidth:number, showMana:boolean) {
