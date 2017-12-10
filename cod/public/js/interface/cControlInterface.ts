@@ -12,6 +12,7 @@ class cControlInterface {
     private speedBars = 50;
 
     public gameLvl:number = 1;
+    private textGameLvl:Phaser.BitmapText;
 
     private gameStop:boolean = false; 
 
@@ -27,8 +28,30 @@ class cControlInterface {
 
         this.initCristals(); //init all the cristals :)
 
+        this.initLvlSel();
+
         //to control the update of the bars        
         var timer = this.game.time.events.loop(this.speedBars, this.updateBars, this);
+
+    }
+
+    public initLvlSel() {
+
+        var lvl = this.game.add.bitmapText(10, 10, "gotic_white", "LVL " + this.gameLvl, 16);
+        lvl.inputEnabled = true;
+        lvl.events.onInputDown.add(this.skipLvl,this);
+
+        this.textGameLvl = lvl;
+
+    }
+
+    private skipLvl() {
+
+        this.stopGame();
+        this.nextLvl();
+        this.startGame();
+
+        this.textGameLvl.text = "LVL " + this.gameLvl
 
     }
 
@@ -159,7 +182,9 @@ class cControlInterface {
 
     private startGame() {
         
-        this.spriteEndGame.destroy();
+        if (this.spriteEndGame != undefined) {
+            this.spriteEndGame.destroy();
+        }
 
         // start enemyAI
         this.gameStop = false;

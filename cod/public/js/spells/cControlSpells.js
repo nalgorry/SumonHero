@@ -29,7 +29,7 @@ var cControlSpells = (function () {
         newSpell.signalSpellSel.add(this.spellClick, this);
         //hechizo 3
         var newSpell = new cSpell(this.game);
-        newSpell.iniciateSpell(new Phaser.Point(670 + 90 * 2, 560), this.SpellData[enumSpells.spell_3]);
+        newSpell.iniciateSpell(new Phaser.Point(670 + 90 * 2, 560), this.SpellData[enumSpells.shield]);
         this.arrayselSpells.push(newSpell);
         newSpell.signalSpellSel.add(this.spellClick, this);
     };
@@ -41,6 +41,9 @@ var cControlSpells = (function () {
                 break;
             case enumSpells.heal_monsters:
                 this.controlMonsters.spellHealMonsters();
+                break;
+            case enumSpells.shield:
+                this.controlMonsters.spellShieldMonsters(sender.data);
             default:
                 break;
         }
@@ -57,5 +60,5 @@ var enumSpells;
 (function (enumSpells) {
     enumSpells[enumSpells["direct_kill"] = 1] = "direct_kill";
     enumSpells[enumSpells["heal_monsters"] = 2] = "heal_monsters";
-    enumSpells[enumSpells["spell_3"] = 3] = "spell_3";
+    enumSpells[enumSpells["shield"] = 3] = "shield";
 })(enumSpells || (enumSpells = {}));

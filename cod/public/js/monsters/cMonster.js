@@ -22,6 +22,8 @@ var cMonster = (function (_super) {
         this.isAtacking = false;
         //to control the walk animations
         this.isMoving = false;
+        //efects of the spells
+        this.shieldActivated = false;
         //left define the start position of the monster, base on the path selected
         path = path.slice(-path.length + startPoss);
         this.x = path[0].x;
@@ -167,6 +169,9 @@ var cMonster = (function (_super) {
         this.destroy(true);
     };
     cMonster.prototype.IsHit = function (damage) {
+        if (this.shieldActivated == true) {
+            damage = damage / 2;
+        }
         this.life -= damage;
         //lets check if the monster is dead!
         if (this.life <= 0 && this.isDead == false) {
@@ -266,6 +271,22 @@ var cMonster = (function (_super) {
         this.weaponAnimation2 = this.game.add.tween(this.weaponSprite).to({ angle: 0, y: this.data.weaponY - 2 }, 800, Phaser.Easing.Linear.None, false);
         this.weaponAnimation1.chain(this.weaponAnimation2);
         this.weaponAnimation2.chain(this.weaponAnimation1);
+    };
+    cMonster.prototype.activateShield = function (spellData) {
+        this.shieldActivated = true;
+        //lets create the sprite over the monster
+        this.spriteShield = this.game.add.sprite(0, -50, 'spells', spellData.possInSheet);
+        this.spriteShield.anchor.set(0.5);
+        this.spriteShield.scale.set(0.25);
+        this.addChild(this.spriteShield);
+        //lets start the timer to desactivate the events
+        var timer = this.game.time.create();
+        timer.loop(spellData.durationSec * 1000, this.desactivateShield, this);
+        timer.start();
+    };
+    cMonster.prototype.desactivateShield = function () {
+        this.spriteShield.destroy();
+        this.shieldActivated = false;
     };
     return cMonster;
 }(cBasicActor));

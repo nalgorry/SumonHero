@@ -65,7 +65,7 @@
         "maxSpeed": 0.5,
         "atackSpeed":1500,
         "atackType":2,
-        "hitRange":200,
+        "hitRange":150,
         "special": "",
         "weaponTilePoss": 8,
         "weaponX": -20,

@@ -10,9 +10,22 @@ var cControlInterface = (function () {
         this.enemyBars = new cControlBars(game, 916, 368, 40, false); //create the enemy bars
         this.initCards(); //init the cards of the game 
         this.initCristals(); //init all the cristals :)
+        this.initLvlSel();
         //to control the update of the bars        
         var timer = this.game.time.events.loop(this.speedBars, this.updateBars, this);
     }
+    cControlInterface.prototype.initLvlSel = function () {
+        var lvl = this.game.add.bitmapText(10, 10, "gotic_white", "LVL " + this.gameLvl, 16);
+        lvl.inputEnabled = true;
+        lvl.events.onInputDown.add(this.skipLvl, this);
+        this.textGameLvl = lvl;
+    };
+    cControlInterface.prototype.skipLvl = function () {
+        this.stopGame();
+        this.nextLvl();
+        this.startGame();
+        this.textGameLvl.text = "LVL " + this.gameLvl;
+    };
     cControlInterface.prototype.updateManaSpeed = function (numCristals) {
         switch (numCristals) {
             case 4:
@@ -114,7 +127,9 @@ var cControlInterface = (function () {
         this.gameStop = true;
     };
     cControlInterface.prototype.startGame = function () {
-        this.spriteEndGame.destroy();
+        if (this.spriteEndGame != undefined) {
+            this.spriteEndGame.destroy();
+        }
         // start enemyAI
         this.gameStop = false;
         //lets kill all the monster from the previus games!

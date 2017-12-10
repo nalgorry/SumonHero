@@ -17,7 +17,8 @@
         "id": 3,
         "possInSheet": 3,
         "coolDownTimeSec": 10,
-        "heroeText": "KillDirectis!"
+        "heroeText": "Protect!",
+        "durationSec": 20
     }
 ]
 }

@@ -4,6 +4,7 @@ class cSpellData {
     public possInSheet:number;
     public coolDownTimeSec:number;
     public heroeText:string;
+    public durationSec:number;
     
 
     constructor(JSONData:any) {
@@ -12,6 +13,7 @@ class cSpellData {
         this.possInSheet = JSONData.possInSheet;
         this.coolDownTimeSec = JSONData.coolDownTimeSec;
         this.heroeText = JSONData.heroeText;
+        this.durationSec = JSONData.durationSec;
 
     }
 

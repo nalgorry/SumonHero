@@ -29,7 +29,9 @@ class cMonster extends cBasicActor{
     public eMonsterDie:Phaser.Signal;
     public eMonsterAreaAtack:Phaser.Signal;
 
-    
+    //efects of the spells
+    private shieldActivated:boolean = false;
+    private spriteShield:Phaser.Sprite;
 
     constructor (public game:Phaser.Game, 
         public id:number,
@@ -257,6 +259,10 @@ class cMonster extends cBasicActor{
 
     public IsHit(damage:number) {
 
+        if (this.shieldActivated == true) {
+            damage = damage / 2;
+        }
+
         this.life -= damage;
 
        //lets check if the monster is dead!
@@ -405,7 +411,29 @@ class cMonster extends cBasicActor{
         this.weaponAnimation1.chain(this.weaponAnimation2);
         this.weaponAnimation2.chain(this.weaponAnimation1);
 
+    }
 
+    public activateShield(spellData:cSpellData) {
+        
+        this.shieldActivated = true;
+
+        //lets create the sprite over the monster
+        this.spriteShield = this.game.add.sprite(0, -50, 'spells', spellData.possInSheet);
+        this.spriteShield.anchor.set(0.5);
+        this.spriteShield.scale.set(0.25);
+
+        this.addChild(this.spriteShield);
+        
+        //lets start the timer to desactivate the events
+        var timer = this.game.time.create();
+        timer.loop(spellData.durationSec * 1000, this.desactivateShield,this);
+        timer.start();
+
+    }
+
+    public desactivateShield() {
+        this.spriteShield.destroy();
+        this.shieldActivated = false;
     }
 
 

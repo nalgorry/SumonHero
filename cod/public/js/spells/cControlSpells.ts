@@ -45,7 +45,7 @@ class cControlSpells {
 
         //hechizo 3
         var newSpell:cSpell = new cSpell(this.game);
-        newSpell.iniciateSpell(new Phaser.Point(670 + 90 * 2, 560), this.SpellData[enumSpells.spell_3]);
+        newSpell.iniciateSpell(new Phaser.Point(670 + 90 * 2, 560), this.SpellData[enumSpells.shield]);
         
         this.arrayselSpells.push(newSpell);
         newSpell.signalSpellSel.add(this.spellClick,this);                
@@ -62,6 +62,9 @@ class cControlSpells {
                 break;
             case enumSpells.heal_monsters:
                 this.controlMonsters.spellHealMonsters();
+                break;
+            case enumSpells.shield:
+                this.controlMonsters.spellShieldMonsters(sender.data);
             default:
                 break;
         }
@@ -83,5 +86,5 @@ class cControlSpells {
 enum enumSpells {
     direct_kill = 1, 
     heal_monsters = 2,
-    spell_3 =3,
+    shield =3,
 }

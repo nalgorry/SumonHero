@@ -4,6 +4,7 @@ var cSpellData = (function () {
         this.possInSheet = JSONData.possInSheet;
         this.coolDownTimeSec = JSONData.coolDownTimeSec;
         this.heroeText = JSONData.heroeText;
+        this.durationSec = JSONData.durationSec;
     }
     return cSpellData;
 }());

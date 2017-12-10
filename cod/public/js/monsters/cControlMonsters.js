@@ -311,5 +311,13 @@ var cControlMonsters = (function () {
         }
         ;
     };
+    cControlMonsters.prototype.spellShieldMonsters = function (spellData) {
+        //lets check player monsters
+        for (var keyMonster in this.arrayMonsters) {
+            var monster = this.arrayMonsters[keyMonster];
+            monster.activateShield(spellData);
+        }
+        ;
+    };
     return cControlMonsters;
 }());
