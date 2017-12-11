@@ -162,7 +162,7 @@ class cMonster extends cBasicActor{
 
     private animateArrow(defender:cBasicActor) {
         //lets create the proyectile
-        var arrow = new cControlSpellAnim(this.game, this, defender, enumRayAnimations.arrow,0);
+        var arrow = new cControlSpellAnim(this.game, this, defender, enumRayAnimations.arrow, 0);
 
         arrow.evenAnimationFinish.add(this.monsterHit,this, null, defender, null, defender);
     }

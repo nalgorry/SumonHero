@@ -14,7 +14,9 @@ class cControlSpellAnim {
             public spriteTo:Phaser.Sprite, 
             rayAnimationType:enumRayAnimations,
             public spellDamage: number = 0,
-            color:number = 0x000000) {
+            color:number = 0x000000,
+            fromOfset:Phaser.Point = null, 
+            toOfset:Phaser.Point = null) {
 
                 //lets iniciate the events
                 this.evenAnimationFinish = new Phaser.Signal;
@@ -37,7 +39,8 @@ class cControlSpellAnim {
                             ray.finish.add(this.rayFinish,this);
                             break;
                         case enumRayAnimations.ray:
-                            var ray2 = new cControlRay(game,spriteFrom,spriteTo, color);
+                            var ray2 = new cControlRay(game,spriteFrom,spriteTo, color,
+                                fromOfset, toOfset);
                             ray2.finish.add(this.rayFinish,this);
                             break;
                     

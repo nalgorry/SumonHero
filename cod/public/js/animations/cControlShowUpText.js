@@ -1,7 +1,6 @@
 var cControlShowUpText = (function () {
     function cControlShowUpText(game, x, y, showText) {
         this.game = game;
-        console.log("entra");
         var completeText = this.game.add.sprite(x, y);
         //texto que se muestra
         var text = this.game.add.bitmapText(0, 0, 'gotic_black', showText, 18);

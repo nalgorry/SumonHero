@@ -5,7 +5,7 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 var cControlRay = (function (_super) {
     __extends(cControlRay, _super);
-    function cControlRay(game, spriteFrom, spriteTo, color) {
+    function cControlRay(game, spriteFrom, spriteTo, color, fromOfset, toOfset) {
         _super.call(this, game, 0, 0);
         this.game = game;
         this.spriteTo = spriteTo;
@@ -22,13 +22,13 @@ var cControlRay = (function (_super) {
         this.acumY = 0;
         this.finish = new Phaser.Signal();
         this.groupGraphics = new Phaser.Group(this.game);
-        this.makeRay(spriteFrom, spriteTo, color);
+        this.makeRay(spriteFrom, spriteTo, color, fromOfset, toOfset);
     }
-    cControlRay.prototype.makeRay = function (spriteFrom, spriteTo, color) {
+    cControlRay.prototype.makeRay = function (spriteFrom, spriteTo, color, fromOfset, toOfset) {
         var from;
         var to;
-        from = new Phaser.Point(spriteFrom.x, spriteFrom.y - 40);
-        to = new Phaser.Point(spriteTo.x, spriteTo.y - 40);
+        from = new Phaser.Point(spriteFrom.x + fromOfset.x, spriteFrom.y + fromOfset.y);
+        to = new Phaser.Point(spriteTo.x + toOfset.x, spriteTo.y + toOfset.y);
         var distance = from.distance(to);
         this.numberOfLines = Math.floor(distance / this.maxLenght);
         this.loopsInUpdate = Math.floor(this.numberOfLines / this.numberOfUpdates);

@@ -6,9 +6,11 @@ var enumRayAnimations;
     enumRayAnimations[enumRayAnimations["ninjaStar"] = 3] = "ninjaStar";
 })(enumRayAnimations || (enumRayAnimations = {}));
 var cControlSpellAnim = (function () {
-    function cControlSpellAnim(game, spriteFrom, spriteTo, rayAnimationType, spellDamage, color) {
+    function cControlSpellAnim(game, spriteFrom, spriteTo, rayAnimationType, spellDamage, color, fromOfset, toOfset) {
         if (spellDamage === void 0) { spellDamage = 0; }
         if (color === void 0) { color = 0x000000; }
+        if (fromOfset === void 0) { fromOfset = null; }
+        if (toOfset === void 0) { toOfset = null; }
         this.game = game;
         this.spriteTo = spriteTo;
         this.spellDamage = spellDamage;
@@ -31,7 +33,7 @@ var cControlSpellAnim = (function () {
                     ray.finish.add(this.rayFinish, this);
                     break;
                 case enumRayAnimations.ray:
-                    var ray2 = new cControlRay(game, spriteFrom, spriteTo, color);
+                    var ray2 = new cControlRay(game, spriteFrom, spriteTo, color, fromOfset, toOfset);
                     ray2.finish.add(this.rayFinish, this);
                     break;
                 default:

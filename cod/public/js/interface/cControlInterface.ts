@@ -75,9 +75,6 @@ class cControlInterface {
                 break;
         }
 
-        console.log(numCristals);
-        console.log("speed cristales" + this.speedMana)
-
     }
 
 

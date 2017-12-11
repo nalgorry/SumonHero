@@ -26,7 +26,8 @@ class cControlRay extends Phaser.Sprite {
 
     constructor(public game: Phaser.Game, 
         spriteFrom:Phaser.Sprite, 
-        public spriteTo:Phaser.Sprite, color) {
+        public spriteTo:Phaser.Sprite, color,
+        fromOfset:Phaser.Point, toOfset:Phaser.Point ) {
 
         super(game,0, 0);
 
@@ -34,17 +35,17 @@ class cControlRay extends Phaser.Sprite {
 
         this.groupGraphics = new Phaser.Group(this.game);
 
-        this.makeRay(spriteFrom, spriteTo, color);
+        this.makeRay(spriteFrom, spriteTo, color, fromOfset, toOfset);
 
     }
     
 
-    private makeRay(spriteFrom:Phaser.Sprite, spriteTo:Phaser.Sprite, color) {
+    private makeRay(spriteFrom:Phaser.Sprite, spriteTo:Phaser.Sprite, color, fromOfset:Phaser.Point, toOfset:Phaser.Point) {
             var from:Phaser.Point;
             var to:Phaser.Point;
 
-            from = new Phaser.Point(spriteFrom.x, spriteFrom.y - 40);
-            to = new Phaser.Point(spriteTo.x, spriteTo.y - 40);
+            from = new Phaser.Point(spriteFrom.x + fromOfset.x, spriteFrom.y + fromOfset.y);
+            to = new Phaser.Point(spriteTo.x + toOfset.x, spriteTo.y + toOfset.y);
 
             var distance = from.distance(to);
 

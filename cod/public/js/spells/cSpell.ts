@@ -9,6 +9,7 @@ class cSpell {
     private posInSpriteSheet:number = 1;
     private spriteFocusCool:Phaser.Graphics;
     private spriteFocusFixCool:Phaser.Graphics;
+    private fiveSecondsText:Phaser.BitmapText;
 
     public data:cSpellData //here we store all the data of the spell
 
@@ -36,7 +37,7 @@ class cSpell {
         this.spriteFocusCool.pivot.x = 0.5;
         this.spriteFocusCool.pivot.y = 0.5;
         this.spriteFocusCool.beginFill(0x141417);
-        this.spriteFocusCool.alpha = 0.5;
+        this.spriteFocusCool.alpha = 0.75;
         this.spriteFocusCool.drawCircle(0, 0, 64);
         this.spriteFocusCool.visible = false;
 
@@ -45,9 +46,14 @@ class cSpell {
         this.sprite.y + this.sprite.height/2);
         this.spriteFocusFixCool.lineStyle(2, 0x141417, 1);
         this.spriteFocusFixCool.beginFill(0x141417);
-        this.spriteFocusFixCool.alpha = 0.25;
+        this.spriteFocusFixCool.alpha = 0.5;
         this.spriteFocusFixCool.drawCircle(0, 0, 64);
         this.spriteFocusFixCool.visible = false;
+
+        this.fiveSecondsText = this.game.add.bitmapText(this.sprite.x + this.sprite.width/2,
+            this.sprite.y + this.sprite.height/2 - 8, 'gotic_white', "", 32);
+        this.fiveSecondsText.anchor.set(0.5);
+
         
     }
 
@@ -71,9 +77,32 @@ class cSpell {
              { x: 0, y:0 }, this.data.coolDownTimeSec * 1000, Phaser.Easing.Linear.None, true);
 
         this.game.time.events.add(Phaser.Timer.SECOND * this.data.coolDownTimeSec, this.coolDownFinish, this);
+        
+        //lets add a timer to make a number apear when 5 sec are left
+        this.game.time.events.add(Phaser.Timer.SECOND * this.data.coolDownTimeSec - 5000, this.fiveSecondsAlert, this);
     }
 
-    coolDownFinish() {
+    private fiveSecondsAlert() {
+        this.fiveSecondsText.text = "5";
+
+        var timer = this.game.time.create(false);
+        timer.loop(1000, this.updateLeftTime, this, timer);
+        timer.start();
+    }
+
+    private updateLeftTime(timer:Phaser.Timer) {
+
+        var newTime = parseInt(this.fiveSecondsText.text) - 1
+
+        if (newTime >= 1) {
+        this.fiveSecondsText.text = newTime.toString();
+        } else {
+            this.fiveSecondsText.text = "";
+            timer.destroy();
+        }
+    }
+
+    private coolDownFinish() {
         this.spriteFocusCool.visible = false;
         this.spriteFocusFixCool.visible = false;
         this.isSpellOnCoolDown = false;

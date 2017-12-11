@@ -43,8 +43,6 @@ var cControlInterface = (function () {
             default:
                 break;
         }
-        console.log(numCristals);
-        console.log("speed cristales" + this.speedMana);
     };
     cControlInterface.prototype.getSharedCristals = function () {
         return this.controlCristals.arrayShareCristals;

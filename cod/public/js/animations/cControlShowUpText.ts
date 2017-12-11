@@ -2,8 +2,6 @@ class cControlShowUpText {
 
     constructor(public game:Phaser.Game, x:number, y:number, showText:string ) {
 
-        console.log("entra");
-
         var completeText = this.game.add.sprite(x , y);
         
         //texto que se muestra
