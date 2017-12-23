@@ -148,7 +148,7 @@ var cControlMonsters = (function () {
         //now we resolve the atacks
         for (var _i = 0, arrayMonsterAtacking_1 = arrayMonsterAtacking; _i < arrayMonsterAtacking_1.length; _i++) {
             var monster_1 = arrayMonsterAtacking_1[_i];
-            this.resolveAtack(monster_1, monster_1.monsterAtacked);
+            monster_1.resolveAtack(monster_1.monsterAtacked);
         }
     };
     //activate the atack mode of the monster 
@@ -158,19 +158,6 @@ var cControlMonsters = (function () {
         }
         monster.monsterAtacked = enemyHit;
         monster.isAtacking = true;
-    };
-    cControlMonsters.prototype.resolveAtack = function (atacker, defender) {
-        if (atacker.speedCounter >= atacker.data.atackSpeed) {
-            this.monsterAtack(atacker, defender);
-            atacker.speedCounter = 0;
-        }
-        else {
-            atacker.speedCounter += 100;
-        }
-    };
-    cControlMonsters.prototype.monsterAtack = function (atacker, defender) {
-        //lets check if it is atacking a monster or the enemyHeroe
-        atacker.monsterAtack(defender);
     };
     cControlMonsters.prototype.monsterDie = function (monster) {
         //lets delete the monster for the array
@@ -198,20 +185,35 @@ var cControlMonsters = (function () {
     };
     //it happens when the moster do a area atack
     cControlMonsters.prototype.monsterAreaAtack = function (monster) {
+        var offSet = new Phaser.Point(0, 0);
         switch (monster.data.atackType) {
+            case 4 /* hammer */:
+                //lets set the offset where the bug hit!
+                var offSet = new Phaser.Point(30 * monster.sprite.scale.x, 0);
             case 3 /* explosion */:
                 //lets check wich array we have to uses 
                 var array;
+                var heroe;
                 if (monster.isEnemy == true) {
                     array = this.arrayMonsters;
+                    heroe = this.gameInterface.controlHeroes.heroe;
                 }
                 else {
                     array = this.arrayEnemyMonsters;
+                    heroe = this.gameInterface.controlHeroes.enemyHeroe;
+                }
+                //lets check if the area atack afects the enemy heroe
+                var mosterHitPos = new Phaser.Point(offSet.x + monster.x, offSet.y + monster.y);
+                var heroeDistance = mosterHitPos.distance(heroe.position);
+                if (heroeDistance <= monster.data.hitRange) {
+                    heroe.IsHit(monster.data.atack);
                 }
                 //lets get all the monster afected.
                 Object.keys(array).forEach(function (keyEnemyMonster) {
                     var enemy = array[keyEnemyMonster];
-                    var distance = monster.position.distance(enemy.position);
+                    var mosterHitPos = new Phaser.Point(offSet.x + monster.x, offSet.y + monster.y);
+                    ;
+                    var distance = mosterHitPos.distance(enemy.position);
                     if (distance <= monster.data.areaHitRange) {
                         enemy.IsHit(monster.data.atack);
                     }

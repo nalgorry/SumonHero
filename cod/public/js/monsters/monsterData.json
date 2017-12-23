@@ -4,7 +4,7 @@
         "id": 1, 
         "monsterName": "sword monster", 
         "tilePoss": 0,
-        "atack": 40,
+        "atack": 30,
         "defence": 1,
         "life": 50,
         "maxSpeed": 0.4,
@@ -16,7 +16,29 @@
         "weaponX": 0,
         "weaponY": 0,
         "manaCost":50,
-        "respawnTime":5
+        "respawnTime":5,
+        "firstAtack":false
+    },
+    {
+        "id": 5, 
+        "monsterName": "Hammer monster", 
+        "tilePoss": 0,
+        "atack": 60,
+        "defence": 1,
+        "life": 80,
+        "maxSpeed": 0.3,
+        "atackSpeed":1800,
+        "atackType":4,
+        "hitRange":50,
+        "special": "",
+        "weaponTilePoss": 5,
+        "weaponX": 5,
+        "weaponY": 0,
+        "weaponAngle": -90,
+        "manaCost":70,
+        "respawnTime":5,
+        "areaHitRange":40,
+        "firstAtack":false
     },
     {
         "id": 4, 
@@ -34,7 +56,8 @@
         "weaponX": 0,
         "weaponY": 0,
         "manaCost":30,
-        "respawnTime":5
+        "respawnTime":5,
+        "firstAtack":false
     },
     {
         "id": 2, 
@@ -53,7 +76,8 @@
         "weaponX": -25,
         "weaponY": 10,
         "manaCost":50,
-        "respawnTime":5
+        "respawnTime":5,
+        "firstAtack":false
     },
     {
         "id": 3, 
@@ -71,7 +95,28 @@
         "weaponX": -20,
         "weaponY": 10,
         "manaCost":60,
-        "respawnTime":5
+        "respawnTime":5,
+        "firstAtack":false
+    }
+    ,
+    {
+        "id": 6, 
+        "monsterName": "ninja monster", 
+        "tilePoss": 2,
+        "atack": 12,
+        "defence": 1,
+        "life": 70,
+        "maxSpeed": 0.6,
+        "atackSpeed":500,
+        "atackType":5,
+        "hitRange":40,
+        "special": "",
+        "weaponTilePoss": 7,
+        "weaponX": -20,
+        "weaponY": 10,
+        "manaCost":65,
+        "respawnTime":5,
+        "firstAtack":true
     }
 ]
 }

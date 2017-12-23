@@ -39,7 +39,7 @@ class cControlBars {
 
         //the size of the bars
         var barHeight:number = 20;
-
+        
         //vida
         //back
         var bitmapBack = this.game.add.graphics(barWidth , barHeight);

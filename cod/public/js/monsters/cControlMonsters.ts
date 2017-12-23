@@ -210,7 +210,7 @@ class cControlMonsters {
 
         //now we resolve the atacks
         for (let monster of arrayMonsterAtacking) {
-            this.resolveAtack(monster, monster.monsterAtacked);
+            monster.resolveAtack(monster.monsterAtacked);
         }
 
     }
@@ -227,26 +227,6 @@ class cControlMonsters {
         
     }
 
-    private resolveAtack(atacker:cMonster, defender:cBasicActor ) {
-        
-        if (atacker.speedCounter >= atacker.data.atackSpeed) {
-
-            this.monsterAtack(atacker, defender);
-            
-            atacker.speedCounter = 0;
-        } else {
-
-            atacker.speedCounter += 100;
-        }
-
-    }
-
-    private monsterAtack(atacker:cMonster, defender:cBasicActor) {
-        
-        //lets check if it is atacking a monster or the enemyHeroe
-        atacker.monsterAtack(defender);
-
-    }
 
     private monsterDie(monster:cMonster) {
         //lets delete the monster for the array
@@ -289,16 +269,32 @@ class cControlMonsters {
 
     //it happens when the moster do a area atack
     private monsterAreaAtack(monster: cMonster) {
+
+        var offSet = new Phaser.Point(0, 0);
         
         switch (monster.data.atackType) {
+            case enumAtackType.hammer:
+                //lets set the offset where the bug hit!
+                var offSet = new Phaser.Point(30 * monster.sprite.scale.x, 0);
             case enumAtackType.explosion:
-                
+           
                 //lets check wich array we have to uses 
                 var array:cMonster[];
+                var heroe: cBasicHeroe;
                 if (monster.isEnemy == true) {
                     array = this.arrayMonsters;
+                    heroe = this.gameInterface.controlHeroes.heroe;
                 } else {
                     array = this.arrayEnemyMonsters;
+                    heroe = this.gameInterface.controlHeroes.enemyHeroe;
+                }
+
+                //lets check if the area atack afects the enemy heroe
+                var mosterHitPos = new Phaser.Point(offSet.x + monster.x,offSet.y + monster.y);
+                var heroeDistance = mosterHitPos.distance(heroe.position);
+
+                if (heroeDistance <= monster.data.hitRange) {                  
+                    heroe.IsHit(monster.data.atack);
                 }
 
                 //lets get all the monster afected.
@@ -306,7 +302,9 @@ class cControlMonsters {
                     
                     var enemy:cMonster = array[keyEnemyMonster];
 
-                    var distance = monster.position.distance(enemy.position);
+                    var mosterHitPos = new Phaser.Point(offSet.x + monster.x,offSet.y + monster.y);;
+
+                    var distance = mosterHitPos.distance(enemy.position);
 
                     if (distance <= monster.data.areaHitRange) {
                         enemy.IsHit(monster.data.atack);

@@ -35,6 +35,10 @@ var cCards = (function () {
         this.sprite.addChild(bugSprite);
         var weaponSprite = this.game.add.sprite(monsterData.weaponX, monsterData.weaponY + 20, 'items', monsterData.weaponTilePoss);
         weaponSprite.anchor.set(0, 1);
+        if (monsterData.weaponAngle != undefined) {
+            weaponSprite.angle = monsterData.weaponAngle;
+            console.log("entra");
+        }
         bugSprite.addChild(weaponSprite);
         //lets put the mana cost now! (wow so great)
         var backMana = this.game.add.graphics(cardWidth / 2, 4);

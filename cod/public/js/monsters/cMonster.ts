@@ -8,22 +8,31 @@ class cMonster extends cBasicActor{
     private loopSpeed:number = 0;
     private speed:number; //the distance of every point in the path
 
+    private firstAtack:boolean;
+
     private bugSprite:Phaser.Sprite;
     private weaponSprite:Phaser.Sprite;
     
     public isDead:boolean = false; //to control if a spell hit after the monster die.
     public monsterAtacked:cBasicActor;
+
+    //to show the life of the monster
+    private lifeBar:Phaser.Sprite;
+    private bitmapVida:Phaser.Graphics;
+    private bitmapBack:Phaser.Graphics;
+    private barHeight:number = 10;
+    private barWidth:number = 40;
+    private actualBarColor:number;
     
     //to control monster atacks
     public speedCounter:number = 0;
     public isAtacking:boolean = false;
 
     //to control the walk animations
-    public isMoving:boolean = false;
+    private isMoving:boolean = false;
 
-    public weaponAnimation1:Phaser.Tween;
-    public weaponAnimation2:Phaser.Tween;
-
+    private weaponAnimation1:Phaser.Tween;
+    private weaponAnimation2:Phaser.Tween;
 
     public eMonsterHitHeroe:Phaser.Signal;
     public eMonsterDie:Phaser.Signal;
@@ -48,12 +57,13 @@ class cMonster extends cBasicActor{
         this.x = path[0].x;
         this.y = path[0].y;
         this.anchor.set(0.5);
+        this.firstAtack = this.data.firstAtack;
 
         //all the sprites that generates the bug
         this.sprite =  this.game.add.sprite(0, 0)
         this.addChild(this.sprite);
-        this.sprite.inputEnabled = true;
-        this.sprite.events.onInputDown.add(this.monsterClick, this)
+        //this.sprite.inputEnabled = true;
+        //this.sprite.events.onInputDown.add(this.monsterClick, this)
 
         //lets create the bug
         this.bugSprite = this.game.add.sprite(0, 0, 'bugs', data.tilePoss);
@@ -65,6 +75,10 @@ class cMonster extends cBasicActor{
         //lets create the weapon MUAJAJA (evil laugh)
         this.weaponSprite = this.game.add.sprite(data.weaponX, data.weaponY, 'items', data.weaponTilePoss);
         this.weaponSprite.anchor.set(0, 1);
+        
+        if (data.weaponAngle != undefined) {
+            this.weaponSprite.angle = data.weaponAngle;
+        }
 
         this.sprite.addChild(this.weaponSprite);
 
@@ -85,6 +99,9 @@ class cMonster extends cBasicActor{
         this.x = this.monsterPath[0].x;
         this.y = this.monsterPath[0].y;
 
+        //lets create a mega super bar to show the life when monster is hit
+        this.createBar();
+
         //to control the events of the monster
         this.eMonsterHitHeroe = new Phaser.Signal();
         this.eMonsterDie = new Phaser.Signal();
@@ -95,8 +112,93 @@ class cMonster extends cBasicActor{
 
     }
 
+    public createBar() {
+
+        var x = -20;
+        var y = -55;
+
+        //back
+        this.lifeBar = this.game.add.sprite(x, y);
+        this.lifeBar.anchor.setTo(1);
+
+        this.bitmapBack = this.game.add.graphics(x ,y);
+        this.bitmapBack.beginFill(0x363636);
+        this.bitmapBack.drawRect(0, 0, this.barWidth , this.barHeight);
+        this.bitmapBack.endFill();
+        this.bitmapBack.alpha = 0;
+        this.sprite.addChild(this.bitmapBack);
+        
+
+        //actual bar
+        this.bitmapVida = this.game.add.graphics(0, 0);
+        this.bitmapVida.beginFill(0x0B632B);
+        this.bitmapVida.drawRect(0, 0, this.barWidth, this.barHeight);
+        this.bitmapVida.endFill();
+        this.lifeBar.addChild(this.bitmapVida);
+        this.lifeBar.alpha = 0;
+        
+        this.sprite.addChild(this.lifeBar);
+
+        //lets save the actual color of the bar in case we need to change it 
+        this.actualBarColor = 0x0B632B
+
+    }
+
+    private updateLifeBar(damage:number) {
+        this.UpdateBar(this.lifeBar, this.life, this.data.maxLife);
+    }
+
+    private UpdateBar(bar:Phaser.Sprite, value:number, maxValue:number) {
+        var  result:number = value;
+
+        //lets check if we need to show the bar 
+        if (value  >= maxValue) {
+            this.game.add.tween(bar).to(
+             { alpha: 0 }, 200, Phaser.Easing.Linear.None, true);
+            this.bitmapBack.alpha = 0;
+             return;
+        } else {
+            bar.alpha = 1;
+            this.bitmapBack.alpha = 1;
+        }
+
+        //check min value 
+        if (value  <= 0) {
+            result = 0;
+            value = 0;
+        }
+
+        //lets check the color
+        var color:number;
+        if (value / maxValue > 0.7) {
+            color = 0x0B632B;
+        }
+        if (value / maxValue <= 0.7 && value / maxValue >= 0.4) {
+            color = 0xE8F578;
+        } else if (value / maxValue <= 0.4) {
+            color = 0xE82A2A;
+        }
+
+        //lets change the color if we need to 
+        if (color != this.actualBarColor && value != 0) {
+            this.bitmapVida.clear();
+            this.bitmapVida.beginFill(color);
+            this.bitmapVida.drawRect(0, 0, this.barWidth, this.barHeight);
+            this.bitmapVida.endFill();
+
+            this.actualBarColor = color;
+        }
+
+        this.game.add.tween(bar.scale).to(
+             { x: value / maxValue }, 200, Phaser.Easing.Linear.None, true);
+
+             console.log(value / maxValue );
+
+    }
+
     private monsterClick() {
-        //this.monsterAtack(this);
+        this.isAtacking = true;
+        this.monsterAtack(this);
         console.log(this.life);
     }
 
@@ -138,25 +240,84 @@ class cMonster extends cBasicActor{
 
     }
 
+    public resolveAtack(defender:cBasicActor ) {
+
+        var atacker = this;
+
+        //if we have a special atack we dont wait to use it
+        if (this.firstAtack == true) {
+            atacker.monsterAtack(defender);
+        }
+        
+        if (atacker.speedCounter >= atacker.data.atackSpeed) {
+
+            atacker.monsterAtack(defender);
+            
+            atacker.speedCounter = 0;
+        } else {
+
+            atacker.speedCounter += 100;
+        }
+
+    }
+
     public monsterAtack(defender:cBasicActor) {
         
         switch (this.data.atackType) {
             case enumAtackType.range:
-                
-                this.animateArrow(defender);
-
+                    this.animateArrow(defender);
                 break;
                 case enumAtackType.sword:
-
-                this.animateSwordAtack(defender);
-
+                    this.animateSwordAtack(defender);
                 break
                 case enumAtackType.explosion:
-                this.animateExplosion();
-
+                    this.animateExplosion();
+                break;
+                case enumAtackType.hammer:
+                    this.animateHammer(defender);
+                break;
+                case enumAtackType.ninja:
+                    this.animateNinja(defender);
             default:
                 break;
         }
+
+    }
+
+    private animateNinja(defender:cBasicActor) {
+
+        if (this.firstAtack == true) {
+
+            var addPath = 100;
+
+            this.pathNumber += addPath;
+
+            //lets check if we have the space to the the atack
+            if (this.pathNumber >= this.monsterPath.length) {
+                this.firstAtack = false;
+                return;
+            }
+
+            var newX = this.monsterPath[this.pathNumber].x;
+            var newY = this.monsterPath[this.pathNumber].y;
+
+           
+            var anim = this.game.add.tween(this).to( 
+            { x: newX , y: newY }, 400, Phaser.Easing.Linear.None, true);
+
+            anim.onComplete.add(this.ninjaFirstAtackFinish, this);
+
+            
+            this.monsterHit(null, null, defender);
+
+            this.firstAtack = false;
+
+        } else {
+            this.animateSwordAtack(defender);
+        }
+    }
+
+    private ninjaFirstAtackFinish() {
 
     }
 
@@ -191,7 +352,7 @@ class cMonster extends cBasicActor{
         
         //lets kill the character that drop the boom
         this.destroyMonster();
-        this.eMonsterAreaAtack.dispatch(this)
+        this.eMonsterAreaAtack.dispatch(this);
 
     }
 
@@ -228,9 +389,48 @@ class cMonster extends cBasicActor{
 
     }
 
+    private animateHammer(defender:cBasicActor) {
+        
+        //to control the orientacion of animations
+        var ori:number = this.sprite.scale.x
+
+        //the animations for the character 
+        var animation1 = this.game.add.tween(this.sprite)
+        animation1.to( { x: 20 * ori}, 300, Phaser.Easing.Linear.None, true);
+
+        var animation2 = this.game.add.tween(this.sprite)
+        animation2.to( { x: 0}, 300, Phaser.Easing.Linear.None, false);
+
+        animation1.chain(animation2);
+
+        //the animations for the sword
+        var animation1 = this.game.add.tween(this.weaponSprite).to( 
+            { angle: '0' }, 150, Phaser.Easing.Linear.None, true);
+
+        var animation2 = this.game.add.tween(this.weaponSprite).to( 
+            { angle: '+140' }, 150, Phaser.Easing.Linear.None, false);
+        
+        var animation3 = this.game.add.tween(this.weaponSprite).to( 
+            { angle: '-140'}, 150, Phaser.Easing.Linear.None, false);
+
+        animation1.chain(animation2);
+        animation2.chain(animation3);
+
+        animation3.onComplete.add(this.hammerHit, this, null, defender);
+
+    }
+
+    private hammerHit(monster) {
+        this.eMonsterAreaAtack.dispatch(this)
+    }
+
     private monsterHit(sprite, tween, defender:cBasicActor) {
         //lets calculate the damage we will do here, but the actual damage will happend when the animation finish.
         var damage = this.data.atack;
+
+        if (this.firstAtack) {
+            damage = damage * 2
+        }
 
         defender.IsHit(damage);
         
@@ -265,6 +465,9 @@ class cMonster extends cBasicActor{
 
         this.life -= damage;
 
+        console.log("monstruo hace de daño " + damage)
+        this.updateLifeBar(damage);
+
        //lets check if the monster is dead!
         if (this.life <= 0 && this.isDead == false) {
             this.destroyMonster();         
@@ -284,22 +487,22 @@ class cMonster extends cBasicActor{
         if (this.isAtacking == false) {
             if (this.loopSpeedNumber == this.loopSpeed) {
 
-                //lets move the monster
-                this.x = this.monsterPath[this.pathNumber].x;
-                this.y = this.monsterPath[this.pathNumber].y;
-
-                this.pathNumber++;
-
                 //lets check if the movement have finish!
                 if (this.pathNumber >= this.monsterPath.length) {
                     this.monsterHitHeroe()
                     this.isAtacking = true;
-                }
+                } else {
 
-                this.loopSpeedNumber = 0
+                    //lets move the monster
+                    this.x = this.monsterPath[this.pathNumber].x;
+                    this.y = this.monsterPath[this.pathNumber].y;
 
-                //lets animate the character 
-                this.startMoveAnimation()
+                    this.pathNumber++;
+                    this.loopSpeedNumber = 0
+
+                    //lets animate the character 
+                    this.startMoveAnimation()
+                }             
 
             } else {
 
@@ -322,6 +525,7 @@ class cMonster extends cBasicActor{
                     this.animateArrowMovement();
                 break;
                 case enumAtackType.sword:
+                case enumAtackType.hammer:
                     this.animateSwordMovement();
                 break
                 case enumAtackType.explosion:
@@ -357,7 +561,6 @@ class cMonster extends cBasicActor{
     }
 
     private animateSwordMovement() {
-               var animSpeed = 200;
 
         //to control the orientacion of animations
         var ori:number = this.sprite.scale.x
@@ -376,10 +579,10 @@ class cMonster extends cBasicActor{
 
         //animate the weapon
         this.weaponAnimation1 = this.game.add.tween(this.weaponSprite).to( 
-            { angle: -10, y: 2 }, 800, Phaser.Easing.Linear.None, true);
+            { angle: '-10', y: "+2" }, 800, Phaser.Easing.Linear.None, true);
 
         this.weaponAnimation2 = this.game.add.tween(this.weaponSprite).to( 
-            { angle: 0, y: -4 }, 800, Phaser.Easing.Linear.None, false);
+            { angle: '+10', y: "-2" }, 800, Phaser.Easing.Linear.None, false);
         
         this.weaponAnimation1.chain(this.weaponAnimation2);
         this.weaponAnimation2.chain(this.weaponAnimation1);

@@ -52,6 +52,10 @@ class cCards {
 
         var weaponSprite = this.game.add.sprite(monsterData.weaponX, monsterData.weaponY + 20, 'items', monsterData.weaponTilePoss);
         weaponSprite.anchor.set(0, 1);
+        if (monsterData.weaponAngle != undefined) {
+            weaponSprite.angle = monsterData.weaponAngle;
+            console.log("entra");
+        }
 
         bugSprite.addChild(weaponSprite);
 

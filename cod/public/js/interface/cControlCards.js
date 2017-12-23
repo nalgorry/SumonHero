@@ -12,6 +12,8 @@ var cControlCards = (function () {
         this.arrayCards.push(this.createNewCard(100, y, 1 /* sword */));
         this.arrayCards.push(this.createNewCard(180, y, 3 /* bow */));
         this.arrayCards.push(this.createNewCard(180 + 80, y, 2 /* explosion */));
+        this.arrayCards.push(this.createNewCard(180 + 80 * 2, y, 5 /* hammer */));
+        this.arrayCards.push(this.createNewCard(180 + 80 * 3, y, 6 /* ninja */));
     };
     cControlCards.prototype.createNewCard = function (x, y, monsterType) {
         //create the card

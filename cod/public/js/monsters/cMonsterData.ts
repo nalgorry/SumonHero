@@ -18,6 +18,8 @@ class cMonsterData {
     public areaHitRange:number;
     public manaCost:number;
     public respawnTime:number;
+    public weaponAngle:number;
+    public firstAtack:boolean;
 
 
     constructor(JSONData:any) {
@@ -40,6 +42,9 @@ class cMonsterData {
         this.areaHitRange = JSONData.areaHitRange;
         this.manaCost = JSONData.manaCost;
         this.respawnTime = JSONData.respawnTime;
+        this.weaponAngle = JSONData.weaponAngle;
+        this.firstAtack = JSONData.firstAtack;
+
 
     }
 

@@ -18,6 +18,8 @@ var cMonsterData = (function () {
         this.areaHitRange = JSONData.areaHitRange;
         this.manaCost = JSONData.manaCost;
         this.respawnTime = JSONData.respawnTime;
+        this.weaponAngle = JSONData.weaponAngle;
+        this.firstAtack = JSONData.firstAtack;
     }
     return cMonsterData;
 }());

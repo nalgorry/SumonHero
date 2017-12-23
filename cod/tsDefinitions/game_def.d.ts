@@ -12,12 +12,16 @@
         explosion = 2,
         bow = 3,
         dager = 4,
+        hammer = 5,
+        ninja = 6
     }
 
     declare const enum enumAtackType {
         sword = 1,
         range = 2,
         explosion = 3,
+        hammer = 4,
+        ninja = 5,
     }
 
     declare const enum enumCristalType {

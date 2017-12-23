@@ -9,7 +9,7 @@ class InitGame {
         var conf = {
             width: 960,
             height: 640,
-            renderer: Phaser.CANVAS,
+            renderer: Phaser.WEBGL,
             parent: 'content',
             state: null,
             //enableDebug: false,
