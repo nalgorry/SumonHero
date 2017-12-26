@@ -95,9 +95,9 @@ var cMonster = (function (_super) {
         this.actualBarColor = 0x0B632B;
     };
     cMonster.prototype.updateLifeBar = function (damage) {
-        this.UpdateBar(this.lifeBar, this.life, this.data.maxLife);
+        this.updateBar(this.lifeBar, this.life, this.data.maxLife);
     };
-    cMonster.prototype.UpdateBar = function (bar, value, maxValue) {
+    cMonster.prototype.updateBar = function (bar, value, maxValue) {
         var result = value;
         //lets check if we need to show the bar 
         if (value >= maxValue) {
@@ -134,7 +134,6 @@ var cMonster = (function (_super) {
             this.actualBarColor = color;
         }
         this.game.add.tween(bar.scale).to({ x: value / maxValue }, 200, Phaser.Easing.Linear.None, true);
-        console.log(value / maxValue);
     };
     cMonster.prototype.monsterClick = function () {
         this.isAtacking = true;
@@ -308,19 +307,24 @@ var cMonster = (function (_super) {
         this.destroy(true);
     };
     cMonster.prototype.IsHit = function (damage) {
+        //lets check if the monster is already dead before hit it again.
+        if (this.isDead) {
+            return;
+        }
+        //some times this happends, i need to understand why...
+        if (isNaN(this.life)) {
+            console.log("esto no deberia pasar, nan en la vida del monstruo!");
+            console.log("el daño fue" + damage);
+            this.destroyMonster();
+            return;
+        }
         if (this.shieldActivated == true) {
             damage = damage / 2;
         }
         this.life -= damage;
-        console.log("monstruo hace de daño " + damage);
         this.updateLifeBar(damage);
         //lets check if the monster is dead!
         if (this.life <= 0 && this.isDead == false) {
-            this.destroyMonster();
-        }
-        if (isNaN(this.life)) {
-            console.log("esto no deberia pasar, nan en la vida del monstruo!");
-            console.log("el daño fue" + damage);
             this.destroyMonster();
         }
     };

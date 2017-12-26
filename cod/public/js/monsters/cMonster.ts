@@ -145,10 +145,10 @@ class cMonster extends cBasicActor{
     }
 
     private updateLifeBar(damage:number) {
-        this.UpdateBar(this.lifeBar, this.life, this.data.maxLife);
+        this.updateBar(this.lifeBar, this.life, this.data.maxLife);
     }
 
-    private UpdateBar(bar:Phaser.Sprite, value:number, maxValue:number) {
+    private updateBar(bar:Phaser.Sprite, value:number, maxValue:number) {
         var  result:number = value;
 
         //lets check if we need to show the bar 
@@ -191,8 +191,6 @@ class cMonster extends cBasicActor{
 
         this.game.add.tween(bar.scale).to(
              { x: value / maxValue }, 200, Phaser.Easing.Linear.None, true);
-
-             console.log(value / maxValue );
 
     }
 
@@ -459,24 +457,27 @@ class cMonster extends cBasicActor{
 
     public IsHit(damage:number) {
 
+        //lets check if the monster is already dead before hit it again.
+        if (this.isDead) {return}
+
+        //some times this happends, i need to understand why...
+        if (isNaN(this.life)) {
+            console.log("esto no deberia pasar, nan en la vida del monstruo!");
+            console.log("el daño fue" + damage);
+            this.destroyMonster();
+            return
+        }
+
         if (this.shieldActivated == true) {
             damage = damage / 2;
         }
 
         this.life -= damage;
-
-        console.log("monstruo hace de daño " + damage)
         this.updateLifeBar(damage);
 
        //lets check if the monster is dead!
         if (this.life <= 0 && this.isDead == false) {
             this.destroyMonster();         
-        }
-
-        if (isNaN(this.life)) {
-            console.log("esto no deberia pasar, nan en la vida del monstruo!");
-            console.log("el daño fue" + damage);
-            this.destroyMonster();
         }
 
     }
