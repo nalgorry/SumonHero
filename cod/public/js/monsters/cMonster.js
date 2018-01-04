@@ -15,7 +15,7 @@ var cMonster = (function (_super) {
         this.monsterPath = []; //here we have all the paths to move the monsters
         this.pathNumber = 0;
         this.loopSpeedNumber = 0;
-        this.loopSpeed = 0;
+        this.loopSpeed = 0; /////the number of update loops to update the speed
         this.isDead = false; //to control if a spell hit after the monster die.
         this.barHeight = 10;
         this.barWidth = 40;
@@ -26,6 +26,8 @@ var cMonster = (function (_super) {
         this.isMoving = false;
         //efects of the spells
         this.shieldActivated = false;
+        this.monsterSlowed = false;
+        this.resefireTimerCount = false;
         //left define the start position of the monster, base on the path selected
         path = path.slice(-path.length + startPoss);
         this.x = path[0].x;
@@ -52,6 +54,7 @@ var cMonster = (function (_super) {
         //lets define for now the speed of the monster
         this.speed = this.data.maxSpeed;
         this.life = this.data.maxLife;
+        this.atackSpeed = this.data.atackSpeed;
         //lets make it rotate!
         if (this.isEnemy == false) {
         }
@@ -138,7 +141,6 @@ var cMonster = (function (_super) {
     cMonster.prototype.monsterClick = function () {
         this.isAtacking = true;
         this.monsterAtack(this);
-        console.log(this.life);
     };
     cMonster.prototype.makePathConstantSpeed = function (path) {
         var _this = this;
@@ -174,7 +176,7 @@ var cMonster = (function (_super) {
         if (this.firstAtack == true) {
             atacker.monsterAtack(defender);
         }
-        if (atacker.speedCounter >= atacker.data.atackSpeed) {
+        if (atacker.speedCounter >= atacker.atackSpeed) {
             atacker.monsterAtack(defender);
             atacker.speedCounter = 0;
         }
@@ -183,20 +185,30 @@ var cMonster = (function (_super) {
         }
     };
     cMonster.prototype.monsterAtack = function (defender) {
-        switch (this.data.atackType) {
-            case 2 /* range */:
-                this.animateArrow(defender);
+        switch (this.data.id) {
+            case 3 /* bow */:
+                this.animateArrowAtack(defender);
                 break;
+            case 8 /* cold_wizard */:
+                this.animateColdWizardAtack(defender);
+                break;
+            case 9 /* fire_wizard */:
+                this.animateFireWizardAtack(defender);
+                break;
+            case 10 /* star_ninja */:
+                this.animateStarNinjaAtack(defender);
+                break;
+            case 4 /* dager */:
             case 1 /* sword */:
                 this.animateSwordAtack(defender);
                 break;
-            case 3 /* explosion */:
+            case 2 /* explosion */:
                 this.animateExplosion();
                 break;
-            case 4 /* hammer */:
+            case 5 /* hammer */:
                 this.animateHammer(defender);
                 break;
-            case 5 /* ninja */:
+            case 6 /* ninja */:
                 this.animateNinja(defender);
             default:
                 break;
@@ -224,10 +236,71 @@ var cMonster = (function (_super) {
     };
     cMonster.prototype.ninjaFirstAtackFinish = function () {
     };
-    cMonster.prototype.animateArrow = function (defender) {
+    cMonster.prototype.animateArrowAtack = function (defender) {
         //lets create the proyectile
         var arrow = new cControlSpellAnim(this.game, this, defender, enumRayAnimations.arrow, 0);
         arrow.evenAnimationFinish.add(this.monsterHit, this, null, defender, null, defender);
+    };
+    cMonster.prototype.animateColdWizardAtack = function (defender) {
+        //lets create the proyectile
+        var arrow = new cControlSpellAnim(this.game, this, defender, enumRayAnimations.iceball, 0);
+        arrow.evenAnimationFinish.add(this.coldWizardHit, this, null, defender, null, defender);
+    };
+    cMonster.prototype.coldWizardHit = function (sprite, tween, defender) {
+        this.monsterHit(sprite, tween, defender);
+        defender.slowMonster(2000);
+    };
+    cMonster.prototype.animateStarNinjaAtack = function (defender) {
+        //lets create the proyectile
+        var arrow = new cControlSpellAnim(this.game, this, defender, enumRayAnimations.ninjaStar, 0);
+        arrow.evenAnimationFinish.add(this.starNinjaHit, this, null, defender, null, defender);
+        //this moster increase it atack speed every hit
+        var speedIncrease = parseInt(this.data.special_2);
+        var maxSpeedIncrease = parseInt(this.data.special_1);
+        if (this.atackSpeed > maxSpeedIncrease) {
+            this.atackSpeed -= speedIncrease;
+        }
+    };
+    cMonster.prototype.starNinjaHit = function (sprite, tween, defender) {
+        this.monsterHit(sprite, tween, defender);
+    };
+    cMonster.prototype.animateFireWizardAtack = function (defender) {
+        //lets create the proyectile
+        var arrow = new cControlSpellAnim(this.game, this, defender, enumRayAnimations.fireball, 0);
+        arrow.evenAnimationFinish.add(this.fireWizardHit, this, null, defender, null, defender);
+    };
+    cMonster.prototype.fireWizardHit = function (sprite, tween, defender) {
+        this.monsterHit(sprite, tween, defender);
+        var damage = parseInt(this.data.special_1);
+        var speedDamage = parseInt(this.data.special_2);
+        var numberOfTimes = parseInt(this.data.special_3);
+        defender.addFireAtack(damage, speedDamage, numberOfTimes);
+    };
+    cMonster.prototype.addFireAtack = function (damage, speedDamage, numberOfTimes) {
+        if (this.isDead == true) {
+            return;
+        }
+        //lets check if the monster alreade has a fire damage over it
+        if (this.fireDamageTimer == undefined) {
+            this.fireDamageTimer = this.game.time.create();
+            this.fireDamageTimer.repeat(speedDamage, numberOfTimes, this.doFireDamage, this, damage, speedDamage, numberOfTimes);
+            this.fireDamageTimer.start();
+        }
+        else {
+            this.resefireTimerCount = true;
+        }
+    };
+    cMonster.prototype.doFireDamage = function (damage, speedDamage, numberOfTimes) {
+        this.IsHit(damage);
+        //lets check if we need to restart the count of fire damage
+        if (this.resefireTimerCount == true) {
+            console.log("entra aca");
+            this.fireDamageTimer.destroy();
+            this.fireDamageTimer = this.game.time.create();
+            this.fireDamageTimer.repeat(speedDamage, numberOfTimes, this.doFireDamage, this, damage, speedDamage, numberOfTimes);
+            this.fireDamageTimer.start();
+            this.resefireTimerCount = false;
+        }
     };
     cMonster.prototype.animateExplosion = function () {
         //lets make this monster explote only once
@@ -345,6 +418,10 @@ var cMonster = (function (_super) {
                     this.loopSpeedNumber = 0;
                     //lets animate the character 
                     this.startMoveAnimation();
+                    //lets reset the speed of the ninja star monster
+                    if (this.data.id == 10 /* star_ninja */) {
+                        this.atackSpeed = this.data.atackSpeed;
+                    }
                 }
             }
             else {
@@ -358,15 +435,20 @@ var cMonster = (function (_super) {
     cMonster.prototype.startMoveAnimation = function () {
         if (this.isMoving == false) {
             //animamos
-            switch (this.data.atackType) {
-                case 2 /* range */:
+            switch (this.data.id) {
+                case 3 /* bow */:
+                case 10 /* star_ninja */:
                     this.animateArrowMovement();
                     break;
                 case 1 /* sword */:
-                case 4 /* hammer */:
+                case 5 /* hammer */:
+                case 4 /* dager */:
+                case 7 /* shield */:
+                case 8 /* cold_wizard */:
+                case 9 /* fire_wizard */:
                     this.animateSwordMovement();
                     break;
-                case 3 /* explosion */:
+                case 2 /* explosion */:
                     this.animateExplosionMovement();
                 default:
                     break;
@@ -419,6 +501,27 @@ var cMonster = (function (_super) {
         this.weaponAnimation1.chain(this.weaponAnimation2);
         this.weaponAnimation2.chain(this.weaponAnimation1);
     };
+    cMonster.prototype.slowMonster = function (timeMs) {
+        //lets check if the monster is still alive before doing anything
+        if (this.isDead == true) {
+            return;
+        }
+        this.monsterSlowed = true;
+        //lets slow the monster 
+        this.loopSpeed = 1;
+        //lets start the timer to desactivate the events
+        if (this.slowTimer != undefined) {
+            this.slowTimer.destroy();
+        }
+        this.slowTimer = this.game.time.create();
+        this.slowTimer.add(timeMs, this.slowFinish, this);
+        this.slowTimer.start();
+    };
+    cMonster.prototype.slowFinish = function () {
+        this.loopSpeed = 0;
+        this.loopSpeedNumber = 0;
+        this.monsterSlowed = false;
+    };
     cMonster.prototype.activateShield = function (spellData) {
         this.shieldActivated = true;
         //lets create the sprite over the monster
@@ -428,7 +531,7 @@ var cMonster = (function (_super) {
         this.addChild(this.spriteShield);
         //lets start the timer to desactivate the events
         var timer = this.game.time.create();
-        timer.loop(spellData.durationSec * 1000, this.desactivateShield, this);
+        timer.add(spellData.durationSec * 1000, this.desactivateShield, this);
         timer.start();
     };
     cMonster.prototype.desactivateShield = function () {

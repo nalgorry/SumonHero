@@ -272,11 +272,11 @@ class cControlMonsters {
 
         var offSet = new Phaser.Point(0, 0);
         
-        switch (monster.data.atackType) {
-            case enumAtackType.hammer:
+        switch (monster.data.id) {
+            case enumMonstersType.hammer:
                 //lets set the offset where the bug hit!
                 var offSet = new Phaser.Point(30 * monster.sprite.scale.x, 0);
-            case enumAtackType.explosion:
+            case enumMonstersType.explosion:
            
                 //lets check wich array we have to uses 
                 var array:cMonster[];

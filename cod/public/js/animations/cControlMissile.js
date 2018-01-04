@@ -5,7 +5,7 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 var cControlMissile = (function (_super) {
     __extends(cControlMissile, _super);
-    function cControlMissile(game, spriteFrom, spriteTo, sprite_name, perfect_angle, speed, turn_rate) {
+    function cControlMissile(game, spriteFrom, spriteTo, sprite_name, frameNumber, perfect_angle, speed, turn_rate) {
         _super.call(this, game, spriteFrom.x, spriteFrom.y - 40);
         this.game = game;
         this.TURN_RATE = 5; // turn rate in degrees/frame
@@ -14,7 +14,7 @@ var cControlMissile = (function (_super) {
         this.WOBBLE_SPEED = 250; //miliseconds
         this.spriteTo = spriteTo;
         this.speed = speed;
-        var missile = game.add.sprite(0, 0, sprite_name);
+        var missile = game.add.sprite(0, 0, sprite_name, frameNumber);
         missile.anchor.set(0.5);
         this.addChild(missile);
         this.game.physics.arcade.enable(this);

@@ -8,8 +8,14 @@ var cBasicActor = (function (_super) {
     function cBasicActor() {
         _super.apply(this, arguments);
     }
+    //when a actor is hit
     cBasicActor.prototype.IsHit = function (damage) {
-        console.log("esto lo hace cada clase");
+    };
+    //when a actor is slowed
+    cBasicActor.prototype.slowMonster = function (time) {
+    };
+    //when we do continues damage trow fire
+    cBasicActor.prototype.addFireAtack = function (damage, speedDamage, NumberOfTimes) {
     };
     return cBasicActor;
 }(Phaser.Sprite));

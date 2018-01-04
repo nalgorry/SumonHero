@@ -5,8 +5,9 @@ class cMonster extends cBasicActor{
     private monsterPath = []; //here we have all the paths to move the monsters
     private pathNumber:number = 0;
     private loopSpeedNumber:number = 0;
-    private loopSpeed:number = 0;
+    private loopSpeed:number = 0; /////the number of update loops to update the speed
     private speed:number; //the distance of every point in the path
+    private atackSpeed:number // the atack speed of the monster
 
     private firstAtack:boolean;
 
@@ -41,6 +42,11 @@ class cMonster extends cBasicActor{
     //efects of the spells
     private shieldActivated:boolean = false;
     private spriteShield:Phaser.Sprite;
+    private monsterSlowed:boolean = false;
+    private slowTimer:Phaser.Timer;
+    private fireDamageTimer:Phaser.Timer;
+    private resefireTimerCount:boolean = false;
+
 
     constructor (public game:Phaser.Game, 
         public id:number,
@@ -85,6 +91,7 @@ class cMonster extends cBasicActor{
         //lets define for now the speed of the monster
         this.speed = this.data.maxSpeed;
         this.life = this.data.maxLife;
+        this.atackSpeed = this.data.atackSpeed;
 
         //lets make it rotate!
         if (this.isEnemy == false) {
@@ -197,7 +204,6 @@ class cMonster extends cBasicActor{
     private monsterClick() {
         this.isAtacking = true;
         this.monsterAtack(this);
-        console.log(this.life);
     }
 
     private makePathConstantSpeed(path) {
@@ -247,7 +253,7 @@ class cMonster extends cBasicActor{
             atacker.monsterAtack(defender);
         }
         
-        if (atacker.speedCounter >= atacker.data.atackSpeed) {
+        if (atacker.speedCounter >= atacker.atackSpeed) {
 
             atacker.monsterAtack(defender);
             
@@ -261,21 +267,31 @@ class cMonster extends cBasicActor{
 
     public monsterAtack(defender:cBasicActor) {
         
-        switch (this.data.atackType) {
-            case enumAtackType.range:
-                    this.animateArrow(defender);
+        switch (this.data.id) {
+            case enumMonstersType.bow:
+                    this.animateArrowAtack(defender);
                 break;
-                case enumAtackType.sword:
-                    this.animateSwordAtack(defender);
-                break
-                case enumAtackType.explosion:
-                    this.animateExplosion();
-                break;
-                case enumAtackType.hammer:
-                    this.animateHammer(defender);
-                break;
-                case enumAtackType.ninja:
-                    this.animateNinja(defender);
+            case enumMonstersType.cold_wizard:
+                this.animateColdWizardAtack(defender);
+            break;
+            case enumMonstersType.fire_wizard:
+                this.animateFireWizardAtack(defender);
+            break;
+            case enumMonstersType.star_ninja:
+                this.animateStarNinjaAtack(defender);
+            break;
+            case enumMonstersType.dager:
+            case enumMonstersType.sword:
+                this.animateSwordAtack(defender);
+            break
+            case enumMonstersType.explosion:
+                this.animateExplosion();
+            break;
+            case enumMonstersType.hammer:
+                this.animateHammer(defender);
+            break;
+            case enumMonstersType.ninja:
+                this.animateNinja(defender);
             default:
                 break;
         }
@@ -319,11 +335,100 @@ class cMonster extends cBasicActor{
 
     }
 
-    private animateArrow(defender:cBasicActor) {
+    private animateArrowAtack(defender:cBasicActor) {
         //lets create the proyectile
         var arrow = new cControlSpellAnim(this.game, this, defender, enumRayAnimations.arrow, 0);
 
         arrow.evenAnimationFinish.add(this.monsterHit,this, null, defender, null, defender);
+    }
+
+    private animateColdWizardAtack(defender:cBasicActor) {
+        //lets create the proyectile
+        var arrow = new cControlSpellAnim(this.game, this, defender, enumRayAnimations.iceball, 0);
+
+        arrow.evenAnimationFinish.add(this.coldWizardHit,this, null, defender, null, defender);
+    }
+
+    private coldWizardHit(sprite, tween, defender:cBasicActor) {
+
+        this.monsterHit(sprite, tween, defender);
+        defender.slowMonster(2000);
+    }
+
+    private animateStarNinjaAtack(defender:cBasicActor) {
+        //lets create the proyectile
+        var arrow = new cControlSpellAnim(this.game, this, defender, enumRayAnimations.ninjaStar, 0);
+
+        arrow.evenAnimationFinish.add(this.starNinjaHit,this, null, defender, null, defender);
+
+        //this moster increase it atack speed every hit
+        var speedIncrease:number = parseInt(this.data.special_2);
+        var maxSpeedIncrease:number = parseInt(this.data.special_1);
+
+        if (this.atackSpeed > maxSpeedIncrease) {
+            this.atackSpeed -= speedIncrease;
+        }
+
+    }
+
+    private starNinjaHit(sprite, tween, defender:cBasicActor) {
+
+        this.monsterHit(sprite, tween, defender);
+        
+    }
+
+    private animateFireWizardAtack(defender:cBasicActor) {
+        //lets create the proyectile
+        var arrow = new cControlSpellAnim(this.game, this, defender, enumRayAnimations.fireball, 0);
+
+        arrow.evenAnimationFinish.add(this.fireWizardHit,this, null, defender, null, defender);
+    }
+
+    private fireWizardHit(sprite, tween, defender:cBasicActor) {
+
+        this.monsterHit(sprite, tween, defender);
+
+        var damage = parseInt(this.data.special_1);
+        var speedDamage = parseInt(this.data.special_2);
+        var numberOfTimes = parseInt(this.data.special_3);
+
+        defender.addFireAtack(damage, speedDamage, numberOfTimes);
+        
+    }
+
+    public addFireAtack(damage:number, speedDamage:number, numberOfTimes:number) {
+
+        if (this.isDead == true) {return}
+
+
+        //lets check if the monster alreade has a fire damage over it
+        if (this.fireDamageTimer == undefined) {
+            this.fireDamageTimer = this.game.time.create();
+            this.fireDamageTimer.repeat(speedDamage, numberOfTimes , this.doFireDamage,this, damage, speedDamage, numberOfTimes);
+            this.fireDamageTimer.start();
+        } else {
+            this.resefireTimerCount = true;
+        }
+
+
+    }
+
+    private doFireDamage(damage:number, speedDamage:number, numberOfTimes:number ) {
+        this.IsHit(damage);
+
+        //lets check if we need to restart the count of fire damage
+        if (this.resefireTimerCount == true) {
+
+            console.log("entra aca");
+            this.fireDamageTimer.destroy();
+
+            this.fireDamageTimer = this.game.time.create();
+            this.fireDamageTimer.repeat(speedDamage, numberOfTimes , this.doFireDamage, this, damage, speedDamage, numberOfTimes);
+            this.fireDamageTimer.start();
+
+            this.resefireTimerCount = false;
+
+        }
     }
 
     private animateExplosion() {
@@ -503,6 +608,11 @@ class cMonster extends cBasicActor{
 
                     //lets animate the character 
                     this.startMoveAnimation()
+
+                    //lets reset the speed of the ninja star monster
+                    if (this.data.id == enumMonstersType.star_ninja) {
+                        this.atackSpeed = this.data.atackSpeed;
+                    }
                 }             
 
             } else {
@@ -521,15 +631,20 @@ class cMonster extends cBasicActor{
         if (this.isMoving == false) {
 
             //animamos
-        switch (this.data.atackType) {
-            case enumAtackType.range:
+        switch (this.data.id) {
+            case enumMonstersType.bow:
+            case enumMonstersType.star_ninja:
                     this.animateArrowMovement();
                 break;
-                case enumAtackType.sword:
-                case enumAtackType.hammer:
+                case enumMonstersType.sword:
+                case enumMonstersType.hammer:
+                case enumMonstersType.dager:
+                case enumMonstersType.shield:
+                case enumMonstersType.cold_wizard:
+                case enumMonstersType.fire_wizard:
                     this.animateSwordMovement();
                 break
-                case enumAtackType.explosion:
+                case enumMonstersType.explosion:
                     this.animateExplosionMovement();
             default:
                 break;
@@ -617,6 +732,33 @@ class cMonster extends cBasicActor{
 
     }
 
+    public slowMonster(timeMs:number) {
+
+        //lets check if the monster is still alive before doing anything
+        if (this.isDead == true) {return}
+        
+        this.monsterSlowed = true;
+
+        //lets slow the monster 
+        this.loopSpeed = 1;
+        
+        //lets start the timer to desactivate the events
+        if (this.slowTimer != undefined) {
+            this.slowTimer.destroy();
+        }
+
+        this.slowTimer = this.game.time.create();
+        this.slowTimer.add(timeMs, this.slowFinish,this);
+        this.slowTimer.start();
+
+    }
+
+    private slowFinish() {
+        this.loopSpeed = 0;
+        this.loopSpeedNumber = 0;
+        this.monsterSlowed = false;
+    }
+
     public activateShield(spellData:cSpellData) {
         
         this.shieldActivated = true;
@@ -630,12 +772,12 @@ class cMonster extends cBasicActor{
         
         //lets start the timer to desactivate the events
         var timer = this.game.time.create();
-        timer.loop(spellData.durationSec * 1000, this.desactivateShield,this);
+        timer.add(spellData.durationSec * 1000, this.desactivateShield,this);
         timer.start();
 
     }
 
-    public desactivateShield() {
+    private desactivateShield() {
         this.spriteShield.destroy();
         this.shieldActivated = false;
     }

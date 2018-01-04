@@ -16,7 +16,7 @@ var cControlGame = (function () {
         this.controlHeroes = new cControlHeroes(this.game, this.controlInterface);
         this.controlInterface.controlHeroes = this.controlHeroes;
         //lets init the spells
-        this.controlSpells = new cControlSpells(this.game, this.controlMonsters, this.controlHeroes);
+        //this.controlSpells = new cControlSpells(this.game,this.controlMonsters, this.controlHeroes);
     };
     cControlGame.prototype.destroyMenu = function () {
         this.spriteMainMenu.destroy();

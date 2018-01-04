@@ -14,6 +14,7 @@ class cControlMissile extends Phaser.Sprite {
         spriteFrom:Phaser.Sprite, 
         spriteTo:Phaser.Sprite,
         sprite_name:string,
+        frameNumber:number,
         perfect_angle:boolean, 
         speed:number,
         turn_rate ) {
@@ -22,7 +23,7 @@ class cControlMissile extends Phaser.Sprite {
             this.spriteTo = spriteTo;
             this.speed = speed;
 
-            var missile = game.add.sprite(0, 0, sprite_name);
+            var missile = game.add.sprite(0, 0, sprite_name, frameNumber);
             missile.anchor.set(0.5);
             this.addChild(missile);
 

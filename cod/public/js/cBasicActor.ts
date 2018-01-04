@@ -4,8 +4,17 @@ class cBasicActor extends Phaser.Sprite {
     public life:number;
     public sprite:Phaser.Sprite;
 
+    //when a actor is hit
     public IsHit(damage:number) {
-        console.log("esto lo hace cada clase");
+
+    }
+    //when a actor is slowed
+    public slowMonster(time:number) {
+        
+    }
+
+    //when we do continues damage trow fire
+    public addFireAtack(damage:Number, speedDamage:Number, NumberOfTimes:number) {
 
     }
 

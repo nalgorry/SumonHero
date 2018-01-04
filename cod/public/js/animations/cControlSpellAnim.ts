@@ -2,6 +2,7 @@ enum enumRayAnimations {
     ray,
     arrow,
     fireball,
+    iceball,
     ninjaStar,
 }
 
@@ -30,12 +31,16 @@ class cControlSpellAnim {
                             var ray3 = new cControlArrow(game,spriteFrom,spriteTo);
                             ray3.finish.add(this.rayFinish,this);
                             break;
+                        case enumRayAnimations.iceball:
+                            var ray = new cControlMissile(game,spriteFrom,spriteTo,'fireball', 2, false ,250, 5);
+                            ray.finish.add(this.rayFinish,this);
+                            break;
                         case enumRayAnimations.fireball:
-                            var ray = new cControlMissile(game,spriteFrom,spriteTo,'fireball',false,250,5);
+                            var ray = new cControlMissile(game,spriteFrom,spriteTo,'fireball', 1, false ,250, 5);
                             ray.finish.add(this.rayFinish,this);
                             break;
                         case enumRayAnimations.ninjaStar:
-                            var ray = new cControlMissile(game,spriteFrom,spriteTo,'ninja_star',true,400,30);
+                            var ray = new cControlMissile(game,spriteFrom,spriteTo,'fireball', 3 , true, 400, 30);
                             ray.finish.add(this.rayFinish,this);
                             break;
                         case enumRayAnimations.ray:

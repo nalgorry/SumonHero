@@ -13,15 +13,11 @@
         bow = 3,
         dager = 4,
         hammer = 5,
-        ninja = 6
-    }
-
-    declare const enum enumAtackType {
-        sword = 1,
-        range = 2,
-        explosion = 3,
-        hammer = 4,
-        ninja = 5,
+        ninja = 6,
+        shield = 7,
+        cold_wizard = 8,
+        fire_wizard = 9,
+        star_ninja = 10,
     }
 
     declare const enum enumCristalType {

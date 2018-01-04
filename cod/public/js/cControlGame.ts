@@ -32,7 +32,7 @@ class cControlGame {
         this.controlInterface.controlHeroes = this.controlHeroes;
 
         //lets init the spells
-        this.controlSpells = new cControlSpells(this.game,this.controlMonsters, this.controlHeroes);
+        //this.controlSpells = new cControlSpells(this.game,this.controlMonsters, this.controlHeroes);
 
     }
 

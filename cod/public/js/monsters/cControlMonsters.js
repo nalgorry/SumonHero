@@ -186,11 +186,11 @@ var cControlMonsters = (function () {
     //it happens when the moster do a area atack
     cControlMonsters.prototype.monsterAreaAtack = function (monster) {
         var offSet = new Phaser.Point(0, 0);
-        switch (monster.data.atackType) {
-            case 4 /* hammer */:
+        switch (monster.data.id) {
+            case 5 /* hammer */:
                 //lets set the offset where the bug hit!
                 var offSet = new Phaser.Point(30 * monster.sprite.scale.x, 0);
-            case 3 /* explosion */:
+            case 2 /* explosion */:
                 //lets check wich array we have to uses 
                 var array;
                 var heroe;

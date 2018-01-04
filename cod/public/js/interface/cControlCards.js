@@ -14,6 +14,10 @@ var cControlCards = (function () {
         this.arrayCards.push(this.createNewCard(180 + 80, y, 2 /* explosion */));
         this.arrayCards.push(this.createNewCard(180 + 80 * 2, y, 5 /* hammer */));
         this.arrayCards.push(this.createNewCard(180 + 80 * 3, y, 6 /* ninja */));
+        this.arrayCards.push(this.createNewCard(180 + 80 * 4, y, 7 /* shield */));
+        this.arrayCards.push(this.createNewCard(180 + 80 * 5, y, 8 /* cold_wizard */));
+        this.arrayCards.push(this.createNewCard(180 + 80 * 6, y, 9 /* fire_wizard */));
+        this.arrayCards.push(this.createNewCard(180 + 80 * 7, y, 10 /* star_ninja */));
     };
     cControlCards.prototype.createNewCard = function (x, y, monsterType) {
         //create the card

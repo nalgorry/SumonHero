@@ -20,6 +20,10 @@ class cControlCards {
         this.arrayCards.push(this.createNewCard (180 + 80, y, enumMonstersType.explosion));
         this.arrayCards.push(this.createNewCard (180 + 80 * 2, y, enumMonstersType.hammer));
         this.arrayCards.push(this.createNewCard (180 + 80 * 3, y, enumMonstersType.ninja));
+        this.arrayCards.push(this.createNewCard (180 + 80 * 4, y, enumMonstersType.shield));
+        this.arrayCards.push(this.createNewCard (180 + 80 * 5, y, enumMonstersType.cold_wizard));
+        this.arrayCards.push(this.createNewCard (180 + 80 * 6, y, enumMonstersType.fire_wizard));
+        this.arrayCards.push(this.createNewCard (180 + 80 * 7, y, enumMonstersType.star_ninja));
 
     }
 
