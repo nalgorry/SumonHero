@@ -227,20 +227,20 @@ var cControlMonsters = (function () {
     cControlMonsters.prototype.initPosiblePaths = function () {
         var _this = this;
         this.pathCreatePoints[0] = {
-            'x': [66, 240, 480, 720, 908],
-            'y': [350, 230, 186, 230, 350]
+            'x': [96, 190, 360, 640, 902, 1082, 1184],
+            'y': [340, 250, 160, 115, 160, 250, 340]
         };
         this.pathCreatePoints[1] = {
-            'x': [66, 240, 480, 720, 908],
-            'y': [350, 475, 520, 476, 350]
+            'x': [96, 190, 360, 640, 902, 1082, 1184],
+            'y': [340, 430, 512, 560, 518, 428, 340]
         };
         this.pathCreatePoints[2] = {
-            'x': [66, 240, 370, 480, 600, 720, 908],
-            'y': [350, 295, 305, 350, 400, 410, 350]
+            'x': [96, 190, 360, 530, 640, 750, 902, 1090, 1184],
+            'y': [340, 304, 280, 300, 340, 380, 400, 380, 340]
         };
         this.pathCreatePoints[3] = {
-            'x': [66, 240, 370, 480, 600, 720, 908],
-            'y': [350, 410, 400, 350, 305, 295, 350]
+            'x': [96, 190, 360, 530, 640, 750, 902, 1090, 1184],
+            'y': [340, 370, 400, 380, 340, 300, 280, 300, 340]
         };
         //create the camcull paths that will be used to create the path of the monster acording it speed.
         this.pathCreatePoints.forEach(function (path) {

@@ -12,7 +12,7 @@ class cControlCards {
 
     private initCards(){
         //lets add the cards that will let put monsters
-        var y:number = 530;
+        var y:number = 610;
         
         this.arrayCards.push(this.createNewCard (20, y, enumMonstersType.dager));
         this.arrayCards.push(this.createNewCard (100, y, enumMonstersType.sword));

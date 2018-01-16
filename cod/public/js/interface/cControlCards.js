@@ -7,7 +7,7 @@ var cControlCards = (function () {
     }
     cControlCards.prototype.initCards = function () {
         //lets add the cards that will let put monsters
-        var y = 530;
+        var y = 610;
         this.arrayCards.push(this.createNewCard(20, y, 4 /* dager */));
         this.arrayCards.push(this.createNewCard(100, y, 1 /* sword */));
         this.arrayCards.push(this.createNewCard(180, y, 3 /* bow */));

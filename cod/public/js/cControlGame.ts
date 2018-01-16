@@ -32,7 +32,7 @@ class cControlGame {
         this.controlInterface.controlHeroes = this.controlHeroes;
 
         //lets init the spells
-        //this.controlSpells = new cControlSpells(this.game,this.controlMonsters, this.controlHeroes);
+        this.controlSpells = new cControlSpells(this.game,this.controlMonsters, this.controlHeroes);
 
     }
 
@@ -45,7 +45,7 @@ class cControlGame {
         //to control the main menu position
         var height = 200;
         var width = 600;
-        var x = 480;
+        var x = this.game.width / 2;
         var y = 350;
 
         this.spriteMainMenu = this.game.add.sprite(x, y);

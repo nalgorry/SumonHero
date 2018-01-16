@@ -19,17 +19,17 @@ var cControlSpells = (function () {
         this.arrayselSpells = new Array();
         //hechizo 1
         var newSpell = new cSpell(this.game);
-        newSpell.iniciateSpell(new Phaser.Point(670 + 90 * 0, 560), this.SpellData[enumSpells.direct_kill]);
+        newSpell.iniciateSpell(new Phaser.Point(930 + 110 * 0, 620), this.SpellData[enumSpells.direct_kill]);
         this.arrayselSpells.push(newSpell);
         newSpell.signalSpellSel.add(this.spellClick, this);
         //hechizo 2
         var newSpell = new cSpell(this.game);
-        newSpell.iniciateSpell(new Phaser.Point(670 + 90 * 1, 560), this.SpellData[enumSpells.heal_monsters]);
+        newSpell.iniciateSpell(new Phaser.Point(930 + 110 * 1, 620), this.SpellData[enumSpells.heal_monsters]);
         this.arrayselSpells.push(newSpell);
         newSpell.signalSpellSel.add(this.spellClick, this);
         //hechizo 3
         var newSpell = new cSpell(this.game);
-        newSpell.iniciateSpell(new Phaser.Point(670 + 90 * 2, 560), this.SpellData[enumSpells.shield]);
+        newSpell.iniciateSpell(new Phaser.Point(930 + 110 * 2, 620), this.SpellData[enumSpells.shield]);
         this.arrayselSpells.push(newSpell);
         newSpell.signalSpellSel.add(this.spellClick, this);
     };

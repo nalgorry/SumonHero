@@ -548,6 +548,8 @@ class cMonster extends cBasicActor{
 
     public destroyMonster() {
 
+        if (this.isDead == true) {return} //lets check if it is not already dead!
+
         this.eMonsterDie.dispatch(this);
         var deadAnimation = this.game.add.tween(this).to( { alpha: 0}, 200, Phaser.Easing.Linear.None, true, 0, 0, false);
         deadAnimation.onComplete.add(this.destroySprite,this);

@@ -6,8 +6,8 @@ var cControlInterface = (function () {
         this.speedBars = 50;
         this.gameLvl = 1;
         this.gameStop = false;
-        this.playerBars = new cControlBars(game, 22, 475, 120, true); //create the player bars to control mana and life
-        this.enemyBars = new cControlBars(game, 916, 368, 40, false); //create the enemy bars
+        this.playerBars = new cControlBars(game, 10, 368, 80, true); //create the player bars to control mana and life
+        this.enemyBars = new cControlBars(game, 1190, 368, 80, false); //create the enemy bars
         this.initCards(); //init the cards of the game 
         this.initCristals(); //init all the cristals :)
         this.initLvlSel();
@@ -69,7 +69,7 @@ var cControlInterface = (function () {
         //lets put the background
         var height = 200;
         var width = 500;
-        var x = 480;
+        var x = this.game.width / 2;
         var y = 350;
         this.spriteEndGame = this.game.add.sprite(x, y);
         this.spriteEndGame.anchor.setTo(0.5);

@@ -3,7 +3,7 @@ var InitGame = (function () {
         var conf = {
             width: 1280,
             height: 720,
-            renderer: Phaser.CANVAS,
+            renderer: Phaser.WEBGL,
             parent: 'content',
             state: null,
         };
