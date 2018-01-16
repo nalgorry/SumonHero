@@ -7,8 +7,8 @@ class InitGame {
     constructor() {
 
         var conf = {
-            width: 960,
-            height: 640,
+            width: 1280,
+            height: 720,
             renderer: Phaser.CANVAS,
             parent: 'content',
             state: null,
