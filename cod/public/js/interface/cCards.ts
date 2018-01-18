@@ -17,8 +17,8 @@ class cCards {
         var lineColor = 0x215072;
         var manaBackColor = 0xADDDED;
 
-        var cardWidth:number = 60;
-        var cardHeight:number = 90 
+        var cardWidth:number = 80;
+        var cardHeight:number = 120;
         
         this.sprite = this.game.add.sprite(x, y);
         this.sprite.anchor.set(0.5);
@@ -45,7 +45,7 @@ class cCards {
         this.sprite.addChild(backCircle);
 
         //lets add the picture of the bug in the card
-        var bugSprite = this.game.add.sprite(cardWidth/2, 60, 'bugs', monsterData.tilePoss );
+        var bugSprite = this.game.add.sprite(cardWidth/2, 80, 'bugs', monsterData.tilePoss );
         bugSprite.anchor.set(0.5)
         
         this.sprite.addChild(bugSprite);
@@ -60,16 +60,16 @@ class cCards {
         bugSprite.addChild(weaponSprite);
 
         //lets put the mana cost now! (wow so great)
-        var backMana = this.game.add.graphics(cardWidth / 2, 4);
+        var backMana = this.game.add.graphics(cardWidth / 2, 8);
         backMana.beginFill(manaBackColor);
         backMana.lineStyle(1, lineColor);
-        backMana.drawRect(0, 0, 20, 20);
+        backMana.drawRect(0, 0, 25, 25);
         backMana.angle = 45;
         backMana.pivot.set(0.5, 0.5);
         this.sprite.addChild(backMana);
         //and now the number!,
 
-        var textMana = this.game.add.bitmapText(cardWidth/2, 16, 'gotic_black', this.monsterData.manaCost.toString() , 14)
+        var textMana = this.game.add.bitmapText(cardWidth/2, 22, 'gotic_black', this.monsterData.manaCost.toString() , 18)
         textMana.anchor.set(0.5);
 
         this.sprite.addChild(textMana);

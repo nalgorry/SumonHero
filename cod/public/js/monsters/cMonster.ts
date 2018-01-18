@@ -446,7 +446,6 @@ class cMonster extends cBasicActor{
 
             animation.onComplete.add(this.boomExplote,this)
 
-            this.isDead = true;
         }
 
     }

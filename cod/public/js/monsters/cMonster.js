@@ -311,7 +311,6 @@ var cMonster = (function (_super) {
             var animation = boomSprite.animations.add('boom');
             animation.play(15, false, true);
             animation.onComplete.add(this.boomExplote, this);
-            this.isDead = true;
         }
     };
     cMonster.prototype.boomExplote = function () {

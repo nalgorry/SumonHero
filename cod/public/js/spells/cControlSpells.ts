@@ -29,23 +29,28 @@ class cControlSpells {
         
         this.arrayselSpells = new Array<cSpell>();
 
+        //to poss the spells
+        var y = 600;
+        var x = 800;
+        var xSpace = 150;
+
         //hechizo 1
         var newSpell:cSpell = new cSpell(this.game);
-        newSpell.iniciateSpell(new Phaser.Point(930 + 110 * 0, 620), this.SpellData[enumSpells.direct_kill]);
+        newSpell.iniciateSpell(new Phaser.Point(x + xSpace * 0, y), this.SpellData[enumSpells.direct_kill]);
         
         this.arrayselSpells.push(newSpell);
         newSpell.signalSpellSel.add(this.spellClick,this);
      
         //hechizo 2
         var newSpell:cSpell = new cSpell(this.game);
-        newSpell.iniciateSpell(new Phaser.Point(930 + 110 * 1, 620), this.SpellData[enumSpells.heal_monsters]);
+        newSpell.iniciateSpell(new Phaser.Point(x + xSpace * 1, y), this.SpellData[enumSpells.heal_monsters]);
         
-        this.arrayselSpells.push(newSpell);
+        this.arrayselSpells.push(newSpell); 
         newSpell.signalSpellSel.add(this.spellClick,this);          
 
         //hechizo 3
         var newSpell:cSpell = new cSpell(this.game);
-        newSpell.iniciateSpell(new Phaser.Point(930 + 110 * 2, 620), this.SpellData[enumSpells.shield]);
+        newSpell.iniciateSpell(new Phaser.Point(x + xSpace * 2, y), this.SpellData[enumSpells.shield]);
         
         this.arrayselSpells.push(newSpell);
         newSpell.signalSpellSel.add(this.spellClick,this);                

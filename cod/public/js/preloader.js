@@ -15,7 +15,7 @@ var preloader = (function (_super) {
         //all the objets
         this.game.load.spritesheet('heroe', 'assets/char_test40.png', 40, 70);
         this.game.load.spritesheet('weapon1', 'assets/weapon1.png', 120, 120);
-        this.game.load.spritesheet('spells', 'assets/spells.png', 64, 64);
+        this.game.load.spritesheet('spells', 'assets/spells.png', 128, 128);
         this.game.load.image('back', 'assets/back.png');
         this.game.load.image('white_cristal', 'assets/white_cristal.png');
         this.game.load.image('red_cristal', 'assets/red_cristal.png');
@@ -24,7 +24,7 @@ var preloader = (function (_super) {
         this.game.load.spritesheet('fireball', 'assets/all_rockets.png', 24, 24);
         this.game.load.image('ninja_star', 'assets/ninja-star.png');
         //  Load our actual games assets
-        this.game.load.spritesheet('bugs', 'assets/bugs.png', 40, 40);
+        this.game.load.spritesheet('bugs', 'assets/bugs.png', 55, 55);
         this.game.load.spritesheet('items', 'assets/items.png', 40, 40);
         this.game.load.spritesheet('bombexploding', 'assets/bombexploding.png', 32, 64);
         this.game.load.image('pathArrow', 'assets/patharrow.png');

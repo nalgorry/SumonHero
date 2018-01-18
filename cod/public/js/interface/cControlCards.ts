@@ -12,8 +12,17 @@ class cControlCards {
 
     private initCards(){
         //lets add the cards that will let put monsters
-        var y:number = 610;
+        var y:number = 580;
+
+        var arrayCards = this.selectRandomCards()
+
+        this.arrayCards.push(this.createNewCard (20, y, arrayCards[0]));
+        this.arrayCards.push(this.createNewCard (20 + 110, y, arrayCards[1]));
+        this.arrayCards.push(this.createNewCard (20 + 110 * 2, y, arrayCards[2]));
+        this.arrayCards.push(this.createNewCard (20 + 110 * 3, y, arrayCards[3]));
+        this.arrayCards.push(this.createNewCard (20 + 110 * 4, y, arrayCards[4]));
         
+        /* all the cards 
         this.arrayCards.push(this.createNewCard (20, y, enumMonstersType.dager));
         this.arrayCards.push(this.createNewCard (100, y, enumMonstersType.sword));
         this.arrayCards.push(this.createNewCard (180, y, enumMonstersType.bow));
@@ -24,8 +33,38 @@ class cControlCards {
         this.arrayCards.push(this.createNewCard (180 + 80 * 5, y, enumMonstersType.cold_wizard));
         this.arrayCards.push(this.createNewCard (180 + 80 * 6, y, enumMonstersType.fire_wizard));
         this.arrayCards.push(this.createNewCard (180 + 80 * 7, y, enumMonstersType.star_ninja));
+        */
 
     }
+
+    private selectRandomCards()  {
+        var arrayCards:number[] = [];
+
+        //lets select 5 unique cards for now
+        for (var i = 0; i < 5; i++) {
+        //lets make sure that we select one of each card
+            do {
+                var unique:boolean = true;
+                var cardNumber:number = this.game.rnd.integerInRange(1,10);
+                arrayCards.forEach(value => {
+                    if (value == cardNumber) {
+                        unique = false;
+                    }
+                })
+                console.log(unique);
+            } while (unique == false)
+        
+            arrayCards.push(cardNumber);
+        
+        }
+
+    
+        console.log(arrayCards)
+
+        return arrayCards
+    }
+
+    
 
     private createNewCard(x:number, y:number, monsterType:enumMonstersType):cCards {
         

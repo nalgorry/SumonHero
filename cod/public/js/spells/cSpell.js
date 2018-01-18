@@ -6,6 +6,7 @@ var cSpell = (function () {
     }
     cSpell.prototype.iniciateSpell = function (spellPos, data) {
         this.sprite = this.game.add.sprite(spellPos.x, spellPos.y, 'spells', data.possInSheet);
+        this.sprite.scale.set(0.75);
         this.sprite.inputEnabled = true;
         this.data = data;
         this.sprite.events.onInputDown.add(this.spellSelected, this);

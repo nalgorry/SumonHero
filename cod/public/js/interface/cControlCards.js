@@ -7,17 +7,45 @@ var cControlCards = (function () {
     }
     cControlCards.prototype.initCards = function () {
         //lets add the cards that will let put monsters
-        var y = 610;
-        this.arrayCards.push(this.createNewCard(20, y, 4 /* dager */));
-        this.arrayCards.push(this.createNewCard(100, y, 1 /* sword */));
-        this.arrayCards.push(this.createNewCard(180, y, 3 /* bow */));
-        this.arrayCards.push(this.createNewCard(180 + 80, y, 2 /* explosion */));
-        this.arrayCards.push(this.createNewCard(180 + 80 * 2, y, 5 /* hammer */));
-        this.arrayCards.push(this.createNewCard(180 + 80 * 3, y, 6 /* ninja */));
-        this.arrayCards.push(this.createNewCard(180 + 80 * 4, y, 7 /* shield */));
-        this.arrayCards.push(this.createNewCard(180 + 80 * 5, y, 8 /* cold_wizard */));
-        this.arrayCards.push(this.createNewCard(180 + 80 * 6, y, 9 /* fire_wizard */));
-        this.arrayCards.push(this.createNewCard(180 + 80 * 7, y, 10 /* star_ninja */));
+        var y = 580;
+        var arrayCards = this.selectRandomCards();
+        this.arrayCards.push(this.createNewCard(20, y, arrayCards[0]));
+        this.arrayCards.push(this.createNewCard(20 + 110, y, arrayCards[1]));
+        this.arrayCards.push(this.createNewCard(20 + 110 * 2, y, arrayCards[2]));
+        this.arrayCards.push(this.createNewCard(20 + 110 * 3, y, arrayCards[3]));
+        this.arrayCards.push(this.createNewCard(20 + 110 * 4, y, arrayCards[4]));
+        /* all the cards
+        this.arrayCards.push(this.createNewCard (20, y, enumMonstersType.dager));
+        this.arrayCards.push(this.createNewCard (100, y, enumMonstersType.sword));
+        this.arrayCards.push(this.createNewCard (180, y, enumMonstersType.bow));
+        this.arrayCards.push(this.createNewCard (180 + 80, y, enumMonstersType.explosion));
+        this.arrayCards.push(this.createNewCard (180 + 80 * 2, y, enumMonstersType.hammer));
+        this.arrayCards.push(this.createNewCard (180 + 80 * 3, y, enumMonstersType.ninja));
+        this.arrayCards.push(this.createNewCard (180 + 80 * 4, y, enumMonstersType.shield));
+        this.arrayCards.push(this.createNewCard (180 + 80 * 5, y, enumMonstersType.cold_wizard));
+        this.arrayCards.push(this.createNewCard (180 + 80 * 6, y, enumMonstersType.fire_wizard));
+        this.arrayCards.push(this.createNewCard (180 + 80 * 7, y, enumMonstersType.star_ninja));
+        */
+    };
+    cControlCards.prototype.selectRandomCards = function () {
+        var arrayCards = [];
+        //lets select 5 unique cards for now
+        for (var i = 0; i < 5; i++) {
+            //lets make sure that we select one of each card
+            do {
+                var unique = true;
+                var cardNumber = this.game.rnd.integerInRange(1, 10);
+                arrayCards.forEach(function (value) {
+                    if (value == cardNumber) {
+                        unique = false;
+                    }
+                });
+                console.log(unique);
+            } while (unique == false);
+            arrayCards.push(cardNumber);
+        }
+        console.log(arrayCards);
+        return arrayCards;
     };
     cControlCards.prototype.createNewCard = function (x, y, monsterType) {
         //create the card
