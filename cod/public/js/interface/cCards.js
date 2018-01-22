@@ -68,10 +68,10 @@ var cCards = (function () {
     };
     cCards.prototype.checkMana = function (mana) {
         if (mana >= this.monsterData.manaCost) {
-            this.sprite.alpha = 1;
+            var cardEnabled = this.game.add.tween(this.sprite).to({ alpha: 1 }, 200, Phaser.Easing.Linear.None, true, 0, 0, false);
         }
         else {
-            this.sprite.alpha = 0.5;
+            var cardEnabled = this.game.add.tween(this.sprite).to({ alpha: 0.3 }, 200, Phaser.Easing.Linear.None, true, 0, 0, false);
         }
     };
     cCards.prototype.getCenter = function () {

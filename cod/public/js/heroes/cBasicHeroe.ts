@@ -70,7 +70,7 @@ class cBasicHeroe extends cBasicActor{
 
         if (monsterToAtack != undefined) {
             //lets create the proyectile
-            var arrow = new cControlSpellAnim(this.game, this, monsterToAtack, enumRayAnimations.ray,
+            var arrow = new cControlSpellAnim(this.game, this, monsterToAtack, enumRayAnimations.darkBall,
                 0,null,new Phaser.Point(36 * this.bugSprite.scale.x, -38), new Phaser.Point(0, -38));
 
            arrow.evenAnimationFinish.add(this.monsterHit,this, null, monsterToAtack, null, monsterToAtack);

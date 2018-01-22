@@ -5,6 +5,7 @@ var enumRayAnimations;
     enumRayAnimations[enumRayAnimations["fireball"] = 2] = "fireball";
     enumRayAnimations[enumRayAnimations["iceball"] = 3] = "iceball";
     enumRayAnimations[enumRayAnimations["ninjaStar"] = 4] = "ninjaStar";
+    enumRayAnimations[enumRayAnimations["darkBall"] = 5] = "darkBall";
 })(enumRayAnimations || (enumRayAnimations = {}));
 var cControlSpellAnim = (function () {
     function cControlSpellAnim(game, spriteFrom, spriteTo, rayAnimationType, spellDamage, color, fromOfset, toOfset) {
@@ -35,6 +36,10 @@ var cControlSpellAnim = (function () {
                     break;
                 case enumRayAnimations.ninjaStar:
                     var ray = new cControlMissile(game, spriteFrom, spriteTo, 'fireball', 3, true, 400, 30);
+                    ray.finish.add(this.rayFinish, this);
+                    break;
+                case enumRayAnimations.darkBall:
+                    var ray = new cControlMissile(game, spriteFrom, spriteTo, 'fireball', 0, true, 200, 30);
                     ray.finish.add(this.rayFinish, this);
                     break;
                 case enumRayAnimations.ray:

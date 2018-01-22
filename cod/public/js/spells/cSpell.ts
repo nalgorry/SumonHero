@@ -39,7 +39,7 @@ class cSpell {
         this.spriteFocusCool.pivot.y = 0.5;
         this.spriteFocusCool.beginFill(0x141417);
         this.spriteFocusCool.alpha = 0.75;
-        this.spriteFocusCool.drawCircle(0, 0, 64);
+        this.spriteFocusCool.drawCircle(0, 0, 96);
         this.spriteFocusCool.visible = false;
 
         //circulo fijo
@@ -47,12 +47,12 @@ class cSpell {
         this.sprite.y + this.sprite.height/2);
         this.spriteFocusFixCool.lineStyle(2, 0x141417, 1);
         this.spriteFocusFixCool.beginFill(0x141417);
-        this.spriteFocusFixCool.alpha = 0.5;
-        this.spriteFocusFixCool.drawCircle(0, 0, 64);
+        this.spriteFocusFixCool.alpha = 0.3;
+        this.spriteFocusFixCool.drawCircle(0, 0, 96);
         this.spriteFocusFixCool.visible = false;
 
         this.fiveSecondsText = this.game.add.bitmapText(this.sprite.x + this.sprite.width/2,
-            this.sprite.y + this.sprite.height/2 - 8, 'gotic_white', "", 32);
+            this.sprite.y + this.sprite.height/2 - 8, 'gotic_white', "", 48);
         this.fiveSecondsText.anchor.set(0.5);
 
         

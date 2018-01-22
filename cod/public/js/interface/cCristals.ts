@@ -2,8 +2,8 @@ class cCristals {
 
     sprite:Phaser.Sprite;
     sprite_back_circle:Phaser.Sprite;
-    maxDistance:number = 45;
-    showCircleDistnace = 35;
+    maxDistance:number = 60;
+    showCircleDistnace = 55;
     private cristalSprite:Phaser.Sprite;
 
 

@@ -7,8 +7,8 @@ var cCristals = (function () {
         this.pathOption = pathOption;
         this.monsterStartPoss = monsterStartPoss;
         this.cristalType = cristalType;
-        this.maxDistance = 45;
-        this.showCircleDistnace = 35;
+        this.maxDistance = 60;
+        this.showCircleDistnace = 55;
         //lets create the cristal
         this.sprite = this.game.add.sprite(x, y);
         this.sprite.anchor.set(0.5);

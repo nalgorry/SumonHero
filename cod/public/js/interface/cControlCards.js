@@ -9,11 +9,11 @@ var cControlCards = (function () {
         //lets add the cards that will let put monsters
         var y = 580;
         var arrayCards = this.selectRandomCards();
-        this.arrayCards.push(this.createNewCard(20, y, arrayCards[0]));
-        this.arrayCards.push(this.createNewCard(20 + 110, y, arrayCards[1]));
-        this.arrayCards.push(this.createNewCard(20 + 110 * 2, y, arrayCards[2]));
-        this.arrayCards.push(this.createNewCard(20 + 110 * 3, y, arrayCards[3]));
-        this.arrayCards.push(this.createNewCard(20 + 110 * 4, y, arrayCards[4]));
+        this.arrayCards.push(this.createNewCard(20, y, 4 /* dager */));
+        this.arrayCards.push(this.createNewCard(20 + 110, y, 1 /* sword */));
+        this.arrayCards.push(this.createNewCard(20 + 110 * 2, y, 3 /* bow */));
+        //this.arrayCards.push(this.createNewCard (20 + 110 * 3, y, arrayCards[3]));
+        //this.arrayCards.push(this.createNewCard (20 + 110 * 4, y, arrayCards[4]));
         /* all the cards
         this.arrayCards.push(this.createNewCard (20, y, enumMonstersType.dager));
         this.arrayCards.push(this.createNewCard (100, y, enumMonstersType.sword));

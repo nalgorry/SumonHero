@@ -305,6 +305,7 @@ var cMonster = (function (_super) {
     cMonster.prototype.animateExplosion = function () {
         //lets make this monster explote only once
         if (this.isDead == false) {
+            this.isDead = true;
             var ori = this.sprite.scale.x;
             var boomSprite = this.game.add.sprite(this.x + 30 * ori, this.y - 30, 'bombexploding');
             boomSprite.anchor.set(0.5);
@@ -370,9 +371,9 @@ var cMonster = (function (_super) {
         this.eMonsterHitHeroe.dispatch(this);
     };
     cMonster.prototype.destroyMonster = function () {
-        if (this.isDead == true) {
+        if (this.game == undefined) {
             return;
-        } //lets check if it is not already dead!
+        } //lets check if the monster is really there to destroy
         this.eMonsterDie.dispatch(this);
         var deadAnimation = this.game.add.tween(this).to({ alpha: 0 }, 200, Phaser.Easing.Linear.None, true, 0, 0, false);
         deadAnimation.onComplete.add(this.destroySprite, this);
