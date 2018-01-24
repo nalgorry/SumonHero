@@ -10,7 +10,8 @@ var preloader = (function (_super) {
     }
     preloader.prototype.preload = function () {
         //  Set-up our preloader sprite
-        this.preloadBar = this.add.sprite(100, 250, 'preloadBar');
+        this.preloadBar = this.add.sprite(this.game.width / 2, 500, 'preloadBar');
+        this.preloadBar.anchor.set(0.5);
         this.load.setPreloadSprite(this.preloadBar);
         //all the objets
         this.game.load.spritesheet('heroe', 'assets/char_test40.png', 40, 70);
@@ -20,6 +21,9 @@ var preloader = (function (_super) {
         this.game.load.image('white_cristal', 'assets/white_cristal.png');
         this.game.load.image('red_cristal', 'assets/red_cristal.png');
         this.game.load.image('blue_cristal', 'assets/blue_cristal.png');
+        this.game.load.image('menu_card', 'assets/menu_card.png');
+        this.game.load.image('example_cristal', 'assets/example_cristal.png');
+        this.game.load.image('white_arrow', 'assets/white_arrow.png');
         this.game.load.image('arrow', 'assets/arrow.png');
         this.game.load.spritesheet('fireball', 'assets/all_rockets.png', 24, 24);
         this.game.load.image('ninja_star', 'assets/ninja-star.png');

@@ -9,8 +9,7 @@ class cEnemyIA {
 
         //lets create the timer to do all we need
         this.timer = game.time.create(false);
-        this.timer.loop(this.timerStep, this.loop, this);
-        this.timer.start();
+         
 
     }
 

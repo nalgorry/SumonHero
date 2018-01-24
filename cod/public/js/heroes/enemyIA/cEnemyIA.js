@@ -6,8 +6,6 @@ var cEnemyIA = (function () {
         this.timerStep = 5000;
         //lets create the timer to do all we need
         this.timer = game.time.create(false);
-        this.timer.loop(this.timerStep, this.loop, this);
-        this.timer.start();
     }
     cEnemyIA.prototype.loop = function () {
         var monsterType = this.game.rnd.integerInRange(1, 3);

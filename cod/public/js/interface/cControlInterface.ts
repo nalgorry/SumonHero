@@ -3,6 +3,7 @@ class cControlInterface {
     private controlCards:cControlCards;
     public controlCristals:cControlCristals;
     public controlHeroes:cControlHeroes;
+    public controlMenu:cControlMenu;
 
     private playerBars:cControlBars;
     private enemyBars:cControlBars;
@@ -13,16 +14,19 @@ class cControlInterface {
 
     public gameLvl:number = 1;
     private textGameLvl:Phaser.BitmapText;
+    private timer:Phaser.TimerEvent //to control the bars of the game 
 
     private gameStop:boolean = false; 
 
     //to show a message when game finish
-    private spriteEndGame: Phaser.Sprite;
+    private spriteMenu: Phaser.Sprite;
     
     constructor (public game:Phaser.Game, public controlMonsters:cControlMonsters) {
 
         this.playerBars = new cControlBars(game, 10, 368, 80, true); //create the player bars to control mana and life
         this.enemyBars = new cControlBars(game, 1190, 368, 80, false); //create the enemy bars
+
+        this.controlMenu = new cControlMenu(this.game, this)
         
         this.initCards(); //init the cards of the game 
 
@@ -30,14 +34,13 @@ class cControlInterface {
 
         this.initLvlSel();
 
-        //to control the update of the bars        
-        var timer = this.game.time.events.loop(this.speedBars, this.updateBars, this);
+        this.stopGame(); //lets stop the game to show the lvl menu
 
     }
 
     public initLvlSel() {
 
-        var lvl = this.game.add.bitmapText(10, 10, "gotic_white", "LVL " + this.gameLvl, 16);
+        var lvl = this.game.add.bitmapText(10, 10, "gotic_black", "LVL " + this.gameLvl, 16);
         lvl.inputEnabled = true;
         lvl.events.onInputDown.add(this.skipLvl,this);
 
@@ -48,10 +51,12 @@ class cControlInterface {
     private skipLvl() {
 
         this.stopGame();
-        this.nextLvl();
-        this.startGame();
+        
+        this.gameLvl ++
 
-        this.textGameLvl.text = "LVL " + this.gameLvl
+        this.controlMenu.startLvlMenu();
+
+        this.textGameLvl.text = "LVL " + this.gameLvl;
 
     }
 
@@ -112,8 +117,8 @@ class cControlInterface {
         var x = this.game.width / 2;
         var y = 350;
 
-        this.spriteEndGame = this.game.add.sprite(x, y);
-        this.spriteEndGame.anchor.setTo(0.5);
+        this.spriteMenu = this.game.add.sprite(x, y);
+        this.spriteMenu.anchor.setTo(0.5);
 
         var bitmapEndGame = this.game.add.graphics(-width/2 , -height/2);
         bitmapEndGame.beginFill(0x363636);
@@ -121,12 +126,12 @@ class cControlInterface {
         bitmapEndGame.drawRect(0, 0, width, height);
         bitmapEndGame.endFill();
         bitmapEndGame.alpha = 0.9;
-        this.spriteEndGame.addChild(bitmapEndGame);
+        this.spriteMenu.addChild(bitmapEndGame);
 
         //lets add the text
-        var textEndGame = this.game.add.bitmapText(0, -70, "gotic_white", "Lvl "+ this.gameLvl.toString() +" Finish!", 32);
-        textEndGame.anchor.setTo(0.5);
-        this.spriteEndGame.addChild(textEndGame);
+        var text = this.game.add.bitmapText(0, -70, "gotic_white", "Lvl "+ this.gameLvl.toString() +" Finish!", 32);
+        text.anchor.setTo(0.5);
+        this.spriteMenu.addChild(text);
 
         var result:string 
         if (youWin) {
@@ -136,22 +141,22 @@ class cControlInterface {
         }
 
         //lets add the text
-        var textEndGame = this.game.add.bitmapText(0, 0, "gotic_white", result, 32);
-        textEndGame.anchor.setTo(0.5);
-        this.spriteEndGame.addChild(textEndGame);
+        var text = this.game.add.bitmapText(0, 0, "gotic_white", result, 32);
+        text.anchor.setTo(0.5);
+        this.spriteMenu.addChild(text);
 
         //lets add some buttons
         var buttonTryAgain = new cControlButton(this.game, -140, 70, "Try Again!");
         buttonTryAgain.anchor.setTo(0.5);
         buttonTryAgain.buttonClick.add(this.tryAgain, this);
-        this.spriteEndGame.addChild(buttonTryAgain);
+        this.spriteMenu.addChild(buttonTryAgain);
 
         //only if you win you can continue
         if (youWin) {
-            var buttonNextLvl = new cControlButton(this.game, 140, 70, "Next Lvl ->");
-            buttonNextLvl.anchor.setTo(0.5);
-            buttonNextLvl.buttonClick.add(this.nextLvl, this);
-            this.spriteEndGame.addChild(buttonNextLvl);        
+            var buttonStartLvl = new cControlButton(this.game, 140, 70, "Next Lvl ->");
+            buttonStartLvl.anchor.setTo(0.5);
+            buttonStartLvl.buttonClick.add(this.controlMenu.startLvlMenu, this.controlMenu);
+            this.spriteMenu.addChild(buttonStartLvl);        
         }
 
         //lets stop the game
@@ -159,28 +164,40 @@ class cControlInterface {
 
     }
 
+
     private tryAgain() {
         this.controlHeroes.enemyHeroe.enemyIA.startEnemyAI(0);
         this.startGame();
     }
 
-    private nextLvl() {
+    public nextLvl() {
         this.gameLvl ++;
+
+        console.log(this.textGameLvl)
+        this.textGameLvl.text = "LVL " + this.gameLvl;
+
         this.controlHeroes.enemyHeroe.enemyIA.startEnemyAI(-300);
         this.startGame();
     }
 
     private stopGame() {
         //lets stop the enemy AI
-        this.controlHeroes.enemyHeroe.enemyIA.stopEnemyAI();
+        if (this.controlHeroes != undefined){
+            this.controlHeroes.enemyHeroe.enemyIA.stopEnemyAI();
+        }
+        //lets stop the timer 
+        if (this.timer != undefined) {
+            this.timer.timer.destroy();
+        }
+        
         this.gameStop = true;
 
     }
 
     private startGame() {
         
-        if (this.spriteEndGame != undefined) {
-            this.spriteEndGame.destroy();
+        if (this.spriteMenu != undefined) {
+            this.spriteMenu.destroy();
         }
 
         // start enemyAI
@@ -192,6 +209,9 @@ class cControlInterface {
         this.enemyBars.restartBars();
 
         this.controlCristals.restartCristals();
+
+        //lets add the timer to update the manas bars
+        this.timer = this.game.time.events.loop(this.speedBars, this.updateBars, this);
 
 
     }

@@ -17,6 +17,8 @@ var cControlGame = (function () {
         this.controlInterface.controlHeroes = this.controlHeroes;
         //lets init the spells
         this.controlSpells = new cControlSpells(this.game, this.controlMonsters, this.controlHeroes);
+        //lets show the lvl menu 
+        this.controlInterface.controlMenu.startLvlMenu();
     };
     cControlGame.prototype.destroyMenu = function () {
         this.spriteMainMenu.destroy();
@@ -51,10 +53,10 @@ var cControlGame = (function () {
         textEndGame.anchor.setTo(0.5);
         this.spriteMainMenu.addChild(textEndGame);
         //lets add some buttons
-        var buttonTryAgain = new cControlButton(this.game, 0, 70, "Start");
-        buttonTryAgain.anchor.setTo(0.5);
-        buttonTryAgain.buttonClick.add(this.initLvl, this);
-        this.spriteMainMenu.addChild(buttonTryAgain);
+        var buttonStart = new cControlButton(this.game, 0, 70, "Start");
+        buttonStart.anchor.setTo(0.5);
+        buttonStart.buttonClick.add(this.initLvl, this);
+        this.spriteMainMenu.addChild(buttonStart);
     };
     return cControlGame;
 }());
