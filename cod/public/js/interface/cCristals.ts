@@ -2,7 +2,7 @@ class cCristals {
 
     sprite:Phaser.Sprite;
     sprite_back_circle:Phaser.Sprite;
-    maxDistance:number = 60;
+    maxDistance:number = 55;
     showCircleDistnace = 55;
     private cristalSprite:Phaser.Sprite;
 
@@ -62,7 +62,7 @@ class cCristals {
     private makeCircle() {
         var backCircle = this.game.add.graphics(0,0);
         backCircle.beginFill(0x0d5118);
-        backCircle.drawEllipse(0, 15, this.showCircleDistnace, this.showCircleDistnace * 0.75);
+        backCircle.drawEllipse(0, 15, this.showCircleDistnace, this.showCircleDistnace * 0.65);
 
         //lets put the circle in the back
         this.sprite_back_circle = this.game.add.sprite(0, 0);
@@ -91,14 +91,13 @@ class cCristals {
     }
 
     //check if a card was drop over a cristal
-    public checkDistance(card:cCards):boolean {
+    public checkDistance(point1: Phaser.Point):boolean {
 
         //first we check if the cristal is blue, if not we just leave
         if (this.color !=cristalColor.blue_cristal) { return false }
 
         //the poin1 is the mouse poss
         //var point1 = this.game.input.activePointer.position;
-        var point1 = card.getCenter();
         var point2 = new Phaser.Point(this.sprite.x, this.sprite.y);
 
         var distance = point1.distance(point2);

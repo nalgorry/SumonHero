@@ -36,12 +36,12 @@ var cControlMenu = (function () {
         this.spriteMenu.addChild(buttonTryAgain);
         var buttonStartLvl = new cControlButton(this.game, 180, 170, "Start!");
         buttonStartLvl.anchor.setTo(0.5);
-        buttonStartLvl.buttonClick.add(this.nextLvl, this);
+        buttonStartLvl.buttonClick.add(this.startLvl, this);
         this.spriteMenu.addChild(buttonStartLvl);
     };
-    cControlMenu.prototype.nextLvl = function () {
+    cControlMenu.prototype.startLvl = function () {
         this.game.add.tween(this.spriteMenu).to({ alpha: 0 }, 300, Phaser.Easing.Linear.None, true, 0, 0, false);
-        this.controlInterface.nextLvl();
+        this.controlInterface.startLvl();
     };
     cControlMenu.prototype.lvlMessage = function () {
         var lvl = this.controlInterface.gameLvl;

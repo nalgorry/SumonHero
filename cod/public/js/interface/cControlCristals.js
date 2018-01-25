@@ -5,6 +5,7 @@ var cControlCristals = (function () {
         this.arrayCristals = []; //to store all the cristals to do the checks
         this.arrayShareCristals = [];
         this.numBlueCristals = 4;
+        this.cristalClick = new Phaser.Signal();
         this.initCristals();
     }
     cControlCristals.prototype.initCristals = function () {
@@ -46,12 +47,23 @@ var cControlCristals = (function () {
             cristal.turnOffCristal();
         });
     };
+    cControlCristals.prototype.spellAtackLine = function () {
+        //lets activate the cristals
+        this.activateBlueCristals();
+        this.eventCristalClick = this.game.input.onDown.add(this.spellLineCristalSel, this);
+    };
+    cControlCristals.prototype.spellLineCristalSel = function () {
+        this.eventCristalClick.detach();
+        var cristalClick = this.checkRelease(new Phaser.Point(this.game.input.x, this.game.input.y));
+        this.turnOffBlueCristals();
+        this.cristalClick.dispatch(cristalClick);
+    };
     //when we check if the card was release over the cristal
-    cControlCristals.prototype.checkRelease = function (card) {
+    cControlCristals.prototype.checkRelease = function (point) {
         var selCristal = undefined;
         //lets check every cristal if it is close enough
         this.arrayCristals.forEach(function (cristal) {
-            if (cristal.checkDistance(card) == true) {
+            if (cristal.checkDistance(point) == true) {
                 selCristal = cristal;
             }
         });

@@ -5,15 +5,16 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 var cMonster = (function (_super) {
     __extends(cMonster, _super);
-    function cMonster(game, id, path, isEnemy, startPoss, data) {
+    function cMonster(game, id, path, pathOption, isEnemy, startPoss, data) {
         _super.call(this, game, 0, 0);
         this.game = game;
         this.id = id;
+        this.pathOption = pathOption;
         this.isEnemy = isEnemy;
         this.data = data;
         this.showPath = false;
         this.monsterPath = []; //here we have all the paths to move the monsters
-        this.pathNumber = 0;
+        this.activePathNumber = 0; //the current position in the path 
         this.loopSpeedNumber = 0;
         this.loopSpeed = 0; /////the number of update loops to update the speed
         this.isDead = false; //to control if a spell hit after the monster die.
@@ -217,14 +218,14 @@ var cMonster = (function (_super) {
     cMonster.prototype.animateNinja = function (defender) {
         if (this.firstAtack == true) {
             var addPath = 100;
-            this.pathNumber += addPath;
+            this.activePathNumber += addPath; //the current position in the path 
             //lets check if we have the space to the the atack
-            if (this.pathNumber >= this.monsterPath.length) {
+            if (this.activePathNumber >= this.monsterPath.length) {
                 this.firstAtack = false;
                 return;
             }
-            var newX = this.monsterPath[this.pathNumber].x;
-            var newY = this.monsterPath[this.pathNumber].y;
+            var newX = this.monsterPath[this.activePathNumber].x; //the current position in the path 
+            var newY = this.monsterPath[this.activePathNumber].y; //the current position in the path 
             var anim = this.game.add.tween(this).to({ x: newX, y: newY }, 400, Phaser.Easing.Linear.None, true);
             anim.onComplete.add(this.ninjaFirstAtackFinish, this);
             this.monsterHit(null, null, defender);
@@ -409,15 +410,15 @@ var cMonster = (function (_super) {
         if (this.isAtacking == false) {
             if (this.loopSpeedNumber == this.loopSpeed) {
                 //lets check if the movement have finish!
-                if (this.pathNumber >= this.monsterPath.length) {
+                if (this.activePathNumber >= this.monsterPath.length) {
                     this.monsterHitHeroe();
                     this.isAtacking = true;
                 }
                 else {
                     //lets move the monster
-                    this.x = this.monsterPath[this.pathNumber].x;
-                    this.y = this.monsterPath[this.pathNumber].y;
-                    this.pathNumber++;
+                    this.x = this.monsterPath[this.activePathNumber].x; //the current position in the path 
+                    this.y = this.monsterPath[this.activePathNumber].y; //the current position in the path 
+                    this.activePathNumber++; //the current position in the path 
                     this.loopSpeedNumber = 0;
                     //lets animate the character 
                     this.startMoveAnimation();

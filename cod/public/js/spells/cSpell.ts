@@ -1,6 +1,5 @@
 class cSpell {
 
-
     public sprite:Phaser.Sprite
     public spellNumber:number
     public isSpellOnCoolDown:boolean = false;
@@ -62,12 +61,17 @@ class cSpell {
         
         if (this.isSpellOnCoolDown == false) {
             this.signalSpellSel.dispatch(this);
-            this.spellColdDown();
+
+            //lets check if we need to activate the cold down, or another action is needed before do it
+            if (this.data.hasCallBack == false) {
+                this.spellColdDown();
+            }
         }
 
     }
 
-     private spellColdDown() {
+
+    public spellColdDown() {
         this.isSpellOnCoolDown = true;
         
         this.spriteFocusCool.visible = true;

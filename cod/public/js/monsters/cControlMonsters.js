@@ -39,11 +39,37 @@ var cControlMonsters = (function () {
         return this.arrayMonsters;
     };
     cControlMonsters.prototype.testMonster = function (pathOption, startPosition, monsterType) {
-        var monster = new cMonster(this.game, this.monsterId, this.paths[pathOption], false, startPosition, this.monsterData[monsterType]);
+        var monster = new cMonster(this.game, this.monsterId, this.paths[pathOption], pathOption, false, startPosition, this.monsterData[monsterType]);
         monster.isAtacking = true;
-        var enemyMonster = new cMonster(this.game, this.monsterId, this.paths[pathOption], true, startPosition + 500, this.monsterData[monsterType]);
+        var enemyMonster = new cMonster(this.game, this.monsterId, this.paths[pathOption], pathOption, true, startPosition + 500, this.monsterData[monsterType]);
         enemyMonster.isAtacking = true;
         monster.eMonsterDie.add(this.monsterDie, this);
+    };
+    cControlMonsters.prototype.spellAtackLine = function (pathOption) {
+        var selPath = this.paths[pathOption];
+        for (var i = 0; i < selPath.length;) {
+            var boomSprite = this.game.add.sprite(selPath[i].x, selPath[i].y - 15, 'bombexploding', 1);
+            boomSprite.anchor.set(0.5);
+            var animation = boomSprite.animations.add('boom');
+            animation.play(15, false, true);
+            if (i == 0) {
+                animation.onComplete.add(this.boomExplote, this, null, pathOption);
+            }
+            //i put the i otside the for last parameter because it dont work if i put it inside
+            i = i + 200;
+        }
+    };
+    cControlMonsters.prototype.boomExplote = function (sprite, anim, pathOption) {
+        //lets check wich monster we need to hit with this spell
+        for (var keyMonster in this.arrayEnemyMonsters) {
+            var monster = this.arrayEnemyMonsters[keyMonster];
+            console.log(monster.pathOption);
+            console.log(pathOption);
+            if (monster.pathOption == pathOption) {
+                monster.IsHit(50);
+            }
+        }
+        ;
     };
     cControlMonsters.prototype.readMonsterData = function () {
         var _this = this;
@@ -168,17 +194,17 @@ var cControlMonsters = (function () {
         //lets copy the path and then reverse it
         var path = this.paths[pathOption].slice();
         path.reverse();
-        var monster = this.createMonster(path, startPosition, monsterType, true);
+        var monster = this.createMonster(path, pathOption, startPosition, monsterType, true);
         this.arrayEnemyMonsters["m" + this.monsterId] = monster;
         this.monsterId++;
     };
     cControlMonsters.prototype.createNewMonster = function (pathOption, startPosition, monsterType) {
-        var monster = this.createMonster(this.paths[pathOption], startPosition, monsterType, false);
+        var monster = this.createMonster(this.paths[pathOption], pathOption, startPosition, monsterType, false);
         this.arrayMonsters["m" + this.monsterId] = monster;
         this.monsterId++;
     };
-    cControlMonsters.prototype.createMonster = function (arrayPath, startPosition, monsterType, enemyMonster) {
-        var monster = new cMonster(this.game, this.monsterId, arrayPath, enemyMonster, startPosition, this.monsterData[monsterType]);
+    cControlMonsters.prototype.createMonster = function (arrayPath, pathOption, startPosition, monsterType, enemyMonster) {
+        var monster = new cMonster(this.game, this.monsterId, arrayPath, pathOption, enemyMonster, startPosition, this.monsterData[monsterType]);
         monster.eMonsterDie.add(this.monsterDie, this);
         monster.eMonsterAreaAtack.add(this.monsterAreaAtack, this);
         return monster;

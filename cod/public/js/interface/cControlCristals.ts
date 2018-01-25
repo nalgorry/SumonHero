@@ -4,6 +4,9 @@ class cControlCristals {
     public arrayShareCristals:cCristals[] = [];
     public numBlueCristals:number = 4;
 
+    public eventCristalClick: Phaser.SignalBinding; //to use spells over the cristals
+    public cristalClick:Phaser.Signal = new Phaser.Signal();
+
     constructor (public game:Phaser.Game, public controlInterfase:cControlInterface) {
         
         this.initCristals();
@@ -64,13 +67,34 @@ class cControlCristals {
 
     }
 
+    public spellAtackLine() {
+        //lets activate the cristals
+        this.activateBlueCristals();
+
+       this.eventCristalClick = this.game.input.onDown.add(this.spellLineCristalSel, this);
+
+
+    }
+
+    private spellLineCristalSel() {
+
+        this.eventCristalClick.detach();
+
+        var cristalClick = this.checkRelease(new Phaser.Point(this.game.input.x, this.game.input.y))
+
+        this.turnOffBlueCristals();
+
+        this.cristalClick.dispatch(cristalClick);
+        
+        }
+
     //when we check if the card was release over the cristal
-    public checkRelease(card:cCards):cCristals {
+    public checkRelease(point:Phaser.Point):cCristals {
         
         var selCristal:cCristals = undefined;
         //lets check every cristal if it is close enough
         this.arrayCristals.forEach(cristal => {
-            if (cristal.checkDistance(card) == true) {
+            if (cristal.checkDistance(point) == true) {
                 selCristal = cristal;
             }
             

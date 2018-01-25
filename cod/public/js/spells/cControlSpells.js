@@ -1,8 +1,9 @@
 var cControlSpells = (function () {
-    function cControlSpells(game, controlMonsters, controlHeroes) {
+    function cControlSpells(game, controlMonsters, controlHeroes, controlCristals) {
         this.game = game;
         this.controlMonsters = controlMonsters;
         this.controlHeroes = controlHeroes;
+        this.controlCristals = controlCristals;
         this.SpellData = []; //to store the data of the spell
         this.readSpellsData();
         this.createnumSpells();
@@ -41,7 +42,8 @@ var cControlSpells = (function () {
         this.heroeAnimation(sender);
         switch (sender.data.id) {
             case enumSpells.direct_kill:
-                this.controlMonsters.spellDirectKill();
+                this.controlCristals.spellAtackLine();
+                this.cristalCallBack = this.controlCristals.cristalClick.add(this.cristalClick, this, null, sender);
                 break;
             case enumSpells.heal_monsters:
                 this.controlMonsters.spellHealMonsters();
@@ -51,6 +53,15 @@ var cControlSpells = (function () {
             default:
                 break;
         }
+    };
+    cControlSpells.prototype.cristalClick = function (cristal, spell) {
+        if (cristal != undefined) {
+            //lets destroy all in the line of this spell
+            this.controlMonsters.spellAtackLine(cristal.pathOption);
+            //lets put the spell on coll dawn 
+            spell.spellColdDown();
+        }
+        this.cristalCallBack.detach();
     };
     cControlSpells.prototype.heroeAnimation = function (sender) {
         //lets make the heroe do something cool when a spell is activated

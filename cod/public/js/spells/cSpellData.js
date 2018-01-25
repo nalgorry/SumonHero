@@ -5,6 +5,7 @@ var cSpellData = (function () {
         this.coolDownTimeSec = JSONData.coolDownTimeSec;
         this.heroeText = JSONData.heroeText;
         this.durationSec = JSONData.durationSec;
+        this.hasCallBack = JSONData.hasCallBack;
     }
     return cSpellData;
 }());

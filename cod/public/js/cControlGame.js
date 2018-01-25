@@ -15,8 +15,6 @@ var cControlGame = (function () {
         //lets init the heroes
         this.controlHeroes = new cControlHeroes(this.game, this.controlInterface);
         this.controlInterface.controlHeroes = this.controlHeroes;
-        //lets init the spells
-        this.controlSpells = new cControlSpells(this.game, this.controlMonsters, this.controlHeroes);
         //lets show the lvl menu 
         this.controlInterface.controlMenu.startLvlMenu();
     };

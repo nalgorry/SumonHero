@@ -48,14 +48,14 @@ class cControlMenu {
 
         var buttonStartLvl = new cControlButton(this.game, 180, 170, "Start!");
         buttonStartLvl.anchor.setTo(0.5);
-        buttonStartLvl.buttonClick.add(this.nextLvl, this);
+        buttonStartLvl.buttonClick.add(this.startLvl, this);
         this.spriteMenu.addChild(buttonStartLvl);        
 
     }
 
-    private nextLvl() {
+    private startLvl() {
         this.game.add.tween(this.spriteMenu).to({alpha: 0}, 300, Phaser.Easing.Linear.None, true, 0, 0, false) 
-        this.controlInterface.nextLvl();
+        this.controlInterface.startLvl();
     }
 
     private lvlMessage() {

@@ -3,7 +3,7 @@ class cMonster extends cBasicActor{
     private showPath:boolean = false;
 
     private monsterPath = []; //here we have all the paths to move the monsters
-    private pathNumber:number = 0;
+    private activePathNumber:number = 0; //the current position in the path 
     private loopSpeedNumber:number = 0;
     private loopSpeed:number = 0; /////the number of update loops to update the speed
     private speed:number; //the distance of every point in the path
@@ -50,7 +50,8 @@ class cMonster extends cBasicActor{
 
     constructor (public game:Phaser.Game, 
         public id:number,
-        path:any[], 
+        path:any[],
+        public pathOption:enumPathOptions,
         public isEnemy:boolean,
         startPoss:number,
         public data:cMonsterData) {
@@ -304,16 +305,16 @@ class cMonster extends cBasicActor{
 
             var addPath = 100;
 
-            this.pathNumber += addPath;
+            this.activePathNumber += addPath; //the current position in the path 
 
             //lets check if we have the space to the the atack
-            if (this.pathNumber >= this.monsterPath.length) {
+            if (this.activePathNumber >= this.monsterPath.length) { //the current position in the path 
                 this.firstAtack = false;
                 return;
             }
 
-            var newX = this.monsterPath[this.pathNumber].x;
-            var newY = this.monsterPath[this.pathNumber].y;
+            var newX = this.monsterPath[this.activePathNumber].x; //the current position in the path 
+            var newY = this.monsterPath[this.activePathNumber].y; //the current position in the path 
 
            
             var anim = this.game.add.tween(this).to( 
@@ -597,16 +598,16 @@ class cMonster extends cBasicActor{
             if (this.loopSpeedNumber == this.loopSpeed) {
 
                 //lets check if the movement have finish!
-                if (this.pathNumber >= this.monsterPath.length) {
+                if (this.activePathNumber >= this.monsterPath.length) { //the current position in the path 
                     this.monsterHitHeroe()
                     this.isAtacking = true;
                 } else {
 
                     //lets move the monster
-                    this.x = this.monsterPath[this.pathNumber].x;
-                    this.y = this.monsterPath[this.pathNumber].y;
+                    this.x = this.monsterPath[this.activePathNumber].x; //the current position in the path 
+                    this.y = this.monsterPath[this.activePathNumber].y; //the current position in the path 
 
-                    this.pathNumber++;
+                    this.activePathNumber++; //the current position in the path 
                     this.loopSpeedNumber = 0
 
                     //lets animate the character 

@@ -34,7 +34,10 @@ var cSpell = (function () {
     cSpell.prototype.spellSelected = function () {
         if (this.isSpellOnCoolDown == false) {
             this.signalSpellSel.dispatch(this);
-            this.spellColdDown();
+            //lets check if we need to activate the cold down, or another action is needed before do it
+            if (this.data.hasCallBack == false) {
+                this.spellColdDown();
+            }
         }
     };
     cSpell.prototype.spellColdDown = function () {

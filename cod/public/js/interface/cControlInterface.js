@@ -14,8 +14,12 @@ var cControlInterface = (function () {
         this.initLvlSel();
         this.stopGame(); //lets stop the game to show the lvl menu
     }
+    cControlInterface.prototype.initSpells = function () {
+        //lets init the spells
+        this.controlSpells = new cControlSpells(this.game, this.controlMonsters, this.controlHeroes, this.controlCristals);
+    };
     cControlInterface.prototype.initLvlSel = function () {
-        var lvl = this.game.add.bitmapText(10, 10, "gotic_black", "LVL " + this.gameLvl, 16);
+        var lvl = this.game.add.bitmapText(10, 10, "gotic_black", "LVL " + this.gameLvl, 32);
         lvl.inputEnabled = true;
         lvl.events.onInputDown.add(this.skipLvl, this);
         this.textGameLvl = lvl;
@@ -104,21 +108,22 @@ var cControlInterface = (function () {
         if (youWin) {
             var buttonStartLvl = new cControlButton(this.game, 140, 70, "Next Lvl ->");
             buttonStartLvl.anchor.setTo(0.5);
-            buttonStartLvl.buttonClick.add(this.controlMenu.startLvlMenu, this.controlMenu);
+            buttonStartLvl.buttonClick.add(this.nextLvl, this);
             this.spriteMenu.addChild(buttonStartLvl);
         }
         //lets stop the game
         this.stopGame();
     };
     cControlInterface.prototype.tryAgain = function () {
-        this.controlHeroes.enemyHeroe.enemyIA.startEnemyAI(0);
         this.startGame();
     };
     cControlInterface.prototype.nextLvl = function () {
         this.gameLvl++;
         console.log(this.textGameLvl);
         this.textGameLvl.text = "LVL " + this.gameLvl;
-        this.controlHeroes.enemyHeroe.enemyIA.startEnemyAI(-300);
+        this.controlMenu.startLvlMenu();
+    };
+    cControlInterface.prototype.startLvl = function () {
         this.startGame();
     };
     cControlInterface.prototype.stopGame = function () {
@@ -136,7 +141,8 @@ var cControlInterface = (function () {
         if (this.spriteMenu != undefined) {
             this.spriteMenu.destroy();
         }
-        // start enemyAI
+        //start enemy!
+        this.controlHeroes.enemyHeroe.enemyIA.startEnemyAI(-300);
         this.gameStop = false;
         //lets kill all the monster from the previus games!
         this.controlMonsters.restart();
@@ -145,6 +151,11 @@ var cControlInterface = (function () {
         this.controlCristals.restartCristals();
         //lets add the timer to update the manas bars
         this.timer = this.game.time.events.loop(this.speedBars, this.updateBars, this);
+        this.timer.timer.start();
+        //in the lvl 2 we start the spell sistem
+        if (this.gameLvl == 2) {
+            this.initSpells();
+        }
     };
     cControlInterface.prototype.updateBars = function () {
         //update the mana of the player
@@ -162,7 +173,7 @@ var cControlInterface = (function () {
         //first we desativate the blue cristals 
         this.controlCristals.turnOffBlueCristals();
         //then we see if we have to generate a monster or not
-        var cristal = this.controlCristals.checkRelease(card);
+        var cristal = this.controlCristals.checkRelease(card.getCenter());
         if (cristal != undefined) {
             //lets check if we have the mana to do it
             if (this.playerBars.UpdateMana(-card.monsterData.manaCost) == true) {

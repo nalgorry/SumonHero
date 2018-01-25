@@ -5,6 +5,7 @@ class cSpellData {
     public coolDownTimeSec:number;
     public heroeText:string;
     public durationSec:number;
+    public hasCallBack:boolean;
     
 
     constructor(JSONData:any) {
@@ -14,6 +15,7 @@ class cSpellData {
         this.coolDownTimeSec = JSONData.coolDownTimeSec;
         this.heroeText = JSONData.heroeText;
         this.durationSec = JSONData.durationSec;
+        this.hasCallBack = JSONData.hasCallBack;
 
     }
 

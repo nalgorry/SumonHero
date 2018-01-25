@@ -2,15 +2,18 @@ class cControlSpells {
 
     public arrayselSpells: Array<cSpell>;
     public SpellData:cSpellData[] = []; //to store the data of the spell
+    private cristalCallBack:Phaser.SignalBinding;
 
 
     constructor (public game:Phaser.Game, 
         public controlMonsters:cControlMonsters,
-        public controlHeroes:cControlHeroes) {
+        public controlHeroes:cControlHeroes,
+        public controlCristals:cControlCristals) {
         
         this.readSpellsData();
 
         this.createnumSpells();
+
     }
 
     private readSpellsData() {
@@ -63,7 +66,8 @@ class cControlSpells {
 
         switch (sender.data.id) {
             case enumSpells.direct_kill:
-                this.controlMonsters.spellDirectKill();
+                this.controlCristals.spellAtackLine();
+                this.cristalCallBack = this.controlCristals.cristalClick.add(this.cristalClick, this,null, sender);
                 break;
             case enumSpells.heal_monsters:
                 this.controlMonsters.spellHealMonsters();
@@ -74,6 +78,20 @@ class cControlSpells {
                 break;
         }
         
+    }
+
+    public cristalClick(cristal:cCristals, spell:cSpell) {
+        
+        if (cristal != undefined) {
+            
+            //lets destroy all in the line of this spell
+            this.controlMonsters.spellAtackLine(cristal.pathOption)
+
+            //lets put the spell on coll dawn 
+            spell.spellColdDown();
+        }
+
+        this.cristalCallBack.detach();
     }
 
     private heroeAnimation(sender:cSpell) {
