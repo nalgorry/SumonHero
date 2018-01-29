@@ -93,6 +93,51 @@ class cControlMenu {
                 text.anchor.setTo(0.5);
                 this.spriteMenu.addChild(text);
 
+                var image = this.game.add.sprite(0, 0, 'spells_help')
+                image.anchor.set(0.5);
+                this.spriteMenu.addChild(image);
+
+                var text = this.game.add.bitmapText(-180, 80, "gotic_white", "Atack a line", 24);
+                text.anchor.setTo(0.5);
+                this.spriteMenu.addChild(text);
+
+                var text = this.game.add.bitmapText(0, 120, "gotic_white", "Heal all monsters", 24);
+                text.anchor.setTo(0.5);
+                this.spriteMenu.addChild(text);
+
+                var text = this.game.add.bitmapText(180, 80, "gotic_white", "Defend monsters", 24);
+                text.anchor.setTo(0.5);
+                this.spriteMenu.addChild(text);
+
+                var image = this.game.add.sprite(0, 82, 'white_arrow')
+                image.scale.set(0.3);
+                image.angle = -90;
+                image.anchor.set(0.5);
+                this.spriteMenu.addChild(image);
+
+                var image = this.game.add.sprite(-180, 40, 'white_arrow')
+                image.scale.set(0.3);
+                image.angle = -20;
+                image.anchor.set(0.5);
+                this.spriteMenu.addChild(image);
+
+                var image = this.game.add.sprite(180, 40, 'white_arrow')
+                image.scale.set(0.3);
+                image.scale.y *= -1
+                image.angle = -140;
+                image.anchor.set(0.5);
+                this.spriteMenu.addChild(image);
+
+            case 3:
+                //lets add the text
+                var text = this.game.add.bitmapText(0, -120, "gotic_white", "New Monster Avaible!", 24);
+                text.align = "center";
+                text.anchor.setTo(0.5);
+                this.spriteMenu.addChild(text);
+
+                
+
+
                 break;
             default:
                 break;

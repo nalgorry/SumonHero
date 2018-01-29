@@ -2,6 +2,7 @@ class cControlCards {
 
     private sprite:Phaser.Sprite;
     private arrayCards:cCards[] = [];
+    private yCards:number = 580;
 
 
     constructor(public game:Phaser.Game, public userInterfase:cControlInterface) {
@@ -12,7 +13,7 @@ class cControlCards {
 
     private initCards(){
         //lets add the cards that will let put monsters
-        var y:number = 580;
+        var y:number = this.yCards;
 
         var arrayCards = this.selectRandomCards()
 
@@ -35,6 +36,18 @@ class cControlCards {
         this.arrayCards.push(this.createNewCard (180 + 80 * 7, y, enumMonstersType.star_ninja));
         */
 
+    }
+
+    public addNewCards(lvl:number) {
+       
+        switch (lvl) {
+            case 3:
+                this.arrayCards.push(this.createNewCard (20 + 110 * 3, this.yCards, enumMonstersType.cold_wizard));
+                break;
+        
+            default:
+                break;
+        }
     }
 
     private selectRandomCards()  {

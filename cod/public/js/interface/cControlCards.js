@@ -3,11 +3,12 @@ var cControlCards = (function () {
         this.game = game;
         this.userInterfase = userInterfase;
         this.arrayCards = [];
+        this.yCards = 580;
         this.initCards();
     }
     cControlCards.prototype.initCards = function () {
         //lets add the cards that will let put monsters
-        var y = 580;
+        var y = this.yCards;
         var arrayCards = this.selectRandomCards();
         this.arrayCards.push(this.createNewCard(20, y, 4 /* dager */));
         this.arrayCards.push(this.createNewCard(20 + 110, y, 1 /* sword */));
@@ -26,6 +27,15 @@ var cControlCards = (function () {
         this.arrayCards.push(this.createNewCard (180 + 80 * 6, y, enumMonstersType.fire_wizard));
         this.arrayCards.push(this.createNewCard (180 + 80 * 7, y, enumMonstersType.star_ninja));
         */
+    };
+    cControlCards.prototype.addNewCards = function (lvl) {
+        switch (lvl) {
+            case 3:
+                this.arrayCards.push(this.createNewCard(20 + 110 * 3, this.yCards, 8 /* cold_wizard */));
+                break;
+            default:
+                break;
+        }
     };
     cControlCards.prototype.selectRandomCards = function () {
         var arrayCards = [];

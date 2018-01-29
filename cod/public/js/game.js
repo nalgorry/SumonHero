@@ -6,7 +6,6 @@ var InitGame = (function () {
             renderer: Phaser.CANVAS,
             parent: 'content',
             state: null,
-            enableDebug: false,
         };
         this.game = new Phaser.Game(conf);
         this.game.state.add('boot', boot, false);

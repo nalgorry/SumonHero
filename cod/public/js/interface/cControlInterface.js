@@ -26,9 +26,7 @@ var cControlInterface = (function () {
     };
     cControlInterface.prototype.skipLvl = function () {
         this.stopGame();
-        this.gameLvl++;
-        this.controlMenu.startLvlMenu();
-        this.textGameLvl.text = "LVL " + this.gameLvl;
+        this.nextLvl();
     };
     cControlInterface.prototype.updateManaSpeed = function (numCristals) {
         switch (numCristals) {
@@ -122,6 +120,10 @@ var cControlInterface = (function () {
         console.log(this.textGameLvl);
         this.textGameLvl.text = "LVL " + this.gameLvl;
         this.controlMenu.startLvlMenu();
+        //in the lvl 2 we start the spell sistem
+        if (this.gameLvl == 2) {
+            this.initSpells();
+        }
     };
     cControlInterface.prototype.startLvl = function () {
         this.startGame();
@@ -152,10 +154,8 @@ var cControlInterface = (function () {
         //lets add the timer to update the manas bars
         this.timer = this.game.time.events.loop(this.speedBars, this.updateBars, this);
         this.timer.timer.start();
-        //in the lvl 2 we start the spell sistem
-        if (this.gameLvl == 2) {
-            this.initSpells();
-        }
+        //lets add the new cards if needed
+        this.controlCards.addNewCards(this.gameLvl);
     };
     cControlInterface.prototype.updateBars = function () {
         //update the mana of the player

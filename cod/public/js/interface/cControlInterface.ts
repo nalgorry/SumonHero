@@ -59,11 +59,7 @@ class cControlInterface {
 
         this.stopGame();
         
-        this.gameLvl ++
-
-        this.controlMenu.startLvlMenu();
-
-        this.textGameLvl.text = "LVL " + this.gameLvl;
+        this.nextLvl();
 
     }
 
@@ -184,6 +180,9 @@ class cControlInterface {
 
         this.controlMenu.startLvlMenu();
 
+        //in the lvl 2 we start the spell sistem
+        if (this.gameLvl == 2) { this.initSpells() }
+
     }
 
     public startLvl() {
@@ -226,8 +225,9 @@ class cControlInterface {
         this.timer = this.game.time.events.loop(this.speedBars, this.updateBars, this);
         this.timer.timer.start();
 
-        //in the lvl 2 we start the spell sistem
-        if (this.gameLvl == 2) { this.initSpells() }
+        //lets add the new cards if needed
+        this.controlCards.addNewCards(this.gameLvl);
+
 
     }
 
