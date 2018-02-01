@@ -9,9 +9,9 @@ class cControlInterface {
     private playerBars:cControlBars;
     private enemyBars:cControlBars;
 
-    private speedMana = 0.5;
+    private speedMana = 1;
 
-    private speedBars = 50;
+    private speedBars = 100;
 
     public gameLvl:number = 1;
     private textGameLvl:Phaser.BitmapText;
@@ -67,16 +67,16 @@ class cControlInterface {
 
         switch (numCristals) {
             case 4:
-                this.speedMana = 0.5;
+                this.speedMana = this.speedMana * 1;
                 break;
             case 5:
-                this.speedMana = 0.6;
+                this.speedMana = this.speedMana * 1.1;
                 break;
             case 6:
-                this.speedMana = 0.65;
+                this.speedMana = this.speedMana * 1.15;
                 break;
             case 7:
-                this.speedMana = 0.7;
+                this.speedMana = this.speedMana * 1.2;
                 break;
         
             default:
@@ -114,53 +114,7 @@ class cControlInterface {
 
         if (this.gameStop) {return}
 
-        //lets put the background
-        var height = 200;
-        var width = 500;
-        var x = this.game.width / 2;
-        var y = 350;
-
-        this.spriteMenu = this.game.add.sprite(x, y);
-        this.spriteMenu.anchor.setTo(0.5);
-
-        var bitmapEndGame = this.game.add.graphics(-width/2 , -height/2);
-        bitmapEndGame.beginFill(0x363636);
-        bitmapEndGame.lineStyle(2, 0x000000, 1);
-        bitmapEndGame.drawRect(0, 0, width, height);
-        bitmapEndGame.endFill();
-        bitmapEndGame.alpha = 0.9;
-        this.spriteMenu.addChild(bitmapEndGame);
-
-        //lets add the text
-        var text = this.game.add.bitmapText(0, -70, "gotic_white", "Lvl "+ this.gameLvl.toString() +" Finish!", 32);
-        text.anchor.setTo(0.5);
-        this.spriteMenu.addChild(text);
-
-        var result:string 
-        if (youWin) {
-            result = "YOU WIN :)";
-        } else {
-            result = "YOU LOSE :(";
-        }
-
-        //lets add the text
-        var text = this.game.add.bitmapText(0, 0, "gotic_white", result, 32);
-        text.anchor.setTo(0.5);
-        this.spriteMenu.addChild(text);
-
-        //lets add some buttons
-        var buttonTryAgain = new cControlButton(this.game, -140, 70, "Try Again!");
-        buttonTryAgain.anchor.setTo(0.5);
-        buttonTryAgain.buttonClick.add(this.tryAgain, this);
-        this.spriteMenu.addChild(buttonTryAgain);
-
-        //only if you win you can continue
-        if (youWin) {
-            var buttonStartLvl = new cControlButton(this.game, 140, 70, "Next Lvl ->");
-            buttonStartLvl.anchor.setTo(0.5);
-            buttonStartLvl.buttonClick.add(this.nextLvl, this);
-            this.spriteMenu.addChild(buttonStartLvl);        
-        }
+        this.controlMenu.showLvlFinish(youWin)
 
         //lets stop the game
         this.stopGame();
@@ -168,7 +122,7 @@ class cControlInterface {
     }
 
 
-    private tryAgain() {
+    public tryAgain() {
         this.startGame();
     }
 
@@ -210,7 +164,7 @@ class cControlInterface {
         }
 
         //start enemy!
-        this.controlHeroes.enemyHeroe.enemyIA.startEnemyAI(-300);
+        this.controlHeroes.enemyHeroe.enemyIA.startEnemyAI(this.gameLvl);
 
         this.gameStop = false;
         //lets kill all the monster from the previus games!

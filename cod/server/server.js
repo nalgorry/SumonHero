@@ -7,7 +7,7 @@ var port = process.env.PORT || 8080;
 // variables del juego
 var socket; // Socket controller
 // Create and start the http server
-var server = http.createServer(ecstatic({ root: path.resolve(__dirname, '../public') })).listen(port, function (err) {
+var server = http.createServer(ecstatic({ root: path.resolve(__dirname, '../public') })).listen(port, "0.0.0.0", function (err) {
     if (err) {
         throw err;
     }

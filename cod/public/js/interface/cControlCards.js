@@ -33,6 +33,9 @@ var cControlCards = (function () {
             case 3:
                 this.arrayCards.push(this.createNewCard(20 + 110 * 3, this.yCards, 8 /* cold_wizard */));
                 break;
+            case 4:
+                this.arrayCards.push(this.createNewCard(20 + 110 * 4, this.yCards, 2 /* explosion */));
+                break;
             default:
                 break;
         }

@@ -12,7 +12,7 @@ var socket:SocketIO.Server	// Socket controller
 // Create and start the http server
 var server = http.createServer(
   ecstatic({ root: path.resolve(__dirname, '../public') })
-).listen(port, function (err) {
+).listen(port, "0.0.0.0", function (err) {
   if (err) {
     throw err
   }

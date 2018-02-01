@@ -44,6 +44,11 @@ class cControlCards {
             case 3:
                 this.arrayCards.push(this.createNewCard (20 + 110 * 3, this.yCards, enumMonstersType.cold_wizard));
                 break;
+
+            case 4:
+                this.arrayCards.push(this.createNewCard (20 + 110 * 4, this.yCards, enumMonstersType.explosion));
+                break;
+        
         
             default:
                 break;

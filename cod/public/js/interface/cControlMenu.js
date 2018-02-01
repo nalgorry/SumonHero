@@ -53,8 +53,9 @@ var cControlMenu = (function () {
                 text.anchor.setTo(0.5);
                 this.spriteMenu.addChild(text);
                 //lets add some help... how the hell is this game played?
-                var image = this.game.add.sprite(-140, 40, 'menu_card');
+                var image = this.game.add.sprite(-140, 40, 'menu_card', 0);
                 image.anchor.set(0.5);
+                image.scale.set(1.2);
                 this.spriteMenu.addChild(image);
                 var image = this.game.add.sprite(140, 20, 'example_cristal');
                 image.anchor.set(0.5);
@@ -99,16 +100,102 @@ var cControlMenu = (function () {
                 image.angle = -140;
                 image.anchor.set(0.5);
                 this.spriteMenu.addChild(image);
+                break;
             case 3:
                 //lets add the text
                 var text = this.game.add.bitmapText(0, -120, "gotic_white", "New Monster Avaible!", 24);
                 text.align = "center";
                 text.anchor.setTo(0.5);
                 this.spriteMenu.addChild(text);
+                var image = this.game.add.sprite(-0, 0, 'menu_card', 1);
+                image.anchor.set(0.5);
+                image.scale.set(1.2);
+                this.spriteMenu.addChild(image);
+                var text = this.game.add.bitmapText(0, 100, "gotic_white", "I will freeze your enemies.", 24);
+                text.align = "center";
+                text.anchor.setTo(0.5);
+                this.spriteMenu.addChild(text);
                 break;
-            default:
+            case 4:
+                //lets add the text
+                var text = this.game.add.bitmapText(0, -120, "gotic_white", "New Monster Avaible!", 24);
+                text.align = "center";
+                text.anchor.setTo(0.5);
+                this.spriteMenu.addChild(text);
+                var image = this.game.add.sprite(-0, 0, 'menu_card', 2);
+                image.anchor.set(0.5);
+                this.spriteMenu.addChild(image);
+                var text = this.game.add.bitmapText(0, 100, "gotic_white", "I will explote for you.", 24);
+                text.align = "center";
+                text.anchor.setTo(0.5);
+                this.spriteMenu.addChild(text);
+                break;
+            case 5:
+                //lets add the text
+                var text = this.game.add.bitmapText(0, -120, "gotic_white", "BOSS enemy", 48);
+                text.align = "center";
+                text.anchor.setTo(0.5);
+                this.spriteMenu.addChild(text);
+                var text = this.game.add.bitmapText(0, 0, "gotic_white", "BE CAREFULL", 62);
+                text.align = "center";
+                text.anchor.setTo(0.5);
+                this.spriteMenu.addChild(text);
                 break;
         }
+    };
+    cControlMenu.prototype.showLvlFinish = function (youWin) {
+        if (this.spriteMenu != undefined) {
+            this.spriteMenu.destroy();
+        }
+        //lets put the background
+        var height = 200;
+        var width = 500;
+        var x = this.game.width / 2;
+        var y = 350;
+        this.spriteMenu = this.game.add.sprite(x, y);
+        this.spriteMenu.anchor.setTo(0.5);
+        var bitmapEndGame = this.game.add.graphics(-width / 2, -height / 2);
+        bitmapEndGame.beginFill(0x363636);
+        bitmapEndGame.lineStyle(2, 0x000000, 1);
+        bitmapEndGame.drawRect(0, 0, width, height);
+        bitmapEndGame.endFill();
+        bitmapEndGame.alpha = 0.9;
+        this.spriteMenu.addChild(bitmapEndGame);
+        //lets add the text
+        var text = this.game.add.bitmapText(0, -70, "gotic_white", "Lvl " + this.controlInterface.gameLvl.toString() + " Finish!", 32);
+        text.anchor.setTo(0.5);
+        this.spriteMenu.addChild(text);
+        var result;
+        if (youWin) {
+            result = "YOU WIN :)";
+        }
+        else {
+            result = "YOU LOSE :(";
+        }
+        //lets add the text
+        var text = this.game.add.bitmapText(0, 0, "gotic_white", result, 32);
+        text.anchor.setTo(0.5);
+        this.spriteMenu.addChild(text);
+        //lets add some buttons
+        var buttonTryAgain = new cControlButton(this.game, -140, 70, "Try Again!");
+        buttonTryAgain.anchor.setTo(0.5);
+        buttonTryAgain.buttonClick.add(this.tryAgain, this);
+        this.spriteMenu.addChild(buttonTryAgain);
+        //only if you win you can continue
+        if (youWin) {
+            var buttonStartLvl = new cControlButton(this.game, 140, 70, "Next Lvl ->");
+            buttonStartLvl.anchor.setTo(0.5);
+            buttonStartLvl.buttonClick.add(this.nextLvl, this);
+            this.spriteMenu.addChild(buttonStartLvl);
+        }
+    };
+    cControlMenu.prototype.tryAgain = function () {
+        this.game.add.tween(this.spriteMenu).to({ alpha: 0 }, 300, Phaser.Easing.Linear.None, true, 0, 0, false);
+        this.controlInterface.tryAgain();
+    };
+    cControlMenu.prototype.nextLvl = function () {
+        this.game.add.tween(this.spriteMenu).to({ alpha: 0 }, 300, Phaser.Easing.Linear.None, true, 0, 0, false);
+        this.controlInterface.nextLvl();
     };
     return cControlMenu;
 }());

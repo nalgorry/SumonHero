@@ -3,6 +3,7 @@ class cEnemyIA {
     private monsterNumber:number = 0;
     private timer:Phaser.Timer;
     public timerStep = 5000;
+    public gameLvl:number;
 
     constructor(public game:Phaser.Game,
     public gameInterface:cControlInterface) {
@@ -10,15 +11,19 @@ class cEnemyIA {
         //lets create the timer to do all we need
         this.timer = game.time.create(false);
          
+    
 
     }
 
-    private loop () {
+    private loopFirstLvl () {
         
-        var monsterType = this.game.rnd.integerInRange(1,3);
+        //lets define the variable for the first lvl 
+        var monsterType = this.game.rnd.integerInRange(0,2);
         var pathNumber = this.game.rnd.integerInRange(0,3);
 
-        this.gameInterface.controlMonsters.createEnemyMonster(pathNumber, 0 ,monsterType);
+        var monsterOptions = [enumMonstersType.bow, enumMonstersType.dager, enumMonstersType.sword]
+
+        this.gameInterface.controlMonsters.createEnemyMonster(pathNumber, 0 , monsterOptions[monsterType]);
 
         this.monsterNumber ++;
 
@@ -28,12 +33,25 @@ class cEnemyIA {
         this.timer.stop();
     }
 
-    public startEnemyAI(timerStep:number) {
+    public startEnemyAI(gameLvl:number) {
 
-        this.timerStep += timerStep;
-        console.log(this.timerStep);
+        this.gameLvl = gameLvl;
 
-        this.timer.loop(this.timerStep, this.loop, this);
+        switch (gameLvl) {
+            case 1:
+                this.timerStep = 5000;
+                this.timer.loop(this.timerStep, this.loopFirstLvl, this);
+                break;
+            case 2:
+                this.timerStep = 4000;
+                this.timer.loop(this.timerStep, this.loopFirstLvl, this);
+                break;
+        
+            default:
+                break;
+        }
+
+        console.log("la velocidad Actual es" + this.timerStep);
         this.timer.start();
     }
 

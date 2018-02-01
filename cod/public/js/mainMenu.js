@@ -23,9 +23,9 @@ var mainMenu = (function (_super) {
     };
     mainMenu.prototype.render = function () {
         if (this.showElements == true) {
-            //we only show this on desktop
+            this.game.debug.text(this.game.time.fps.toString(), 2, 14, "#00ff00");
+            //we only show xy on desktop 
             if (this.game.device.desktop == true) {
-                this.game.debug.text(this.game.time.fps.toString(), 2, 14, "#00ff00");
                 var pos = this.game.input.activePointer.position;
                 this.game.debug.text("x:" + pos.x + " y:" + pos.y, 180, 15);
             }

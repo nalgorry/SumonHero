@@ -22,7 +22,7 @@ class preloader extends Phaser.State {
         this.game.load.image('blue_cristal', 'assets/blue_cristal.png');
 
         //load the help items
-        this.game.load.image('menu_card', 'assets/menus/menu_card.png');
+        this.game.load.spritesheet('menu_card', 'assets/menus/menu_card.png', 61, 108);
         this.game.load.image('spells_help', 'assets/menus/spells_help.png');
         this.game.load.image('example_cristal', 'assets/menus/example_cristal.png');
 
