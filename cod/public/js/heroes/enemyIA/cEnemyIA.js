@@ -29,10 +29,13 @@ var cEnemyIA = (function () {
                 this.timerStep = 4000;
                 this.timer.loop(this.timerStep, this.loopFirstLvl, this);
                 break;
+            case 3:
+                this.timerStep = 3500;
+                this.timer.loop(this.timerStep, this.loopFirstLvl, this);
+                break;
             default:
                 break;
         }
-        console.log("la velocidad Actual es" + this.timerStep);
         this.timer.start();
     };
     return cEnemyIA;

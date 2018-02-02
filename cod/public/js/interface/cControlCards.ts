@@ -69,17 +69,15 @@ class cControlCards {
                         unique = false;
                     }
                 })
-                console.log(unique);
+
             } while (unique == false)
         
             arrayCards.push(cardNumber);
         
         }
 
+    return arrayCards
     
-        console.log(arrayCards)
-
-        return arrayCards
     }
 
     

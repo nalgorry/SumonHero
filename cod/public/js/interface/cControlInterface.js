@@ -3,6 +3,7 @@ var cControlInterface = (function () {
         this.game = game;
         this.controlMonsters = controlMonsters;
         this.speedMana = 1;
+        this.baseSpeedMana = 1;
         this.speedBars = 100;
         this.gameLvl = 1;
         this.gameStop = false;
@@ -31,16 +32,16 @@ var cControlInterface = (function () {
     cControlInterface.prototype.updateManaSpeed = function (numCristals) {
         switch (numCristals) {
             case 4:
-                this.speedMana = this.speedMana * 1;
+                this.speedMana = this.baseSpeedMana * 1;
                 break;
             case 5:
-                this.speedMana = this.speedMana * 1.1;
+                this.speedMana = this.baseSpeedMana * 1.1;
                 break;
             case 6:
-                this.speedMana = this.speedMana * 1.15;
+                this.speedMana = this.baseSpeedMana * 1.15;
                 break;
             case 7:
-                this.speedMana = this.speedMana * 1.2;
+                this.speedMana = this.baseSpeedMana * 1.2;
                 break;
             default:
                 break;
@@ -77,7 +78,6 @@ var cControlInterface = (function () {
     };
     cControlInterface.prototype.nextLvl = function () {
         this.gameLvl++;
-        console.log(this.textGameLvl);
         this.textGameLvl.text = "LVL " + this.gameLvl;
         this.controlMenu.startLvlMenu();
         //in the lvl 2 we start the spell sistem

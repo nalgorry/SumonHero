@@ -53,11 +53,9 @@ var cControlCards = (function () {
                         unique = false;
                     }
                 });
-                console.log(unique);
             } while (unique == false);
             arrayCards.push(cardNumber);
         }
-        console.log(arrayCards);
         return arrayCards;
     };
     cControlCards.prototype.createNewCard = function (x, y, monsterType) {

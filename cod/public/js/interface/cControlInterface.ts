@@ -11,6 +11,7 @@ class cControlInterface {
 
     private speedMana = 1;
 
+    private baseSpeedMana = 1;
     private speedBars = 100;
 
     public gameLvl:number = 1;
@@ -67,16 +68,16 @@ class cControlInterface {
 
         switch (numCristals) {
             case 4:
-                this.speedMana = this.speedMana * 1;
+                this.speedMana = this.baseSpeedMana * 1;
                 break;
             case 5:
-                this.speedMana = this.speedMana * 1.1;
+                this.speedMana = this.baseSpeedMana * 1.1;
                 break;
             case 6:
-                this.speedMana = this.speedMana * 1.15;
+                this.speedMana = this.baseSpeedMana * 1.15;
                 break;
             case 7:
-                this.speedMana = this.speedMana * 1.2;
+                this.speedMana = this.baseSpeedMana * 1.2;
                 break;
         
             default:
@@ -129,7 +130,6 @@ class cControlInterface {
     public nextLvl() {
         this.gameLvl ++;
 
-        console.log(this.textGameLvl)
         this.textGameLvl.text = "LVL " + this.gameLvl;
 
         this.controlMenu.startLvlMenu();
