@@ -62,7 +62,7 @@ class cCristals {
     private makeCircle() {
         var backCircle = this.game.add.graphics(0,0);
         backCircle.beginFill(0x0d5118);
-        backCircle.drawEllipse(0, 15, this.showCircleDistnace, this.showCircleDistnace * 0.65);
+        backCircle.drawEllipse(0, 15, this.showCircleDistnace, this.showCircleDistnace * 0.5);
 
         //lets put the circle in the back
         this.sprite_back_circle = this.game.add.sprite(0, 0);
