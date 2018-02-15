@@ -314,7 +314,7 @@ class cMonster extends cBasicActor{
 
         if (this.firstAtack == true) {
 
-            var addPath = 100;
+            var addPath = 120;
 
             this.activePathNumber += addPath; //the current position in the path 
 

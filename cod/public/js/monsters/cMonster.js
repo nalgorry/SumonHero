@@ -224,7 +224,7 @@ var cMonster = (function (_super) {
     };
     cMonster.prototype.animateNinja = function (defender) {
         if (this.firstAtack == true) {
-            var addPath = 100;
+            var addPath = 120;
             this.activePathNumber += addPath; //the current position in the path 
             //lets check if we have the space to the the atack
             if (this.activePathNumber >= this.monsterPath.length) {
