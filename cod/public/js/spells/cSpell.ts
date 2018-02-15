@@ -89,6 +89,7 @@ class cSpell {
 
     private fiveSecondsAlert() {
         this.fiveSecondsText.text = "5";
+        this.fiveSecondsText.visible = true;
 
         var timer = this.game.time.create(false);
         timer.loop(1000, this.updateLeftTime, this, timer);
@@ -107,10 +108,11 @@ class cSpell {
         }
     }
 
-    private coolDownFinish() {
+    public coolDownFinish() {
         this.spriteFocusCool.visible = false;
         this.spriteFocusFixCool.visible = false;
         this.isSpellOnCoolDown = false;
+        this.fiveSecondsText.visible = false;
     }
 
 }

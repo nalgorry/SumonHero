@@ -14,7 +14,7 @@ class cMonster extends cBasicActor{
     private bugSprite:Phaser.Sprite;
     private weaponSprite:Phaser.Sprite;
     
-    public isDead:boolean = false; //to control if a spell hit after the monster die.
+    public isDead:boolean = true; //to control if a spell hit after the monster die.
     public monsterAtacked:cBasicActor;
 
     //to show the life of the monster
@@ -114,9 +114,20 @@ class cMonster extends cBasicActor{
         this.eMonsterHitHeroe = new Phaser.Signal();
         this.eMonsterDie = new Phaser.Signal();
         this.eMonsterAreaAtack = new Phaser.Signal();
-        
+
         //to use the update loop
         this.game.add.existing(this);
+
+        this.alpha = 0;
+        var anim = this.game.add.tween(this).to( { alpha: 1}, 400, Phaser.Easing.Linear.None, true, 0, 0, false);
+        anim.onComplete.add(this.startAnimationComplete, this);
+        
+    }
+
+    private startAnimationComplete() {
+        
+        //lets make it alive!!!
+        this.isDead = false;
 
     }
 

@@ -1,6 +1,6 @@
 class cControlSpells {
 
-    public arrayselSpells: Array<cSpell>;
+    public arrayselSpells:cSpell[] = [];
     public SpellData:cSpellData[] = []; //to store the data of the spell
     private cristalCallBack:Phaser.SignalBinding;
 
@@ -22,6 +22,14 @@ class cControlSpells {
 
         phaserJSON.spellData.forEach(element => {
             this.SpellData[element.id] = new cSpellData(element);
+        });
+
+    }
+
+    public restartPowers() {
+
+        this.arrayselSpells.forEach(spell => {
+            spell.coolDownFinish();
         });
 
     }
@@ -85,7 +93,7 @@ class cControlSpells {
         if (cristal != undefined) {
             
             //lets destroy all in the line of this spell
-            this.controlMonsters.spellAtackLine(cristal.pathOption)
+            this.controlMonsters.spellAtackLine(cristal.getCristalPath())
 
             //lets put the spell on coll dawn 
             spell.spellColdDown();

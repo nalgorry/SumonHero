@@ -52,6 +52,7 @@ var cSpell = (function () {
     };
     cSpell.prototype.fiveSecondsAlert = function () {
         this.fiveSecondsText.text = "5";
+        this.fiveSecondsText.visible = true;
         var timer = this.game.time.create(false);
         timer.loop(1000, this.updateLeftTime, this, timer);
         timer.start();
@@ -70,6 +71,7 @@ var cSpell = (function () {
         this.spriteFocusCool.visible = false;
         this.spriteFocusFixCool.visible = false;
         this.isSpellOnCoolDown = false;
+        this.fiveSecondsText.visible = false;
     };
     return cSpell;
 }());

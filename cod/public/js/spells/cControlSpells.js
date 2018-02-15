@@ -4,6 +4,7 @@ var cControlSpells = (function () {
         this.controlMonsters = controlMonsters;
         this.controlHeroes = controlHeroes;
         this.controlCristals = controlCristals;
+        this.arrayselSpells = [];
         this.SpellData = []; //to store the data of the spell
         this.readSpellsData();
         this.createnumSpells();
@@ -13,6 +14,11 @@ var cControlSpells = (function () {
         var phaserJSON = this.game.cache.getJSON('spellData');
         phaserJSON.spellData.forEach(function (element) {
             _this.SpellData[element.id] = new cSpellData(element);
+        });
+    };
+    cControlSpells.prototype.restartPowers = function () {
+        this.arrayselSpells.forEach(function (spell) {
+            spell.coolDownFinish();
         });
     };
     cControlSpells.prototype.createnumSpells = function () {
@@ -57,7 +63,7 @@ var cControlSpells = (function () {
     cControlSpells.prototype.cristalClick = function (cristal, spell) {
         if (cristal != undefined) {
             //lets destroy all in the line of this spell
-            this.controlMonsters.spellAtackLine(cristal.pathOption);
+            this.controlMonsters.spellAtackLine(cristal.getCristalPath());
             //lets put the spell on coll dawn 
             spell.spellColdDown();
         }

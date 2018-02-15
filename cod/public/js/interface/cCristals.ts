@@ -5,6 +5,7 @@ class cCristals {
     maxDistance:number = 55;
     showCircleDistnace = 55;
     private cristalSprite:Phaser.Sprite;
+    private backCircle:Phaser.Graphics;
 
 
     public playerControl:boolean;
@@ -13,7 +14,7 @@ class cCristals {
     constructor(public game:Phaser.Game,
         public x:number, public y:number,
         public color:cristalColor, 
-        public pathOption:enumPathOptions,
+        private pathOption:enumPathOptions,
         public monsterStartPoss:number,
         public cristalType:enumCristalType) {
 
@@ -28,19 +29,28 @@ class cCristals {
         //lets add the events to detect when we are over a cristal
         this.sprite.inputEnabled = true;
 
-        this.sprite.events.onInputOver.add(this.mouseOver,this);
-        this.sprite.events.onInputOut.add(this.mouseOut,this);
-
     }
 
-    private mouseOut() {
-            
+    public setMouseOverColor() {
+       // console.log("entra al crista");
     }
 
-    private mouseOver() {
-
-
+    public resetMouseOverColor() {
+        //console.log("sale dele cristal");
     }
+
+    public getCristalPath():enumPathOptions {
+        if (this.pathOption == enumPathOptions.allOptions) {
+            //lets choose a random path 
+            return this.game.rnd.integerInRange(0,3);
+        }  else if (this.pathOption == enumPathOptions.centerOfMap) {
+            return this.game.rnd.integerInRange(2,3);
+        } else {
+            return this.pathOption
+        }
+    }
+
+
 
     public lightBlueCristal() {
 
@@ -60,15 +70,15 @@ class cCristals {
     }
 
     private makeCircle() {
-        var backCircle = this.game.add.graphics(0,0);
-        backCircle.beginFill(0x0d5118);
-        backCircle.drawEllipse(0, 15, this.showCircleDistnace, this.showCircleDistnace * 0.5);
+        this.backCircle = this.game.add.graphics(0,0);
+        this.backCircle.beginFill(0x0d5118);
+        this.backCircle.drawEllipse(0, 15, this.showCircleDistnace, this.showCircleDistnace * 0.5);
 
         //lets put the circle in the back
         this.sprite_back_circle = this.game.add.sprite(0, 0);
         this.sprite_back_circle.anchor.set(0.5);
         this.sprite_back_circle.alpha = 0.6;
-        this.sprite_back_circle.addChild(backCircle);
+        this.sprite_back_circle.addChild(this.backCircle);
         
         this.sprite.addChild(this.sprite_back_circle);
         this.sprite.swapChildren(this.sprite.children[0],this.sprite.children[1])

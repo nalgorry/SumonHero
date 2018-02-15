@@ -63,8 +63,6 @@ var cControlMonsters = (function () {
         //lets check wich monster we need to hit with this spell
         for (var keyMonster in this.arrayEnemyMonsters) {
             var monster = this.arrayEnemyMonsters[keyMonster];
-            console.log(monster.pathOption);
-            console.log(pathOption);
             if (monster.pathOption == pathOption) {
                 monster.IsHit(50);
             }

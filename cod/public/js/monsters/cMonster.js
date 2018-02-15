@@ -17,7 +17,7 @@ var cMonster = (function (_super) {
         this.activePathNumber = 0; //the current position in the path 
         this.loopSpeedNumber = 0;
         this.loopSpeed = 0; /////the number of update loops to update the speed
-        this.isDead = false; //to control if a spell hit after the monster die.
+        this.isDead = true; //to control if a spell hit after the monster die.
         this.barHeight = 10;
         this.barWidth = 40;
         //to control monster atacks
@@ -74,7 +74,14 @@ var cMonster = (function (_super) {
         this.eMonsterAreaAtack = new Phaser.Signal();
         //to use the update loop
         this.game.add.existing(this);
+        this.alpha = 0;
+        var anim = this.game.add.tween(this).to({ alpha: 1 }, 400, Phaser.Easing.Linear.None, true, 0, 0, false);
+        anim.onComplete.add(this.startAnimationComplete, this);
     }
+    cMonster.prototype.startAnimationComplete = function () {
+        //lets make it alive!!!
+        this.isDead = false;
+    };
     cMonster.prototype.createBar = function () {
         var x = -20;
         var y = -55;

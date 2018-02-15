@@ -11,7 +11,7 @@ class cControlInterface {
 
     private speedMana = 1;
 
-    private baseSpeedMana = 1;
+    private baseSpeedMana = 1.05;
     private speedBars = 100;
 
     public gameLvl:number = 1;
@@ -182,6 +182,10 @@ class cControlInterface {
         //lets add the new cards if needed
         this.controlCards.addNewCards(this.gameLvl);
 
+        //lets restart the powers
+        if (this.controlSpells != undefined){
+            this.controlSpells.restartPowers();
+        }
 
     }
 
@@ -212,22 +216,14 @@ class cControlInterface {
         this.controlCristals.turnOffBlueCristals();
 
         //then we see if we have to generate a monster or not
-        var cristal = this.controlCristals.checkRelease(card.getCenter());
+        var cristal = this.controlCristals.checkRelease(card.getCenter(), true);
         
         if (cristal != undefined) {
             //lets check if we have the mana to do it
             if (this.playerBars.UpdateMana(-card.monsterData.manaCost) == true) {
-
-                var direction = cristal.pathOption
-
-                if (cristal.pathOption == enumPathOptions.allOptions) {
-                    //lets choose a random path 
-                    direction = this.game.rnd.integerInRange(0,3);
-                }  else if (cristal.pathOption == enumPathOptions.centerOfMap) {
-                    direction = this.game.rnd.integerInRange(2,3);
-                }
+       
                 //lets add the new monster to the map!
-                this.controlMonsters.createNewMonster(direction, cristal.monsterStartPoss, card.monsterData.id);
+                this.controlMonsters.createNewMonster(cristal.getCristalPath(), cristal.monsterStartPoss, card.monsterData.id);
             
             }
 

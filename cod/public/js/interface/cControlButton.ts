@@ -47,6 +47,12 @@ class cControlButton extends Phaser.Sprite {
         this.events.onInputOver.add(this.botonLvlUpOver,this);
         this.events.onInputOut.add(this.botonLvlUpOut,this);
         this.events.onInputDown.add(this.botonLvlUpDown,this);
+
+        //le agrego el input al texto a ver si soluciono un bug con los celulares
+        textOption.inputEnabled = true;
+        textOption.events.onInputDown.add(this.botonLvlUpDown,this);
+        textOption.events.onInputOver.add(this.botonLvlUpOver,this);
+        textOption.events.onInputOut.add(this.botonLvlUpOut,this);
         
     }
 
@@ -56,14 +62,14 @@ class cControlButton extends Phaser.Sprite {
     }
 
     public botonLvlUpOver(button:Phaser.Sprite) {
-        button.children[0].visible = false;
-        button.children[1].visible = true;
+        this.children[0].visible = false;
+        this.children[1].visible = true;
 
     }
 
     public botonLvlUpOut(button:Phaser.Sprite) {
-        button.children[0].visible = true;
-        button.children[1].visible = false;
+        this.children[0].visible = true;
+        this.children[1].visible = false;
 
     }
 

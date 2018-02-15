@@ -17,12 +17,24 @@ var cCristals = (function () {
         this.sprite.addChild(this.cristalSprite);
         //lets add the events to detect when we are over a cristal
         this.sprite.inputEnabled = true;
-        this.sprite.events.onInputOver.add(this.mouseOver, this);
-        this.sprite.events.onInputOut.add(this.mouseOut, this);
     }
-    cCristals.prototype.mouseOut = function () {
+    cCristals.prototype.setMouseOverColor = function () {
+        // console.log("entra al crista");
     };
-    cCristals.prototype.mouseOver = function () {
+    cCristals.prototype.resetMouseOverColor = function () {
+        //console.log("sale dele cristal");
+    };
+    cCristals.prototype.getCristalPath = function () {
+        if (this.pathOption == 4 /* allOptions */) {
+            //lets choose a random path 
+            return this.game.rnd.integerInRange(0, 3);
+        }
+        else if (this.pathOption == 5 /* centerOfMap */) {
+            return this.game.rnd.integerInRange(2, 3);
+        }
+        else {
+            return this.pathOption;
+        }
     };
     cCristals.prototype.lightBlueCristal = function () {
         if (this.color == cristalColor.blue_cristal) {
@@ -34,14 +46,14 @@ var cCristals = (function () {
         this.color = newColor;
     };
     cCristals.prototype.makeCircle = function () {
-        var backCircle = this.game.add.graphics(0, 0);
-        backCircle.beginFill(0x0d5118);
-        backCircle.drawEllipse(0, 15, this.showCircleDistnace, this.showCircleDistnace * 0.5);
+        this.backCircle = this.game.add.graphics(0, 0);
+        this.backCircle.beginFill(0x0d5118);
+        this.backCircle.drawEllipse(0, 15, this.showCircleDistnace, this.showCircleDistnace * 0.5);
         //lets put the circle in the back
         this.sprite_back_circle = this.game.add.sprite(0, 0);
         this.sprite_back_circle.anchor.set(0.5);
         this.sprite_back_circle.alpha = 0.6;
-        this.sprite_back_circle.addChild(backCircle);
+        this.sprite_back_circle.addChild(this.backCircle);
         this.sprite.addChild(this.sprite_back_circle);
         this.sprite.swapChildren(this.sprite.children[0], this.sprite.children[1]);
         //lets add some really cool animation
