@@ -30,7 +30,7 @@ class cControlCristals {
         this.arrayCristals.push( new cCristals(this.game, 260, 452, cristalColor.blue_cristal, enumPathOptions.down, oneQuarterPoss, enumCristalType.fixedCristal));
         
         //lets init the red cristals of the other player
-        var cristal_enemy1 = new cCristals(this.game, 1184, 325, cristalColor.red_cristal, enumPathOptions.up, 0, enumCristalType.enemyCristal);
+        var cristal_enemy1 = new cCristals(this.game, 1184, 325, cristalColor.red_cristal, enumPathOptions.allOptions, 0, enumCristalType.enemyCristal);
         var cristal_enemy2 = new cCristals(this.game, 1020, 200, cristalColor.red_cristal, enumPathOptions.up, oneQuarterPoss, enumCristalType.enemyCristal);
         var cristal_enemy3 =  new cCristals(this.game, 1020, 268, cristalColor.red_cristal, enumPathOptions.upS, oneQuarterSPoss, enumCristalType.enemyCristal);
         var cristal_enemy4 = new cCristals(this.game, 1020, 376, cristalColor.red_cristal, enumPathOptions.downS, oneQuarterSPoss, enumCristalType.enemyCristal);

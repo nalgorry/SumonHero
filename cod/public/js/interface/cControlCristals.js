@@ -20,7 +20,7 @@ var cControlCristals = (function () {
         this.arrayCristals.push(new cCristals(this.game, 260, 374, cristalColor.blue_cristal, 3 /* downS */, oneQuarterSPoss, 2 /* fixedCristal */));
         this.arrayCristals.push(new cCristals(this.game, 260, 452, cristalColor.blue_cristal, 1 /* down */, oneQuarterPoss, 2 /* fixedCristal */));
         //lets init the red cristals of the other player
-        var cristal_enemy1 = new cCristals(this.game, 1184, 325, cristalColor.red_cristal, 0 /* up */, 0, 4 /* enemyCristal */);
+        var cristal_enemy1 = new cCristals(this.game, 1184, 325, cristalColor.red_cristal, 4 /* allOptions */, 0, 4 /* enemyCristal */);
         var cristal_enemy2 = new cCristals(this.game, 1020, 200, cristalColor.red_cristal, 0 /* up */, oneQuarterPoss, 4 /* enemyCristal */);
         var cristal_enemy3 = new cCristals(this.game, 1020, 268, cristalColor.red_cristal, 2 /* upS */, oneQuarterSPoss, 4 /* enemyCristal */);
         var cristal_enemy4 = new cCristals(this.game, 1020, 376, cristalColor.red_cristal, 3 /* downS */, oneQuarterSPoss, 4 /* enemyCristal */);

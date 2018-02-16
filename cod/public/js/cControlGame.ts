@@ -64,6 +64,7 @@ class cControlGame {
         var bug1 = this.game.add.sprite(-260, -50, 'bugs', 0)
         this.spriteMainMenu.addChild(bug1);
 
+
         var bug2 = this.game.add.sprite(260, -50, 'bugs', 1)
         bug2.scale.x = -1;
         this.spriteMainMenu.addChild(bug2);
