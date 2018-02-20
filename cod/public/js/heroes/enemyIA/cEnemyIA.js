@@ -59,13 +59,15 @@ var cEnemyIA = (function () {
                 this.timerStep = 3500;
                 this.timer.loop(this.timerStep, this.loopLvl_4, this);
                 startMsg = "Everything will \n explote!";
+                break;
             case 5:
                 this.timerStep = 4000;
                 this.timer.loop(this.timerStep, this.loopLvl_5, this);
-                this.specialStep = this.game.rnd.integerInRange(12000, 22000);
+                this.specialStep = this.game.rnd.integerInRange(18000, 30000);
                 this.timerSpecial.add(this.specialStep, this.special_5, this);
                 this.timerSpecial.start();
                 startMsg = "You are not \n ready for this!";
+                break;
             default:
                 break;
         }

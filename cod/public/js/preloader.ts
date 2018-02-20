@@ -37,7 +37,7 @@ class preloader extends Phaser.State {
         this.game.load.spritesheet('bugs', 'assets/bugs.png', 55, 55);
         this.game.load.spritesheet('items', 'assets/items.png', 40, 40);
         this.game.load.spritesheet('bombexploding', 'assets/bombexploding.png',  32, 64);
-        this.game.load.image('pathArrow', 'assets/patharrow.png');
+        this.game.load.image('blackArrow', 'assets/blackArrow.png');
         this.game.load.image('enemy_msg', 'assets/enemy_msg.png');
 
         //load the fonts

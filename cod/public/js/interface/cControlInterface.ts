@@ -9,6 +9,8 @@ class cControlInterface {
     private playerBars:cControlBars;
     private enemyBars:cControlBars;
 
+    private helpSprite;
+
     private speedMana = 1;
 
     private baseSpeedMana = 1.05;
@@ -167,6 +169,7 @@ class cControlInterface {
         this.controlHeroes.enemyHeroe.enemyIA.startEnemyAI(this.gameLvl);
 
         this.gameStop = false;
+
         //lets kill all the monster from the previus games!
         this.controlMonsters.restart();
 
@@ -187,6 +190,44 @@ class cControlInterface {
             this.controlSpells.restartPowers();
         }
 
+        if (this.gameLvl == 1) {
+            this.createTutorial();
+        }
+
+    }
+
+    private createTutorial() {
+
+        this.helpSprite = this.game.add.sprite(150, 500);
+
+        var s = this.game.add.sprite(55, 25, "blackArrow");
+        s.anchor.set(0.5);
+        s.scale.set(1.2);
+        s.angle = -45;
+
+        this.helpSprite.addChild(s);
+
+        var text = this.game.add.bitmapText(-38, -20, "gotic_black", "move yours \n monsters to the \n blue cristals" , 20);
+        text.anchor.setTo(0.5);
+        this.helpSprite.addChild(text);
+
+        var quake = this.game.add.tween(s)
+        .to({y: "-4" }, 300, Phaser.Easing.Bounce.InOut, true, 0, 200, true);
+
+    
+    }
+
+    private endCristalTutorial() {
+        
+        if (this.helpSprite != undefined) {
+            var anim = this.game.add.tween(this.helpSprite).to( { alpha: 0}, 800, Phaser.Easing.Linear.None, true, 0, 0, false);
+            anim.onComplete.add(this.destroyCristalTutorial,this);
+        }
+
+    }
+
+    private destroyCristalTutorial() {
+        this.helpSprite.destroy();
     }
 
     private updateBars() {
@@ -217,8 +258,13 @@ class cControlInterface {
 
         //then we see if we have to generate a monster or not
         var cristal = this.controlCristals.checkRelease(card.getCenter(), true);
+
         
         if (cristal != undefined) {
+
+            //lets destroy the tutorial 
+            this.endCristalTutorial()
+
             //lets check if we have the mana to do it
             if (this.playerBars.UpdateMana(-card.monsterData.manaCost) == true) {
        

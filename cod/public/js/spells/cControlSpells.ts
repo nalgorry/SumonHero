@@ -4,7 +4,6 @@ class cControlSpells {
     public SpellData:cSpellData[] = []; //to store the data of the spell
     private cristalCallBack:Phaser.SignalBinding;
 
-
     constructor (public game:Phaser.Game, 
         public controlMonsters:cControlMonsters,
         public controlHeroes:cControlHeroes,
@@ -42,7 +41,7 @@ class cControlSpells {
 
         //to poss the spells
         var y = 600;
-        var x = 800;
+        var x = 900;
         var xSpace = 150;
 
         //hechizo 1
@@ -54,17 +53,17 @@ class cControlSpells {
      
         //hechizo 2
         var newSpell:cSpell = new cSpell(this.game);
-        newSpell.iniciateSpell(new Phaser.Point(x + xSpace * 1, y), this.SpellData[enumSpells.heal_monsters]);
+        newSpell.iniciateSpell(new Phaser.Point(x + xSpace * 1, y), this.SpellData[enumSpells.shield]);
         
         this.arrayselSpells.push(newSpell); 
         newSpell.signalSpellSel.add(this.spellClick,this);          
 
         //hechizo 3
-        var newSpell:cSpell = new cSpell(this.game);
-        newSpell.iniciateSpell(new Phaser.Point(x + xSpace * 2, y), this.SpellData[enumSpells.shield]);
+        //var newSpell:cSpell = new cSpell(this.game);
+        //newSpell.iniciateSpell(new Phaser.Point(x + xSpace * 2, y), this.SpellData[enumSpells.heal_monsters]);
         
-        this.arrayselSpells.push(newSpell);
-        newSpell.signalSpellSel.add(this.spellClick,this);                
+        //this.arrayselSpells.push(newSpell);
+        //newSpell.signalSpellSel.add(this.spellClick,this);                
 
     }
 
@@ -74,33 +73,44 @@ class cControlSpells {
 
         switch (sender.data.id) {
             case enumSpells.direct_kill:
-                this.controlCristals.spellAtackLine();
-                this.cristalCallBack = this.controlCristals.cristalClick.add(this.cristalClick, this,null, sender);
-                break;
-            case enumSpells.heal_monsters:
-                this.controlMonsters.spellHealMonsters();
+                this.controlCristals.spellClicked();
+                this.cristalCallBack = this.controlCristals.cristalClick.add(this.cristalClickAtack, this, null, sender);
                 break;
             case enumSpells.shield:
-                this.controlMonsters.spellShieldMonsters(sender.data);
+                this.controlCristals.spellClicked();
+                this.cristalCallBack = this.controlCristals.cristalClick.add(this.cristalClickDefend, this, null, sender);
+                break;
+            case enumSpells.heal_monsters:
+                //this.controlMonsters.spellHealMonsters();
             default:
                 break;
         }
         
     }
 
-    public cristalClick(cristal:cCristals, spell:cSpell) {
+    public cristalClickAtack(cristal:cCristals, spell:cSpell) {
         
-        if (cristal != undefined) {
-            
-            //lets destroy all in the line of this spell
-            this.controlMonsters.spellAtackLine(cristal.getCristalPath())
+        //lets destroy all in the line of this spell
+        this.controlMonsters.spellAtackLine(cristal.getCristalPath())
 
-            //lets put the spell on coll dawn 
-            spell.spellColdDown();
-        }
+        //lets put the spell on coll dawn 
+        spell.spellColdDown();
 
         this.cristalCallBack.detach();
     }
+
+    public cristalClickDefend(cristal:cCristals, spell:cSpell) {
+
+        this.controlMonsters.spellShieldMonsters(spell.data, cristal.getCristalPath());
+
+        //lets put the spell on coll dawn 
+        spell.spellColdDown();
+
+        this.cristalCallBack.detach();
+
+    }
+
+
 
     private heroeAnimation(sender:cSpell) {
 

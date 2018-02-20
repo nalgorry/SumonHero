@@ -97,7 +97,7 @@ class cControlCristals {
 
     }
 
-    public spellAtackLine() {
+    public spellClicked() {
         //lets activate the cristals
         this.activateBlueCristals();
 
@@ -134,7 +134,6 @@ class cControlCristals {
             this.game.input.deleteMoveCallback(this.mouseMoveWithCard, this);
             this.lastCristalOnMouse = undefined;
         }
-
 
         return selCristal;
     }

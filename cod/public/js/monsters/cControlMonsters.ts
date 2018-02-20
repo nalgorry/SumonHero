@@ -488,15 +488,18 @@ class cControlMonsters {
             };
     }
 
-    public spellShieldMonsters(spellData:cSpellData) {
+    public spellShieldMonsters(spellData:cSpellData, pathOption:enumPathOptions) {
 
         //lets check player monsters
             for (let keyMonster in this.arrayMonsters) {
                 var monster:cMonster = this.arrayMonsters[keyMonster];
 
-                monster.activateShield(spellData);
+                if (monster.pathOption == pathOption) {
+                    monster.activateShield(spellData);
+                }      
 
             };
+
     }
 
 

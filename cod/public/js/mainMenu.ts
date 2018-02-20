@@ -1,6 +1,6 @@
 class mainMenu extends Phaser.State {
 
-    showElements = false;
+    showElements = true;
  
     create() {
 

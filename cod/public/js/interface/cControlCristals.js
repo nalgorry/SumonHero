@@ -73,7 +73,7 @@ var cControlCristals = (function () {
             cristal.turnOffCristal();
         });
     };
-    cControlCristals.prototype.spellAtackLine = function () {
+    cControlCristals.prototype.spellClicked = function () {
         //lets activate the cristals
         this.activateBlueCristals();
         this.eventCristalClick = this.game.input.onDown.add(this.spellLineCristalSel, this);
