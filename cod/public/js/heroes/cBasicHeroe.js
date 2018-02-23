@@ -9,7 +9,7 @@ var cBasicHeroe = (function (_super) {
         _super.call(this, game, 0, 0);
         this.game = game;
         this.atackDistance = 220;
-        this.heroeAtack = 7;
+        this.heroeAtack = 5;
         this.orientation = orientation;
         this.playerHit = new Phaser.Signal;
         this.life = 100;
