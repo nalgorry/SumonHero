@@ -4,7 +4,7 @@ class cBasicHeroe extends cBasicActor{
     private weaponSprite:Phaser.Sprite;
     private orientation:heroeOrientation;
     private atackDistance = 220;
-    private heroeAtack = 7;
+    private heroeAtack = 5;
     public playerHit:Phaser.Signal;
 
     constructor (public game:Phaser.Game, initPos:Phaser.Point, orientation:heroeOrientation) {
