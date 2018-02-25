@@ -81,6 +81,7 @@ var cMonster = (function (_super) {
     cMonster.prototype.startAnimationComplete = function () {
         //lets make it alive!!!
         this.isDead = false;
+        this.animateMonsterMove();
     };
     cMonster.prototype.createBar = function () {
         var x = -20;
@@ -479,19 +480,16 @@ var cMonster = (function (_super) {
             }
         }
     };
+    cMonster.prototype.animateMonsterMove = function () {
+        //animate the weapon
+        this.moveAnimation1 = this.game.add.tween(this.bugSprite).to({ angle: '-1', y: "+3" }, 300, Phaser.Easing.Linear.None, true);
+        this.moveAnimation2 = this.game.add.tween(this.bugSprite).to({ angle: '+1', y: "-3" }, 300, Phaser.Easing.Linear.None, false);
+        this.moveAnimation1.chain(this.moveAnimation2);
+        this.moveAnimation2.chain(this.moveAnimation1);
+    };
     cMonster.prototype.animateSwordMovement = function () {
         //to control the orientacion of animations
         var ori = this.sprite.scale.x;
-        //the animations for the character 
-        /*
-        var animation1 = this.game.add.tween(this.sprite)
-        animation1.to( { x: 20 * ori}, animSpeed, Phaser.Easing.Linear.None, true);
-
-        var animation2 = this.game.add.tween(this.sprite)
-        animation2.to( { x: 0}, animSpeed, Phaser.Easing.Linear.None, false);
-        animation1.chain(animation2);
-
-        */
         //animate the weapon
         this.weaponAnimation1 = this.game.add.tween(this.weaponSprite).to({ angle: '-10', y: "+2" }, 800, Phaser.Easing.Linear.None, true);
         this.weaponAnimation2 = this.game.add.tween(this.weaponSprite).to({ angle: '+10', y: "-2" }, 800, Phaser.Easing.Linear.None, false);

@@ -34,6 +34,8 @@ class cMonster extends cBasicActor{
 
     private weaponAnimation1:Phaser.Tween;
     private weaponAnimation2:Phaser.Tween;
+    private moveAnimation1:Phaser.Tween;
+    private moveAnimation2:Phaser.Tween;
 
     public eMonsterHitHeroe:Phaser.Signal;
     public eMonsterDie:Phaser.Signal;
@@ -128,6 +130,7 @@ class cMonster extends cBasicActor{
         
         //lets make it alive!!!
         this.isDead = false;
+        this.animateMonsterMove();
 
     }
 
@@ -691,22 +694,23 @@ class cMonster extends cBasicActor{
 
     }
 
+    private animateMonsterMove() {
+        //animate the weapon
+        this.moveAnimation1 = this.game.add.tween(this.bugSprite).to( 
+            { angle: '-1', y: "+3" }, 300, Phaser.Easing.Linear.None, true);
+
+        this.moveAnimation2 = this.game.add.tween(this.bugSprite).to( 
+            { angle: '+1', y: "-3" }, 300, Phaser.Easing.Linear.None, false);
+        
+        this.moveAnimation1.chain(this.moveAnimation2);
+        this.moveAnimation2.chain(this.moveAnimation1);
+        
+    }
+
     private animateSwordMovement() {
 
         //to control the orientacion of animations
-        var ori:number = this.sprite.scale.x
-
-        //the animations for the character 
-        /*
-        var animation1 = this.game.add.tween(this.sprite)
-        animation1.to( { x: 20 * ori}, animSpeed, Phaser.Easing.Linear.None, true);
-
-        var animation2 = this.game.add.tween(this.sprite)
-        animation2.to( { x: 0}, animSpeed, Phaser.Easing.Linear.None, false);
-        animation1.chain(animation2);
-
-        */
-        
+        var ori:number = this.sprite.scale.x;      
 
         //animate the weapon
         this.weaponAnimation1 = this.game.add.tween(this.weaponSprite).to( 
