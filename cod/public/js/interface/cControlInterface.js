@@ -2,8 +2,8 @@ var cControlInterface = (function () {
     function cControlInterface(game, controlMonsters) {
         this.game = game;
         this.controlMonsters = controlMonsters;
-        this.speedMana = 1;
-        this.baseSpeedMana = 1.05;
+        this.speedMana = 1.45;
+        //private baseSpeedMana = 1.35;
         this.speedBars = 100;
         this.gameLvl = 1;
         this.gameStop = false;
@@ -30,6 +30,9 @@ var cControlInterface = (function () {
         this.nextLvl();
     };
     cControlInterface.prototype.updateManaSpeed = function (numCristals) {
+        //desactivo esto por ahora, no tiene sentido usarlo 
+        /*
+
         switch (numCristals) {
             case 4:
                 this.speedMana = this.baseSpeedMana * 1;
@@ -43,9 +46,12 @@ var cControlInterface = (function () {
             case 7:
                 this.speedMana = this.baseSpeedMana * 1.2;
                 break;
+        
             default:
                 break;
         }
+
+        */
     };
     cControlInterface.prototype.getSharedCristals = function () {
         return this.controlCristals.arrayShareCristals;
@@ -80,6 +86,8 @@ var cControlInterface = (function () {
         this.gameLvl++;
         this.textGameLvl.text = "LVL " + this.gameLvl;
         this.controlMenu.startLvlMenu();
+        //lets add the new cards if needed
+        this.controlCards.addNewCards(this.gameLvl);
         //in the lvl 2 we start the spell sistem
         if (this.gameLvl == 2) {
             this.initSpells();
@@ -114,8 +122,6 @@ var cControlInterface = (function () {
         //lets add the timer to update the manas bars
         this.timer = this.game.time.events.loop(this.speedBars, this.updateBars, this);
         this.timer.timer.start();
-        //lets add the new cards if needed
-        this.controlCards.addNewCards(this.gameLvl);
         //lets restart the powers
         if (this.controlSpells != undefined) {
             this.controlSpells.restartPowers();

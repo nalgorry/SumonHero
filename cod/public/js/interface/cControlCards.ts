@@ -42,7 +42,7 @@ class cControlCards {
        
         switch (lvl) {
             case 3:
-                this.arrayCards.push(this.createNewCard (20 + 110 * 3, this.yCards, enumMonstersType.cold_wizard));
+                this.arrayCards.push(this.createNewCard (20 + 110 * 3, this.yCards, enumMonstersType.shield));
                 break;
 
             case 4:

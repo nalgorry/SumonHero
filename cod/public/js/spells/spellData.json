@@ -13,7 +13,7 @@
         "possInSheet": 4,
         "coolDownTimeSec": 20,
         "heroeText": "Heal Heal!",
-        "hasCallBack": false
+        "hasCallBack": true
     },
     {
         "id": 3,
@@ -21,7 +21,7 @@
         "coolDownTimeSec": 10,
         "heroeText": "Protect!",
         "durationSec": 20,
-        "hasCallBack": false
+        "hasCallBack": true
     }
 ]
 }

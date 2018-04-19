@@ -75,10 +75,10 @@ var cControlMenu = (function () {
                 var image = this.game.add.sprite(0, 0, 'spells_help');
                 image.anchor.set(0.5);
                 this.spriteMenu.addChild(image);
-                var text = this.game.add.bitmapText(-140, 80, "gotic_white", "Atack a line", 24);
+                var text = this.game.add.bitmapText(-140, 80, "gotic_white", "Atack enemy monster in the \n line of the selected cristal ", 16);
                 text.anchor.setTo(0.5);
                 this.spriteMenu.addChild(text);
-                var text = this.game.add.bitmapText(140, 80, "gotic_white", "Defend monsters", 24);
+                var text = this.game.add.bitmapText(140, 80, "gotic_white", "Defend monsters in the \n line of the selected cristal ", 16);
                 text.anchor.setTo(0.5);
                 this.spriteMenu.addChild(text);
                 var image = this.game.add.sprite(-140, 40, 'white_arrow');
@@ -103,7 +103,7 @@ var cControlMenu = (function () {
                 image.anchor.set(0.5);
                 image.scale.set(1.2);
                 this.spriteMenu.addChild(image);
-                var text = this.game.add.bitmapText(0, 100, "gotic_white", "I will freeze your enemies.", 24);
+                var text = this.game.add.bitmapText(0, 100, "gotic_white", "I will take the hit for you!.", 24);
                 text.align = "center";
                 text.anchor.setTo(0.5);
                 this.spriteMenu.addChild(text);

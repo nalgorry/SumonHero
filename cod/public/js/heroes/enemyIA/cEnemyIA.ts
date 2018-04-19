@@ -90,7 +90,7 @@ class cEnemyIA {
                 this.timerStep = 4000;
                 this.timer.loop(this.timerStep, this.loopLvl_5, this);
                 
-                this.specialStep = this.game.rnd.integerInRange(18000, 30000);
+                this.specialStep = this.game.rnd.integerInRange(25000, 30000);
                 this.timerSpecial.add(this.specialStep, this.special_5, this);
                 this.timerSpecial.start();
                 startMsg = "You are not \n ready for this!";
@@ -121,7 +121,7 @@ class cEnemyIA {
         this.gameInterface.controlMonsters.createEnemyMonster(cristal.getCristalPath(), cristal.monsterStartPoss , enumMonstersType.explosion);
 
         //lets restart the timer
-        this.specialStep = this.game.rnd.integerInRange(12000, 22000);
+        this.specialStep = this.game.rnd.integerInRange(30000, 40000);
         this.timerSpecial.add(this.specialStep, this.special_5, this);
         this.timerSpecial.start();
     }

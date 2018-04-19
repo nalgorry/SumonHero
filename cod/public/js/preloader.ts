@@ -34,7 +34,7 @@ class preloader extends Phaser.State {
         this.game.load.image('ninja_star', 'assets/ninja-star.png');
 
         //  Load our actual games assets
-        this.game.load.spritesheet('bugs', 'assets/bugs.png', 55, 55);
+        this.game.load.spritesheet('bugs', 'assets/bugs.png', 60, 60);
         this.game.load.spritesheet('items', 'assets/items.png', 40, 40);
         this.game.load.spritesheet('bombexploding', 'assets/bombexploding.png',  32, 64);
         this.game.load.image('blackArrow', 'assets/blackArrow.png');

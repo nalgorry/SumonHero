@@ -11,9 +11,9 @@ class cControlInterface {
 
     private helpSprite;
 
-    private speedMana = 1;
+    private speedMana = 1.45;
 
-    private baseSpeedMana = 1.05;
+    //private baseSpeedMana = 1.35;
     private speedBars = 100;
 
     public gameLvl:number = 1;
@@ -68,6 +68,10 @@ class cControlInterface {
 
     public updateManaSpeed(numCristals:number)   {
 
+        //desactivo esto por ahora, no tiene sentido usarlo 
+        
+        /*
+
         switch (numCristals) {
             case 4:
                 this.speedMana = this.baseSpeedMana * 1;
@@ -86,6 +90,7 @@ class cControlInterface {
                 break;
         }
 
+        */
     }
 
 
@@ -136,6 +141,10 @@ class cControlInterface {
 
         this.controlMenu.startLvlMenu();
 
+        //lets add the new cards if needed
+        this.controlCards.addNewCards(this.gameLvl);
+
+
         //in the lvl 2 we start the spell sistem
         if (this.gameLvl == 2) { this.initSpells() }
 
@@ -181,9 +190,6 @@ class cControlInterface {
         //lets add the timer to update the manas bars
         this.timer = this.game.time.events.loop(this.speedBars, this.updateBars, this);
         this.timer.timer.start();
-
-        //lets add the new cards if needed
-        this.controlCards.addNewCards(this.gameLvl);
 
         //lets restart the powers
         if (this.controlSpells != undefined){

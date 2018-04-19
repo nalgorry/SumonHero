@@ -31,7 +31,7 @@ var cControlCards = (function () {
     cControlCards.prototype.addNewCards = function (lvl) {
         switch (lvl) {
             case 3:
-                this.arrayCards.push(this.createNewCard(20 + 110 * 3, this.yCards, 8 /* cold_wizard */));
+                this.arrayCards.push(this.createNewCard(20 + 110 * 3, this.yCards, 7 /* shield */));
                 break;
             case 4:
                 this.arrayCards.push(this.createNewCard(20 + 110 * 4, this.yCards, 2 /* explosion */));
